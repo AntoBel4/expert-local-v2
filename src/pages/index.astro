@@ -511,16 +511,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <!-- ═══════════════════════════════════════════════
      SCRIPTS
 ═══════════════════════════════════════════════ -->
-<script
-  id="diagnosticScript"
-  data-webhook={import.meta.env.PUBLIC_N8N_WEBHOOK_DIAGNOSTIC || ''}
->
-  // ─── Formulaire 3 étapes + envoi webhook n8n ───
+<script>
+  // ─── Formulaire 3 étapes + envoi webhook n8n via Netlify Function ───
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('diagnosticForm');
     if (!form) return;
 
-    const WEBHOOK_URL = document.getElementById('diagnosticScript')?.dataset.webhook;
+    // L'URL est maintenant notre Netlify Function
+    const API_URL = '/.netlify/functions/submit-diagnostic';
 
     // Navigation étapes
     form.querySelectorAll('.btn-next').forEach(btn => {
@@ -596,25 +594,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       };
 
       try {
-        if (!WEBHOOK_URL) {
-          throw new Error('Configuration webhook manquante.');
-        }
-
-        const response = await fetch(WEBHOOK_URL, {
+        const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
-          throw new Error(`Erreur serveur (${response.status})`);
+          const errData = await response.json();
+          throw new Error(errData.error || `Erreur serveur (${response.status})`);
         }
 
         // ── Succès : redirection ──
         window.location.href = '/merci-diagnostic';
 
       } catch (err) {
-        console.error('❌ Erreur webhook:', err);
+        console.error('❌ Erreur API locale:', err);
 
         // ── Afficher erreur ──
         showError('Une erreur est survenue. Veuillez réessayer dans quelques instants.');
