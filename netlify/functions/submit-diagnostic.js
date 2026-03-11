@@ -10,9 +10,9 @@ export async function handler(event, context) {
   try {
     const payload = JSON.parse(event.body);
 
-    // L'URL du webhook n8n est récupérée depuis l'environnement Netlify
-    // Plus besoin qu'elle soit PUBLIC_
-    const webhookUrl = process.env.PUBLIC_N8N_WEBHOOK_DIAGNOSTIC;
+    // L'URL du webhook n8n est récupérée depuis les variables d'environnement serveur Netlify
+    // Variable strictement server-side (jamais exposée côté client)
+    const webhookUrl = process.env.N8N_WEBHOOK_DIAGNOSTIC_URL;
 
     if (!webhookUrl) {
       console.error("Variable N8N_WEBHOOK manquante côté serveur");
