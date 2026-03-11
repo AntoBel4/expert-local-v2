@@ -1,0 +1,52 @@
+---
+/**
+ * Header.astro — Navigation sticky glassmorphism
+ * Réutilisable dans tous les layouts
+ */
+---
+
+<header class="site-header" id="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="nav-logo" aria-label="Expert Local - Accueil">
+        Expert<span class="nav-logo-accent">Local</span>.fr
+      </a>
+      <div class="nav-actions">
+        <a href="#diagnostic" class="btn btn--primary btn--header">
+          Diagnostic gratuit
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(10, 15, 26, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-dark);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) 0;
+  }
+  .nav-logo {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .nav-logo:hover { color: var(--color-text-primary); }
+  .nav-logo-accent { color: var(--color-primary); }
+  .btn--header {
+    font-size: var(--text-sm);
+    padding: var(--space-2) var(--space-5);
+  }
+</style>

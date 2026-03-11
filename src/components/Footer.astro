@@ -1,0 +1,109 @@
+---
+/**
+ * Footer.astro — Footer responsive réutilisable
+ */
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          Expert<span class="footer-logo-accent">Local</span>.fr
+        </a>
+        <p class="footer-tagline">
+          Expert en réputation Google pour commerçants et artisans locaux.<br>
+          <a href="mailto:contact.expertlocal@gmail.com" class="footer-email">contact.expertlocal@gmail.com</a>
+        </p>
+      </div>
+      <div class="footer-links">
+        <h4 class="footer-heading">Liens</h4>
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/#diagnostic">Diagnostic gratuit</a></li>
+          <li><a href="/#methode">La méthode</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4 class="footer-heading">Légal</h4>
+        <ul>
+          <li><a href="/mentions">Mentions légales</a></li>
+          <li><a href="/cgv">CGV</a></li>
+          <li><a href="/confidentialite">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} Studio Estarellas — ExpertLocal.fr — Tous droits réservés</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-bg-section);
+    border-top: 1px solid var(--color-border-dark);
+    padding: var(--space-16) 0 var(--space-8);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-10);
+  }
+  .footer-logo {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: var(--space-3);
+  }
+  .footer-logo-accent { color: var(--color-primary); }
+  .footer-tagline {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    max-width: 320px;
+  }
+  .footer-email {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+  .footer-heading {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+  }
+  .footer-links ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .footer-links a {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+  .footer-links a:hover { color: var(--color-primary); }
+  .footer-bottom {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border-dark);
+    text-align: center;
+  }
+  .footer-bottom p {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>
