@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Diagnostic envoyé ! | ExpertLocal.fr" noindex={true}>
+  <section class="merci-section">
+    <div class="container container--narrow merci-content">
+      <div class="merci-icon">✅</div>
+      <h1>Votre diagnostic est en cours de création !</h1>
+      <p class="merci-subtitle">
+        Nous analysons votre fiche Google en ce moment même.<br>
+        Vous recevrez votre <strong>PDF personnalisé</strong> par email dans les prochaines minutes.
+      </p>
+
+      <div class="merci-steps card card--glass">
+        <h3>📋 Prochaines étapes</h3>
+        <ol class="merci-list">
+          <li><strong>Vérifiez votre boîte email</strong> (pensez aux spams)</li>
+          <li><strong>Lisez votre diagnostic personnalisé</strong> en détail</li>
+          <li><strong>Appliquez les 3 actions prioritaires</strong> recommandées</li>
+        </ol>
+      </div>
+
+      <div class="merci-cta-block">
+        <p class="merci-cta-text">
+          Vous voulez aller plus vite ? Le <strong>Kit Express à 49€</strong> contient tout le matériel prêt à l'emploi.
+        </p>
+        <a href="/#offre" class="btn btn--primary btn--large merci-cta-btn">
+          💎 Découvrir le Kit Express
+        </a>
+        <a href="/" class="merci-back">← Retour à l'accueil</a>
+      </div>
+
+      <div class="merci-trust">
+        <span>🔒 Zéro spam</span>
+        <span>📧 1 seul email de suivi dans 7 jours</span>
+        <span>❌ Désabonnement en 1 clic</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .merci-section {
+    padding: var(--space-20) 0;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+  }
+  .merci-content {
+    text-align: center;
+  }
+  .merci-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-6);
+  }
+  .merci-content h1 {
+    font-size: clamp(var(--text-2xl), 3.5vw, var(--text-4xl));
+    margin-bottom: var(--space-4);
+    line-height: var(--leading-tight);
+  }
+  .merci-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-10);
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .merci-steps {
+    text-align: left;
+    padding: var(--space-6);
+    margin-bottom: var(--space-10);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .merci-steps h3 {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-lg);
+  }
+  .merci-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-left: var(--space-5);
+  }
+  .merci-list li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-normal);
+  }
+  .merci-cta-block {
+    margin-bottom: var(--space-10);
+  }
+  .merci-cta-text {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-md);
+  }
+  .merci-cta-btn {
+    margin-bottom: var(--space-4);
+  }
+  .merci-back {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-top: var(--space-3);
+    transition: color var(--transition-fast);
+  }
+  .merci-back:hover {
+    color: var(--color-primary);
+  }
+  .merci-trust {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+</style>
