@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Politique de Confidentialité — Expert Local"
+  description="Politique de confidentialité et de protection des données personnelles d'Expert Local."
+>
+  <section class="section section--dark">
+    <div class="container container--narrow">
+      <h1 class="legal-title">Politique de Confidentialité</h1>
+      <p class="legal-updated">Dernière mise à jour : mars 2026</p>
+
+      <div class="legal-draft-banner">
+        ⚠️ Version provisoire — Cette politique de confidentialité doit être validée avant publication.
+      </div>
+
+      <div class="legal-content">
+        <h2>1. Responsable du traitement</h2>
+        <p>Le responsable du traitement des données personnelles est Studio Estarellas (Expert Local), joignable à l'adresse <a href="mailto:contact.expertlocal@gmail.com">contact.expertlocal@gmail.com</a>.</p>
+
+        <h2>2. Données collectées</h2>
+        <p>Nous collectons les données suivantes :</p>
+        <ul>
+          <li>Prénom et adresse email (formulaire de diagnostic gratuit)</li>
+          <li>Nom du commerce et ville (formulaire de diagnostic)</li>
+          <li>Lien vers la fiche Google Maps (facultatif)</li>
+          <li>Données de paiement (traitées exclusivement par Stripe, non stockées par Expert Local)</li>
+        </ul>
+
+        <h2>3. Finalités du traitement</h2>
+        <ul>
+          <li>Génération et envoi du diagnostic de réputation personnalisé</li>
+          <li>Livraison des produits achetés</li>
+          <li>Communication commerciale relative à nos offres (avec consentement)</li>
+          <li>Suivi de la relation client (CRM)</li>
+        </ul>
+
+        <h2>4. Base légale</h2>
+        <p>Le traitement repose sur le consentement (formulaire de diagnostic), l'exécution d'un contrat (achat de produit) et l'intérêt légitime (amélioration de nos services).</p>
+
+        <h2>5. Destinataires des données</h2>
+        <p>Les données sont transmises aux sous-traitants suivants dans le cadre strict de leurs missions :</p>
+        <ul>
+          <li><strong>Brevo</strong> — Envoi d'emails transactionnels et marketing</li>
+          <li><strong>Stripe</strong> — Traitement des paiements</li>
+          <li><strong>Notion</strong> — Suivi interne de la relation client (CRM)</li>
+        </ul>
+
+        <h2>6. Durée de conservation</h2>
+        <p>Les données sont conservées pendant la durée de la relation commerciale, puis pendant une durée maximale de 3 ans à compter du dernier contact, conformément aux recommandations de la CNIL.</p>
+
+        <h2>7. Vos droits</h2>
+        <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de portabilité et de limitation du traitement de vos données. Pour exercer vos droits, contactez-nous à <a href="mailto:contact.expertlocal@gmail.com">contact.expertlocal@gmail.com</a>.</p>
+
+        <h2>8. Cookies</h2>
+        <p>Le site Expert Local n'utilise pas de cookies de tracking tiers. Seuls des cookies strictement nécessaires au fonctionnement du site peuvent être déposés.</p>
+
+        <h2>9. Sécurité</h2>
+        <p>Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données personnelles contre tout accès non autorisé, modification ou destruction.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-updated {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-10);
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .legal-content p {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-4);
+  }
+
+  .legal-content ul {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-6);
+  }
+
+  .legal-content li {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-2);
+    list-style: disc;
+  }
+
+  .legal-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .legal-draft-banner {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-5);
+    color: var(--color-warning);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-8);
+  }
+</style>

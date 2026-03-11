@@ -1,0 +1,239 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Expert en réputation Google pour commerçants et artisans locaux. Obtenez 10 avis Google 5★ en 10 jours.',
+  noindex = false,
+  ogImage = '/images/og-image-2026.webp',
+} = Astro.props;
+
+const siteUrl = 'https://expert-local.fr';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+---
+
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Expert Local" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+
+  <!-- Styles -->
+  <style is:global>
+    @import '../styles/global.css';
+  </style>
+</head>
+<body>
+  <slot name="before-header" />
+
+  <header class="site-header">
+    <slot name="header">
+      <div class="container">
+        <nav class="nav">
+          <a href="/" class="nav-logo">
+            Expert<span class="nav-logo-accent">Local</span>.fr
+          </a>
+          <div class="nav-actions">
+            <a href="/#diagnostic" class="btn btn--primary">
+              Diagnostic gratuit
+            </a>
+          </div>
+        </nav>
+      </div>
+    </slot>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">
+            Expert<span class="footer-logo-accent">Local</span>.fr
+          </a>
+          <p class="footer-tagline">
+            Expert en réputation Google pour commerçants et artisans locaux.<br>
+            <a href="mailto:contact.expertlocal@gmail.com" style="color: var(--color-text-muted); font-size: var(--text-xs);">contact.expertlocal@gmail.com</a>
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4 class="footer-heading">Liens</h4>
+          <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/#diagnostic">Diagnostic gratuit</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4 class="footer-heading">Légal</h4>
+          <ul>
+            <li><a href="/mentions">Mentions légales</a></li>
+            <li><a href="/cgv">CGV</a></li>
+            <li><a href="/confidentialite">Confidentialité</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; {new Date().getFullYear()} ExpertLocal.fr — Tous droits réservés</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style>
+  /* ── Header ── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(10, 15, 26, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-dark);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) 0;
+  }
+
+  .nav-logo {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .nav-logo:hover {
+    color: var(--color-text-primary);
+  }
+
+  .nav-logo-accent {
+    color: var(--color-primary);
+  }
+
+  .nav-actions .btn {
+    font-size: var(--text-sm);
+    padding: var(--space-2) var(--space-5);
+  }
+
+  /* ── Footer ── */
+  .site-footer {
+    background: var(--color-bg-section);
+    border-top: 1px solid var(--color-border-dark);
+    padding: var(--space-16) 0 var(--space-8);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-10);
+  }
+
+  .footer-logo {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: var(--space-3);
+  }
+
+  .footer-logo-accent {
+    color: var(--color-primary);
+  }
+
+  .footer-tagline {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    max-width: 320px;
+  }
+
+  .footer-heading {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer-links ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer-links a {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .footer-links a:hover {
+    color: var(--color-primary);
+  }
+
+  .footer-bottom {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border-dark);
+    text-align: center;
+  }
+
+  .footer-bottom p {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

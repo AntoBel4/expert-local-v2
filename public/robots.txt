@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /espace-client/
+Disallow: /checkout-49
+Disallow: /upsell-pro
+Disallow: /merci-commande
+Disallow: /merci-pro
+Disallow: /merci-vip
+Disallow: /erreur
+
+Sitemap: https://expert-local.fr/sitemap.xml

@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Conditions Générales de Vente — Expert Local"
+  description="Conditions générales de vente des produits et services Expert Local."
+>
+  <section class="section section--dark">
+    <div class="container container--narrow">
+      <h1 class="legal-title">Conditions Générales de Vente</h1>
+      <p class="legal-updated">Dernière mise à jour : mars 2026</p>
+
+      <div class="legal-draft-banner">
+        ⚠️ Version provisoire — Ces CGV doivent être validées avant publication.
+      </div>
+
+      <div class="legal-content">
+        <h2>Article 1 — Objet</h2>
+        <p>Les présentes Conditions Générales de Vente (CGV) régissent les ventes de produits et services numériques proposés par Studio Estarellas, exerçant sous le nom commercial Expert Local, accessible à l'adresse <a href="https://expert-local.fr">expert-local.fr</a>.</p>
+
+        <h2>Article 2 — Produits et services</h2>
+        <p>Expert Local propose les produits numériques suivants :</p>
+        <ul>
+          <li><strong>Kit Express 2026</strong> — 49,00 € TTC : Kit numérique contenant la méthode, les scripts et les templates pour obtenir des avis Google.</li>
+          <li><strong>Pack Scripts SMS Premium</strong> — 19,00 € TTC : Complément de 10 scripts avancés SMS/WhatsApp (add-on au Kit Express).</li>
+          <li><strong>Pack PRO Domination Locale</strong> — 179,00 € TTC : Kit numérique + matériel professionnel livré + appel stratégique.</li>
+          <li><strong>Accompagnement VIP 2026</strong> — 497,00 € TTC/mois : Gestion complète de la réputation Google (abonnement mensuel).</li>
+        </ul>
+
+        <h2>Article 3 — Prix</h2>
+        <p>Les prix sont indiqués en euros, toutes taxes comprises (TTC). Expert Local se réserve le droit de modifier ses prix à tout moment. Les produits sont facturés sur la base des tarifs en vigueur au moment de la validation de la commande.</p>
+
+        <h2>Article 4 — Commande et paiement</h2>
+        <p>Le paiement s'effectue en ligne par carte bancaire via la plateforme sécurisée Stripe. La commande est confirmée dès réception du paiement.</p>
+
+        <h2>Article 5 — Livraison</h2>
+        <p>Les produits numériques sont livrés par email et/ou via un espace client en ligne, immédiatement après confirmation du paiement. Les produits physiques (Pack PRO) sont expédiés sous 5 jours ouvrés.</p>
+
+        <h2>Article 6 — Droit de rétractation</h2>
+        <p>Conformément à l'article L.221-28 du Code de la consommation, le droit de rétractation ne peut être exercé pour les contenus numériques fournis sur un support immatériel dont l'exécution a commencé avec l'accord du consommateur. En acceptant les présentes CGV et en accédant au contenu numérique, le client renonce expressément à son droit de rétractation.</p>
+
+        <h2>Article 7 — Propriété intellectuelle</h2>
+        <p>L'ensemble des contenus (textes, visuels, méthodes, scripts) fournis dans le cadre des produits Expert Local est protégé par le droit d'auteur. Toute reproduction ou diffusion est interdite sans autorisation écrite préalable.</p>
+
+        <h2>Article 8 — Responsabilité</h2>
+        <p>Expert Local s'engage à fournir des contenus de qualité. Cependant, les résultats obtenus dépendent de la mise en œuvre par le client. Expert Local ne garantit pas un nombre précis d'avis Google.</p>
+
+        <h2>Article 9 — Données personnelles</h2>
+        <p>Le traitement des données personnelles est détaillé dans notre <a href="/confidentialite">Politique de Confidentialité</a>.</p>
+
+        <h2>Article 10 — Contact</h2>
+        <p>Pour toute question relative aux présentes CGV : <a href="mailto:contact.expertlocal@gmail.com">contact.expertlocal@gmail.com</a></p>
+
+        <h2>Article 11 — Droit applicable</h2>
+        <p>Les présentes CGV sont soumises au droit français. En cas de litige, les tribunaux compétents seront ceux du ressort du siège social de Studio Estarellas.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-updated {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-10);
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .legal-content p {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-4);
+  }
+
+  .legal-content ul {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-6);
+  }
+
+  .legal-content li {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-2);
+    list-style: disc;
+  }
+
+  .legal-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .legal-draft-banner {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-5);
+    color: var(--color-warning);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-8);
+  }
+</style>

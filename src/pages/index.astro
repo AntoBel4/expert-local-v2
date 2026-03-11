@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Expert Local 2026 | Obtenez 10 Avis Google 5★ en 10 Jours">
+
+  <section class="section hero-temp">
+    <div class="container container--narrow" style="text-align: center;">
+
+      <div class="hero-temp-badge">
+        <span class="section-label section-label--primary">🚧 En construction</span>
+      </div>
+
+      <h1 class="section-title" style="margin-top: var(--space-8);">
+        Expert<span class="text-gradient">Local</span>.fr
+      </h1>
+
+      <p class="section-subtitle" style="margin-bottom: var(--space-10);">
+        La nouvelle version de notre site arrive très bientôt.<br>
+        Obtenez 10 avis Google 5★ en 10 jours grâce à la méthode psychologique 2026.
+      </p>
+
+      <div class="hero-temp-stats">
+        <div class="card card--glass" style="display: inline-flex; gap: var(--space-10); padding: var(--space-6) var(--space-10);">
+          <div class="stat">
+            <span class="stat-number">87%</span>
+            <span class="stat-label">de réussite</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">24-48h</span>
+            <span class="stat-label">premiers résultats</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">commerces aidés</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-muted" style="margin-top: var(--space-10); font-size: var(--text-sm);">
+        Spécialiste Eure-et-Loir · Conseiller numérique certifié
+      </p>
+
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .hero-temp {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(230, 126, 34, 0.08) 0%, transparent 60%),
+      var(--color-bg-dark);
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .stat-number {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-extrabold);
+    color: var(--color-primary);
+  }
+
+  .stat-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 768px) {
+    .card.card--glass {
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .stat-number {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

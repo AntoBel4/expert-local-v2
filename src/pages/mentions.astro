@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Mentions Légales — Expert Local"
+  description="Mentions légales du site expert-local.fr."
+>
+  <section class="section section--dark">
+    <div class="container container--narrow">
+      <h1 class="legal-title">Mentions Légales</h1>
+      <p class="legal-updated">Dernière mise à jour : mars 2026</p>
+
+      <div class="legal-draft-banner">
+        ⚠️ Version provisoire — Ces mentions légales doivent être validées avant publication.
+      </div>
+
+      <div class="legal-content">
+        <h2>Éditeur du site</h2>
+        <p>
+          <strong>Studio Estarellas</strong><br>
+          Responsable de la publication : Antoine Estarellas<br>
+          SIRET : <em>[À compléter avant mise en ligne]</em><br>
+          Adresse : <em>[À compléter avant mise en ligne — adresse du siège social]</em><br>
+          Email : <a href="mailto:contact.expertlocal@gmail.com">contact.expertlocal@gmail.com</a><br>
+          Site : <a href="https://expert-local.fr">expert-local.fr</a>
+        </p>
+
+        <h2>Hébergement</h2>
+        <p>
+          <strong>Netlify, Inc.</strong><br>
+          512 2nd Street, Suite 200<br>
+          San Francisco, CA 94107, USA<br>
+          <a href="https://www.netlify.com" target="_blank" rel="noopener">www.netlify.com</a>
+        </p>
+
+        <h2>Propriété intellectuelle</h2>
+        <p>L'ensemble du contenu de ce site (textes, images, vidéos, logos, méthodes) est protégé par le droit d'auteur. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable de l'éditeur.</p>
+
+        <h2>Responsabilité</h2>
+        <p>Expert Local s'efforce de fournir des informations aussi précises que possible. Toutefois, l'éditeur ne pourra être tenu responsable des omissions, des inexactitudes et des carences dans la mise à jour, qu'elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations.</p>
+
+        <h2>Liens hypertextes</h2>
+        <p>Le site expert-local.fr peut contenir des liens hypertextes vers d'autres sites. Expert Local n'est pas responsable du contenu de ces sites tiers.</p>
+
+        <h2>Données personnelles</h2>
+        <p>Pour toute information relative au traitement de vos données personnelles, veuillez consulter notre <a href="/confidentialite">Politique de Confidentialité</a>.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-updated {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-10);
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .legal-content p {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-4);
+  }
+
+  .legal-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .legal-draft-banner {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-5);
+    color: var(--color-warning);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-8);
+  }
+</style>

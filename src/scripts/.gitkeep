@@ -1,0 +1,6 @@
+/* Scripts JS côté client */
+/* Les scripts seront créés lors des phases suivantes :
+   - diagnostic-form.js  (Phase C)
+   - stripe-checkout.js  (Phase D)
+   - animations.js       (Phase B)
+*/
