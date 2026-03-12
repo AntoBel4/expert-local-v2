@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Merci pour votre achat ! | ExpertLocal.fr" noindex={true}>
+  <section class="merci-section">
+    <div class="container container--narrow merci-content">
+      <div class="merci-icon">🎉</div>
+      <h1>Félicitations, votre Kit est en route !</h1>
+      <p class="merci-subtitle">
+        Votre paiement a bien été validé. Vous allez recevoir un email très prochainement avec vos accès et tout le matériel du Kit Express (et de l'Order Bump si vous l'avez sélectionné).
+      </p>
+
+      <div class="merci-steps card card--glass">
+        <h3>📋 Vos prochaines étapes</h3>
+        <ol class="merci-list">
+          <li><strong>Consultez votre boîte email</strong> (le même que celui utilisé pour le paiement)</li>
+          <li><strong>Ouvrez l'email "Vos accès au Kit Express"</strong> (vérifiez les spams si besoin)</li>
+          <li><strong>Cliquez sur le lien</strong> pour démarrer immédiatement</li>
+        </ol>
+      </div>
+
+      <div class="merci-trust">
+        <span>✅ Paiement sécurisé validé</span>
+        <span>📧 Accès envoyés par email</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .merci-section {
+    padding: var(--space-20) 0;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+  }
+  .merci-content {
+    text-align: center;
+  }
+  .merci-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-6);
+  }
+  .merci-content h1 {
+    font-size: clamp(var(--text-2xl), 3.5vw, var(--text-4xl));
+    margin-bottom: var(--space-4);
+    line-height: var(--leading-tight);
+    color: var(--color-primary);
+  }
+  .merci-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-10);
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .merci-steps {
+    text-align: left;
+    padding: var(--space-6);
+    margin-bottom: var(--space-10);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .merci-steps h3 {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-lg);
+  }
+  .merci-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-left: var(--space-5);
+  }
+  .merci-list li {
+    font-size: var(--text-md);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-normal);
+  }
+  .merci-trust {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+</style>
