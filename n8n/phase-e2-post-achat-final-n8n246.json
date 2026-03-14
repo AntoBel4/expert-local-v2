@@ -1,0 +1,569 @@
+﻿{
+  "name": "Phase E2 - Stripe Post-Achat (Compat n8n 2.4.6)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-post-achat",
+        "options": {}
+      },
+      "id": "946ab5de-a45f-4e97-8a50-23d2cee9d1b4",
+      "name": "Stripe Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -2336,
+        336
+      ],
+      "webhookId": "d3cc9599-9070-4307-b43c-3b4690e5bd33"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.stripe.com/v1/checkout/sessions/{{$json[\"body\"][\"data\"][\"object\"][\"id\"]}}?expand[]=line_items",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer  A_REMPLIR_STRIPE_SECRET_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a24fe04f-432a-4302-a6b6-03fe60dae390",
+      "name": "GET Stripe Session",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -2080,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"payment_status\"]}}",
+              "value2": "paid"
+            }
+          ]
+        }
+      },
+      "id": "d127c06c-35cd-4e80-86cc-1d952c5f14c8",
+      "name": "Check Paid",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1840,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.notion.com/v1/databases/b7518473a44c49169f0b3fd8e91c4aca/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"filter\": {\n    \"property\": \"Session ID\",\n    \"rich_text\": {\n      \"equals\": \"{{$json.id}}\"\n    }\n  }\n}",
+        "options": {}
+      },
+      "id": "6b6e00b6-0049-4947-88be-d132b4e04b9f",
+      "name": "Search Session in Notion",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1616,
+        320
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"results\"] && $json[\"results\"].length ? \"existing\" : \"new\"}}",
+              "value2": "new"
+            }
+          ]
+        }
+      },
+      "id": "8ae85834-b271-4bee-bd48-7c8e4f3fa6f2",
+      "name": "Check Idempotence",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1424,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node[\"GET Stripe Session\"].json[\"metadata\"][\"type_achat\"]}}",
+              "value2": "kit_seul"
+            }
+          ]
+        }
+      },
+      "id": "856dc7b5-1be5-45d3-a084-0faff9ee68e9",
+      "name": "Is Kit Seul",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1248,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node[\"GET Stripe Session\"].json[\"metadata\"][\"type_achat\"]}}",
+              "value2": "kit_et_bump"
+            }
+          ]
+        }
+      },
+      "id": "4a6e0cb9-f254-44c6-9573-ac8956d885d6",
+      "name": "Is Kit Et Bump",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1248,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node[\"GET Stripe Session\"].json[\"metadata\"][\"type_achat\"]}}",
+              "value2": "pack_pro"
+            }
+          ]
+        }
+      },
+      "id": "52964f0c-356c-440d-805f-e1dfc6a3252e",
+      "name": "Is Pack PRO",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1248,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const stripe = $node[\"GET Stripe Session\"].json;\n\nconst email = (stripe.customer_details && stripe.customer_details.email) || stripe.customer_email || \"\";\nconst nom = (stripe.customer_details && stripe.customer_details.name) || email || \"Client Kit\";\n\nconst body = {\n  parent: {\n    database_id: \"b7518473a44c49169f0b3fd8e91c4aca\"\n  },\n  properties: {\n    \"Nom Commerce\": {\n      title: [{ text: { content: nom } }]\n    },\n    \"Email\": {\n      email: email ? email : null\n    },\n    \"Session ID\": {\n      rich_text: [{ text: { content: stripe.id || \"\" } }]\n    },\n    \"Stripe Customer ID\": {\n      rich_text: [{ text: { content: stripe.customer || \"\" } }]\n    },\n    \"Type Achat\": {\n      select: { name: \"kit_seul\" }\n    },\n    \"Statut Client\": {\n      select: { name: \"Client Kit\" }\n    },\n    \"Source Lead\": {\n      select: { name: \"Landing\" }\n    },\n    \"Coupon AppliquÃ©\": {\n      select: { name: \"Aucun\" }\n    },\n    \"Montant PayÃ©\": {\n      number: stripe.amount_total ? stripe.amount_total / 100 : 49\n    },\n    \"CA GÃ©nÃ©rÃ©\": {\n      number: stripe.amount_total ? stripe.amount_total / 100 : 49\n    },\n    \"Order Bump Inclus\": {\n      checkbox: false\n    },\n    \"Webhook TraitÃ©\": {\n      checkbox: true\n    },\n    \"Date Conversion\": {\n      date: { start: new Date().toISOString().substring(0, 10) }\n    }\n  }\n};\n\nreturn [{ json: { notionBodyStr: JSON.stringify(body) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1024,
+        32
+      ],
+      "id": "ab8a5a08-6f3a-4464-86da-fc6530343456",
+      "name": "Prepare Notion Kit"
+    },
+    {
+      "parameters": {
+        "jsCode": "const stripe = $node[\"GET Stripe Session\"].json;\n\nconst email = (stripe.customer_details && stripe.customer_details.email) || stripe.customer_email || \"\";\nconst nom = (stripe.customer_details && stripe.customer_details.name) || email || \"Client Kit + Bump\";\n\nconst body = {\n  parent: {\n    database_id: \"b7518473a44c49169f0b3fd8e91c4aca\"\n  },\n  properties: {\n    \"Nom Commerce\": {\n      title: [{ text: { content: nom } }]\n    },\n    \"Email\": {\n      email: email ? email : null\n    },\n    \"Session ID\": {\n      rich_text: [{ text: { content: stripe.id || \"\" } }]\n    },\n    \"Stripe Customer ID\": {\n      rich_text: [{ text: { content: stripe.customer || \"\" } }]\n    },\n    \"Type Achat\": {\n      select: { name: \"kit_et_bump\" }\n    },\n    \"Statut Client\": {\n      select: { name: \"Client Kit + Bump\" }\n    },\n    \"Source Lead\": {\n      select: { name: \"Landing\" }\n    },\n    \"Coupon AppliquÃ©\": {\n      select: { name: \"Aucun\" }\n    },\n    \"Montant PayÃ©\": {\n      number: stripe.amount_total ? stripe.amount_total / 100 : 68\n    },\n    \"CA GÃ©nÃ©rÃ©\": {\n      number: stripe.amount_total ? stripe.amount_total / 100 : 68\n    },\n    \"Order Bump Inclus\": {\n      checkbox: true\n    },\n    \"Webhook TraitÃ©\": {\n      checkbox: true\n    },\n    \"Date Conversion\": {\n      date: { start: new Date().toISOString().substring(0, 10) }\n    }\n  }\n};\n\nreturn [{ json: { notionBodyStr: JSON.stringify(body) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1024,
+        272
+      ],
+      "id": "40c323de-fbf4-4dc5-9a1a-3ece78999c74",
+      "name": "Prepare Notion Kit+Bump"
+    },
+    {
+      "parameters": {
+        "jsCode": "const stripe = $node[\"GET Stripe Session\"].json;\n\nconst email = (stripe.customer_details && stripe.customer_details.email) || stripe.customer_email || \"\";\nconst nom = (stripe.customer_details && stripe.customer_details.name) || email || \"Client PRO\";\nconst coupon = (stripe.metadata && stripe.metadata.coupon_applique) || \"Aucun\";\nconst upgradeFrom = (stripe.metadata && stripe.metadata.upgrade_from) || \"direct\";\n\nconst body = {\n  parent: {\n    database_id: \"b7518473a44c49169f0b3fd8e91c4aca\"\n  },\n  properties: {\n    \"Nom Commerce\": {\n      title: [{ text: { content: nom } }]\n    },\n    \"Email\": {\n      email: email ? email : null\n    },\n    \"Session ID\": {\n      rich_text: [{ text: { content: stripe.id || \"\" } }]\n    },\n    \"Stripe Customer ID\": {\n      rich_text: [{ text: { content: stripe.customer || \"\" } }]\n    },\n    \"Upgrade From\": {\n      rich_text: [{ text: { content: upgradeFrom } }]\n    },\n    \"Type Achat\": {\n      select: { name: \"pack_pro\" }\n    },\n    \"Statut Client\": {\n      select: { name: \"Client PRO\" }\n    },\n    \"Source Lead\": {\n      select: { name: \"Landing\" }\n    },\n    \"Coupon AppliquÃ©\": {\n      select: { name: coupon }\n    },\n    \"Montant PayÃ©\": {\n      number: stripe.amount_total ? stripe.amount_total / 100 : 179\n    },\n    \"CA GÃ©nÃ©rÃ©\": {\n      number: stripe.amount_total ? stripe.amount_total / 100 : 179\n    },\n    \"Order Bump Inclus\": {\n      checkbox: false\n    },\n    \"Webhook TraitÃ©\": {\n      checkbox: true\n    },\n    \"Date Conversion\": {\n      date: { start: new Date().toISOString().substring(0, 10) }\n    }\n  }\n};\n\nreturn [{ json: { notionBodyStr: JSON.stringify(body) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1024,
+        512
+      ],
+      "id": "205fd310-bf3b-4fd1-89e9-56c103fb9cf9",
+      "name": "Prepare Notion PRO"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json[\"notionBodyStr\"] }}",
+        "options": {}
+      },
+      "id": "87266fa7-899a-4ee4-befc-2c13ec703b79",
+      "name": "Create Notion Kit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -784,
+        32
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json[\"notionBodyStr\"] }}",
+        "options": {}
+      },
+      "id": "72367d81-2ce1-4fb6-a8a8-eb95f7ece4c3",
+      "name": "Create Notion Kit+Bump",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -784,
+        272
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json[\"notionBodyStr\"] }}",
+        "options": {}
+      },
+      "id": "52dcb703-5ff1-4c90-b6df-eeace9b30b04",
+      "name": "Create Notion PRO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -784,
+        512
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "A_REMPLIR_BREVO_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": {\n    \"name\": \"Antoine d'Expert-Local.fr\",\n    \"email\": \"contact@expert-local.fr\"\n  },\n  \"to\": [\n    {\n      \"email\": \"{{$('GET Stripe Session').item.json.customer_details.email}}\"\n    }\n  ],\n  \"templateId\": 1\n}",
+        "options": {}
+      },
+      "id": "96044b6a-204f-46e5-8b90-a73e846846e1",
+      "name": "Send Brevo Kit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -528,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "A_REMPLIR_BREVO_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "Content-Type"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": {\n    \"name\": \"Antoine d'Expert-Local.fr\",\n    \"email\": \"contact@expert-local.fr\"\n  },\n  \"to\": [\n    {\n      \"email\": \"{{$('GET Stripe Session').item.json.customer_details.email}}\"\n    }\n  ],\n  \"templateId\": 2\n}",
+        "options": {}
+      },
+      "id": "8c95da79-1c33-44fb-97b8-4d0dfda5eb36",
+      "name": "Send Brevo Kit+Bump",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -528,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "A_REMPLIR_BREVO_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "717a3c3c-e7b7-4f5d-b101-af376cbfa773",
+      "name": "Send Brevo PRO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -528,
+        512
+      ]
+    }
+  ],
+  "pinData": {
+    "Stripe Webhook": [
+      {
+        "json": {
+          "body": {
+            "data": {
+              "object": {
+                "id": "cs_test_b1l9eDPaZRXDClBTHfF7N9pNUZT4N8OqosoEOLAuxKtcVolvsQUqIKljpf"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Stripe Webhook": {
+      "main": [
+        [
+          {
+            "node": "GET Stripe Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Stripe Session": {
+      "main": [
+        [
+          {
+            "node": "Check Paid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Paid": {
+      "main": [
+        [
+          {
+            "node": "Search Session in Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Session in Notion": {
+      "main": [
+        [
+          {
+            "node": "Check Idempotence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Idempotence": {
+      "main": [
+        [
+          {
+            "node": "Is Kit Seul",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is Kit Et Bump",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is Pack PRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Kit Seul": {
+      "main": [
+        [
+          {
+            "node": "Prepare Notion Kit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Notion Kit": {
+      "main": [
+        [
+          {
+            "node": "Create Notion Kit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Notion Kit": {
+      "main": [
+        [
+          {
+            "node": "Send Brevo Kit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Kit Et Bump": {
+      "main": [
+        [
+          {
+            "node": "Prepare Notion Kit+Bump",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Notion Kit+Bump": {
+      "main": [
+        [
+          {
+            "node": "Create Notion Kit+Bump",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Notion Kit+Bump": {
+      "main": [
+        [
+          {
+            "node": "Send Brevo Kit+Bump",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Pack PRO": {
+      "main": [
+        [
+          {
+            "node": "Prepare Notion PRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Notion PRO": {
+      "main": [
+        [
+          {
+            "node": "Create Notion PRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Notion PRO": {
+      "main": [
+        [
+          {
+            "node": "Send Brevo PRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "versionId": "4d696d1f-d55c-4c21-89fa-5212f16a04b5",
+  "meta": {
+    "instanceId": "eee3f4e847b8c9878a5d6379d99eacc8e5355b0753c568fb9ee289b1528c4f3b"
+  },
+  "id": "XX2mmP9dnwJk-0IQboUYI",
+  "tags": []
+}

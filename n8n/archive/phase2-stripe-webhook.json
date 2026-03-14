@@ -1,0 +1,479 @@
+{
+  "name": "Phase E2 - Stripe Post-Achat",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-post-achat",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "e98fb12b",
+      "name": "Stripe Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        100,
+        300
+      ],
+      "webhookId": "stripe-post-achat-webhook",
+      "credentials": {
+        "stripeWebhookApi": {
+          "id": "A_REMPLIR_STRIPE_WEBHOOK_CREDENTIALS",
+          "name": "Stripe Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.stripe.com/v1/checkout/sessions/{{$json.body.data.object.id}}?expand[]=line_items",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "stripeApi",
+        "options": {}
+      },
+      "id": "d74fc83a",
+      "name": "GET Stripe Session",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        300,
+        300
+      ],
+      "credentials": {
+        "stripeApi": {
+          "id": "A_REMPLIR_STRIPE_API_CREDENTIALS",
+          "name": "Stripe account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('GET Stripe Session').item.json.payment_status }}",
+              "value2": "paid"
+            }
+          ]
+        }
+      },
+      "id": "payment_status_check",
+      "name": "Check Paid",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "A_REMPLIR_NOTION_DB_ID",
+          "mode": "id"
+        },
+        "filterType": "manual",
+        "matchType": "anyFilter",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Session ID|rich_text",
+              "condition": "equals",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.id }}"
+            }
+          ]
+        }
+      },
+      "id": "c63ea529",
+      "name": "Search Idempotence (Notion)",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "A_REMPLIR_NOTION_CREDENTIALS",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.length > 0}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b52d9418",
+      "name": "Check Doublon",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "condition": "={{ $('GET Stripe Session').item.json.metadata.type_achat }}",
+              "value": "kit_seul"
+            },
+            {
+              "condition": "={{ $('GET Stripe Session').item.json.metadata.type_achat }}",
+              "value": "kit_et_bump"
+            },
+            {
+              "condition": "={{ $('GET Stripe Session').item.json.metadata.type_achat }}",
+              "value": "pack_pro"
+            }
+          ]
+        }
+      },
+      "id": "a41c8307",
+      "name": "Switch type_achat",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": {
+          "__rl": true,
+          "value": "A_REMPLIR_NOTION_DB_ID",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Email|title",
+              "titleValue": "={{ $('GET Stripe Session').item.json.customer_details.email }}"
+            },
+            {
+              "key": "Session ID|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.id }}"
+            },
+            {
+              "key": "Statut Client|select",
+              "selectValue": "Client Kit"
+            },
+            {
+              "key": "Source|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.metadata.source }}"
+            }
+          ]
+        }
+      },
+      "id": "f30b72a6",
+      "name": "Notion (Création Kit)",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        100
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "A_REMPLIR_NOTION_CREDENTIALS",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "email",
+        "operation": "sendTemplate",
+        "templateId": "A_REMPLIR_TEMPLATE_ID_KIT",
+        "recipientEmail": "={{ $('GET Stripe Session').item.json.customer_details.email }}"
+      },
+      "id": "e29a6195",
+      "name": "Brevo (Mail Kit)",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        100
+      ],
+      "credentials": {
+        "brevoApi": {
+          "id": "A_REMPLIR_BREVO_CREDENTIALS",
+          "name": "Brevo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": {
+          "__rl": true,
+          "value": "A_REMPLIR_NOTION_DB_ID",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Email|title",
+              "titleValue": "={{ $('GET Stripe Session').item.json.customer_details.email }}"
+            },
+            {
+              "key": "Session ID|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.id }}"
+            },
+            {
+              "key": "Statut Client|select",
+              "selectValue": "Client Kit + Bump"
+            },
+            {
+              "key": "Source|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.metadata.source }}"
+            }
+          ]
+        }
+      },
+      "id": "g41c83b7",
+      "name": "Notion (Création Kit+Bump)",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        300
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "A_REMPLIR_NOTION_CREDENTIALS",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "email",
+        "operation": "sendTemplate",
+        "templateId": "A_REMPLIR_TEMPLATE_ID_KIT_BUMP",
+        "recipientEmail": "={{ $('GET Stripe Session').item.json.customer_details.email }}"
+      },
+      "id": "f30b72b6",
+      "name": "Brevo (Mail Kit+Bump)",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        300
+      ],
+      "credentials": {
+        "brevoApi": {
+          "id": "A_REMPLIR_BREVO_CREDENTIALS",
+          "name": "Brevo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": {
+          "__rl": true,
+          "value": "A_REMPLIR_NOTION_DB_ID",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Email|title",
+              "titleValue": "={{ $('GET Stripe Session').item.json.customer_details.email }}"
+            },
+            {
+              "key": "Session ID|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.id }}"
+            },
+            {
+              "key": "Statut Client|select",
+              "selectValue": "Client PRO"
+            },
+            {
+              "key": "Source|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.metadata.source }}"
+            },
+            {
+              "key": "Upgrade From|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.metadata.upgrade_from }}"
+            },
+            {
+              "key": "Coupon|rich_text",
+              "richTextValue": "={{ $('GET Stripe Session').item.json.metadata.coupon_applique }}"
+            }
+          ]
+        }
+      },
+      "id": "h52d94c8",
+      "name": "Notion (Création PRO)",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        500
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "A_REMPLIR_NOTION_CREDENTIALS",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "email",
+        "operation": "sendTemplate",
+        "templateId": "A_REMPLIR_TEMPLATE_ID_PRO",
+        "recipientEmail": "={{ $('GET Stripe Session').item.json.customer_details.email }}"
+      },
+      "id": "g41c83c7",
+      "name": "Brevo (Mail PRO)",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        500
+      ],
+      "credentials": {
+        "brevoApi": {
+          "id": "A_REMPLIR_BREVO_CREDENTIALS",
+          "name": "Brevo account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Stripe Webhook": {
+      "main": [
+        [
+          {
+            "node": "GET Stripe Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Stripe Session": {
+      "main": [
+        [
+          {
+            "node": "Check Paid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Paid": {
+      "main": [
+        [
+          {
+            "node": "Search Idempotence (Notion)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Idempotence (Notion)": {
+      "main": [
+        [
+          {
+            "node": "Check Doublon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Doublon": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Switch type_achat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch type_achat": {
+      "main": [
+        [
+          {
+            "node": "Notion (Création Kit)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notion (Création Kit+Bump)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notion (Création PRO)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion (Création Kit)": {
+      "main": [
+        [
+          {
+            "node": "Brevo (Mail Kit)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion (Création Kit+Bump)": {
+      "main": [
+        [
+          {
+            "node": "Brevo (Mail Kit+Bump)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion (Création PRO)": {
+      "main": [
+        [
+          {
+            "node": "Brevo (Mail PRO)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

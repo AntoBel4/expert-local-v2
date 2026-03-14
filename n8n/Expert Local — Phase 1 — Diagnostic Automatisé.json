@@ -1,0 +1,869 @@
+{
+  "name": "Expert Local — Phase 1 — Diagnostic Automatisé",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "expert-local-diagnostic",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "99a1defd-c6a9-4849-ae6b-9c4a20e397c7",
+      "name": "① Webhook Formulaire",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1296,
+        208
+      ],
+      "webhookId": "expert-local-diagnostic"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════\n// VALIDATION DES DONNÉES DU FORMULAIRE\n// ═══════════════════════════════════════════\n\nconst input = $input.first().json.body || $input.first().json;\n\nconst prenom = (input.prenom || '').trim();\nconst email = (input.email || '').trim().toLowerCase();\nconst nom_commerce = (input.nom_commerce || '').trim();\nconst ville = (input.ville || '').trim();\nconst nb_avis = parseInt(input.nb_avis) || 0;\nconst lien_google = (input.lien_google || '').trim();\n\n// Validation email\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\nconst isEmailValid = emailRegex.test(email);\n\n// Validation champs obligatoires\nconst errors = [];\nif (!prenom) errors.push('Prénom manquant');\nif (!email) errors.push('Email manquant');\nelse if (!isEmailValid) errors.push('Email invalide');\nif (!nom_commerce) errors.push('Nom du commerce manquant');\nif (!ville) errors.push('Ville manquante');\n\n// Détermination du segment\nlet segment;\nif (nb_avis <= 5) segment = '0-5';\nelse if (nb_avis <= 20) segment = '6-20';\nelse segment = '21+';\n\n// Détection si lien Google fourni\nconst hasGoogleLink = lien_google.includes('google.com/maps') || \n                      lien_google.includes('goo.gl') ||\n                      lien_google.includes('maps.app.goo.gl');\n\nreturn {\n  json: {\n    isValid: errors.length === 0,\n    errors: errors,\n    prenom,\n    email,\n    nom_commerce,\n    ville,\n    nb_avis,\n    segment,\n    lien_google,\n    hasGoogleLink,\n    timestamp: new Date().toISOString(),\n    searchQuery: `${nom_commerce} ${ville}`\n  }\n};"
+      },
+      "id": "0ec63093-1733-41f2-9f93-a1a4a2361a6a",
+      "name": "② Validation Données",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1056,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "valid-check",
+              "leftValue": "={{ $json.isValid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f0936a6f-d20b-483c-bc10-a9bce7e86a0b",
+      "name": "③ Données valides ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -800,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Votre diagnostic est en cours de préparation. Vous le recevrez par email dans quelques minutes.' }) }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "0f7ab825-1d63-4c88-b67f-ea4c2e905a09",
+      "name": "Réponse OK au site",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -544,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, errors: $json.errors }) }}",
+        "options": {
+          "responseCode": 400,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "7dc94ea4-03d6-467f-a328-09f2baccaa45",
+      "name": "Réponse Erreur au site",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -544,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "google-link-check",
+              "leftValue": "={{ $json.hasGoogleLink }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4b052af8-dc8c-4cb6-a581-fc2f893767c3",
+      "name": "④ Lien Google fourni ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -304,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/{{ $env.APIFY_ACTOR_ID }}/run-sync-get-dataset-items?token={{ $env.APIFY_TOKEN }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"startUrls\": [\n    { \"url\": \"{{ $('② Validation Données').item.json.lien_google }}\" }\n  ],\n  \"maxCrawledPlacesPerSearch\": 1,\n  \"language\": \"fr\",\n  \"maxReviews\": 20,\n  \"reviewsSort\": \"newest\",\n  \"scrapeReviewerName\": false,\n  \"scrapeResponseFromOwnerText\": true\n}",
+        "options": {
+          "response": {
+            "response": {}
+          },
+          "timeout": 120000
+        }
+      },
+      "id": "354becaf-8b26-4bb9-b3b5-6a0a36cdbbd5",
+      "name": "⑤a Apify Scrape Direct",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/{{ $env.APIFY_ACTOR_ID }}/run-sync-get-dataset-items?token={{ $env.APIFY_TOKEN }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"searchStringsArray\": [\n    \"{{ $json.nom_commerce }} {{ $json.ville }}\"\n  ],\n  \"maxCrawledPlacesPerSearch\": 1,\n  \"language\": \"fr\",\n  \"maxReviews\": 20,\n  \"reviewsSort\": \"newest\",\n  \"scrapeReviewerName\": false,\n  \"scrapeResponseFromOwnerText\": true\n}",
+        "options": {
+          "response": {
+            "response": {}
+          },
+          "timeout": 120000
+        }
+      },
+      "id": "ee38d364-2a32-46a1-8185-147cf2b9285f",
+      "name": "⑤b Apify Recherche Auto",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        256
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════\n// EXTRACTION & STRUCTURATION DES DONNÉES\n// ═══════════════════════════════════════════\n\nconst results = $input.first().json;\nconst formData = $('② Validation Données').first().json;\n\n// Apify retourne un array — on prend le premier résultat\n// Si recherche auto, on prend le plus pertinent\nlet allResults = Array.isArray(results) ? results : [results];\n\nif (allResults.length === 0 || !allResults[0]) {\n  return {\n    json: {\n      ficheFound: false,\n      ...formData,\n      errorReason: 'Aucun résultat Apify'\n    }\n  };\n}\n\n// Sélection du meilleur résultat (le premier pour scrape direct, \n// le plus pertinent pour recherche auto)\nlet place = allResults[0];\n\n// Si recherche auto, essayer de matcher le nom\nif (!formData.hasGoogleLink && allResults.length > 1) {\n  const searchName = formData.nom_commerce.toLowerCase();\n  const matched = allResults.find(r => \n    (r.title || r.name || '').toLowerCase().includes(searchName) ||\n    searchName.includes((r.title || r.name || '').toLowerCase())\n  );\n  if (matched) place = matched;\n}\n\n// Extraction des avis\nconst reviews = (place.reviews || []).slice(0, 20).map(r => ({\n  text: r.text || r.textTranslated || '',\n  stars: r.stars || r.rating || 0,\n  date: r.publishedAtDate || r.date || '',\n  ownerResponse: r.responseFromOwnerText || null\n}));\n\n// Extraction des concurrents (autres résultats si recherche auto)\nconst competitors = allResults\n  .filter(r => r !== place)\n  .slice(0, 3)\n  .map(r => ({\n    name: r.title || r.name || 'Inconnu',\n    rating: r.totalScore || r.rating || 0,\n    reviewCount: r.reviewsCount || r.reviews?.length || 0,\n    category: r.categoryName || r.category || ''\n  }));\n\nreturn {\n  json: {\n    ficheFound: true,\n    ...formData,\n    fiche: {\n      name: place.title || place.name || formData.nom_commerce,\n      address: place.address || place.street || '',\n      phone: place.phone || '',\n      website: place.website || place.url || '',\n      category: place.categoryName || place.category || '',\n      rating: place.totalScore || place.rating || 0,\n      reviewCount: place.reviewsCount || reviews.length,\n      url: place.url || place.link || formData.lien_google,\n      imageUrl: place.imageUrl || '',\n      openingHours: place.openingHours || []\n    },\n    reviews,\n    competitors,\n    reviewTextsForAI: reviews.map(r => `[${r.stars}★] ${r.text}`).join('\\n')\n  }\n};"
+      },
+      "id": "fa7753b9-7742-4820-8568-6e0e883eab73",
+      "name": "⑥ Extraction Données",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "fiche-found-check",
+              "leftValue": "={{ $json.ficheFound }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fc1a0793-447e-40f7-9195-d11271cb16a9",
+      "name": "⑦ Fiche trouvée ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════\n// CONSTRUCTION DU PROMPT GEMINI\n// ═══════════════════════════════════════════\n\nconst data = $input.first().json;\n\nconst systemPrompt = `Tu es un consultant expert en marketing local et e-réputation pour les commerces de proximité en France. \nTu analyses les avis Google d'un commerce et produis un diagnostic structuré.\n\nRÈGLES STRICTES :\n- Réponds UNIQUEMENT en JSON valide, sans texte avant ni après\n- Sois direct, concret, actionnable\n- Adapte le ton au segment du commerce\n- Les recommandations doivent être faisables par un commerçant non-tech\n- Utilise le tutoiement professionnel`;\n\nconst userPrompt = `Analyse ce commerce et génère un diagnostic complet.\n\n## INFORMATIONS DU COMMERCE\n- Nom : ${data.fiche.name}\n- Ville : ${data.ville}\n- Catégorie : ${data.fiche.category}\n- Note moyenne : ${data.fiche.rating}/5\n- Nombre d'avis : ${data.fiche.reviewCount}\n- Segment : ${data.segment} avis\n\n## AVIS RÉCENTS (du plus récent au plus ancien)\n${data.reviewTextsForAI}\n\n## CONCURRENTS PROCHES\n${data.competitors.map(c => `- ${c.name} : ${c.rating}/5 (${c.reviewCount} avis)`).join('\\n') || 'Données concurrents non disponibles'}\n\n## FORMAT DE RÉPONSE ATTENDU (JSON strict)\n{\n  \"score_risque\": <number 1-10, 10 = risque maximal>,\n  \"resume_situation\": \"<string, 2 phrases max résumant la situation>\",\n  \"points_forts\": [\n    { \"titre\": \"<string>\", \"detail\": \"<string, extrait d'avis ou observation>\" },\n    { \"titre\": \"<string>\", \"detail\": \"<string>\" },\n    { \"titre\": \"<string>\", \"detail\": \"<string>\" }\n  ],\n  \"faiblesses\": [\n    { \"titre\": \"<string>\", \"detail\": \"<string>\", \"impact\": \"<string>\" },\n    { \"titre\": \"<string>\", \"detail\": \"<string>\", \"impact\": \"<string>\" }\n  ],\n  \"potentiel_avis_30j\": {\n    \"estimation\": <number>,\n    \"methode\": \"<string, comment atteindre ce chiffre>\"\n  },\n  \"actions_prioritaires\": [\n    { \"action\": \"<string>\", \"difficulte\": \"facile|moyen|avancé\", \"impact\": \"fort|moyen|faible\", \"delai\": \"<string>\" },\n    { \"action\": \"<string>\", \"difficulte\": \"facile|moyen|avancé\", \"impact\": \"fort|moyen|faible\", \"delai\": \"<string>\" },\n    { \"action\": \"<string>\", \"difficulte\": \"facile|moyen|avancé\", \"impact\": \"fort|moyen|faible\", \"delai\": \"<string>\" }\n  ],\n  \"recommandation_segment\": \"<string, paragraphe personnalisé selon le segment ${data.segment}>\"\n}`;\n\nreturn {\n  json: {\n    ...data,\n    geminiPayload: {\n      contents: [\n        {\n          role: \"user\",\n          parts: [{ text: userPrompt }]\n        }\n      ],\n      systemInstruction: {\n        parts: [{ text: systemPrompt }]\n      },\n      generationConfig: {\n        temperature: 0.3,\n        topP: 0.8,\n        topK: 40,\n        maxOutputTokens: 8192,\n        responseMimeType: \"application/json\"\n      }\n    }\n  }\n};"
+      },
+      "id": "0d708c6e-6c4b-489a-89ab-aa2ada254154",
+      "name": "⑧ Préparation Prompt Gemini",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={{ $env.GEMINI_API_KEY }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.geminiPayload) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "a4c953a7-664c-431d-a246-573051e8d77a",
+      "name": "⑨ Analyse Gemini Pro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1056,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════\n// PARSE DE LA RÉPONSE GEMINI (v3 — final)\n// ═══════════════════════════════════════════\n\nconst geminiResponse = $input.first().json;\nconst previousData = $('⑧ Préparation Prompt Gemini').first().json;\n\n// Extraction du texte — un seul part, pas de thinking\nlet rawText = '';\ntry {\n  const parts = geminiResponse.candidates[0].content.parts;\n  for (const part of parts) {\n    if (part.text && !part.thought) {\n      rawText = part.text;\n    }\n  }\n  if (!rawText) {\n    rawText = parts[parts.length - 1].text || '';\n  }\n} catch (e) {\n  throw new Error('Structure Gemini inattendue : ' + JSON.stringify(geminiResponse).substring(0, 1000));\n}\n\n// Parse JSON\nlet analysis;\ntry {\n  let cleaned = rawText.trim();\n  cleaned = cleaned.replace(/^```json\\s*/i, '');\n  cleaned = cleaned.replace(/^```\\s*/i, '');\n  cleaned = cleaned.replace(/\\s*```$/i, '');\n  cleaned = cleaned.trim();\n  analysis = JSON.parse(cleaned);\n} catch (e) {\n  throw new Error('JSON invalide : ' + rawText.substring(0, 500));\n}\n\nconst { geminiPayload, reviewTextsForAI, ...cleanData } = previousData;\n\nreturn {\n  json: {\n    ...cleanData,\n    analysis\n  }\n};"
+      },
+      "id": "a6cf55a0-537f-492b-b76b-489ba1852df5",
+      "name": "⑩ Parse Réponse IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════\n// GÉNÉRATION DU HTML DIAGNOSTIC\n// ═══════════════════════════════════════════\n\nconst d = $input.first().json;\nconst a = d.analysis;\nconst f = d.fiche;\n\n// Couleur du score de risque\nfunction getScoreColor(score) {\n  if (score <= 3) return '#22c55e';  // vert\n  if (score <= 6) return '#f59e0b';  // orange\n  return '#ef4444';                   // rouge\n}\n\nfunction getScoreLabel(score) {\n  if (score <= 3) return 'Faible';\n  if (score <= 6) return 'Modéré';\n  return 'Élevé';\n}\n\n// Étoiles visuelles\nfunction stars(rating) {\n  const full = Math.floor(rating);\n  const half = rating % 1 >= 0.5 ? 1 : 0;\n  const empty = 5 - full - half;\n  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);\n}\n\nconst scoreColor = getScoreColor(a.score_risque);\nconst scoreLabel = getScoreLabel(a.score_risque);\nconst scorePercent = (a.score_risque / 10) * 100;\n\n// URL du Kit Express (à personnaliser)\nconst kitExpressUrl = `https://expert-local.fr/kit-express?email=${encodeURIComponent(d.email)}&commerce=${encodeURIComponent(d.nom_commerce)}`;\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n<meta charset=\"UTF-8\">\n<style>\n  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');\n  \n  * { margin: 0; padding: 0; box-sizing: border-box; }\n  \n  body {\n    font-family: 'Inter', -apple-system, sans-serif;\n    color: #1e293b;\n    line-height: 1.6;\n    background: #ffffff;\n  }\n  \n  .page {\n    max-width: 800px;\n    margin: 0 auto;\n    padding: 40px;\n  }\n  \n  /* ─── HEADER ─── */\n  .header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding-bottom: 24px;\n    border-bottom: 3px solid #2563eb;\n    margin-bottom: 32px;\n  }\n  .header .logo {\n    font-size: 24px;\n    font-weight: 700;\n    color: #2563eb;\n  }\n  .header .logo span { color: #1e293b; }\n  .header .date {\n    color: #64748b;\n    font-size: 13px;\n  }\n  \n  /* ─── COMMERCE INFO ─── */\n  .commerce-info {\n    background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);\n    border-radius: 12px;\n    padding: 24px;\n    margin-bottom: 28px;\n  }\n  .commerce-name {\n    font-size: 22px;\n    font-weight: 700;\n    color: #1e40af;\n    margin-bottom: 4px;\n  }\n  .commerce-details {\n    color: #475569;\n    font-size: 14px;\n  }\n  .commerce-rating {\n    margin-top: 8px;\n    font-size: 18px;\n    color: #f59e0b;\n  }\n  .commerce-rating .count {\n    font-size: 14px;\n    color: #64748b;\n  }\n  \n  /* ─── SCORE SECTION ─── */\n  .score-section {\n    text-align: center;\n    margin-bottom: 32px;\n    padding: 28px;\n    background: #fafafa;\n    border-radius: 12px;\n  }\n  .score-title {\n    font-size: 16px;\n    font-weight: 600;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n    color: #64748b;\n    margin-bottom: 16px;\n  }\n  .score-gauge {\n    width: 100%;\n    height: 20px;\n    background: #e2e8f0;\n    border-radius: 10px;\n    overflow: hidden;\n    margin-bottom: 12px;\n  }\n  .score-gauge-fill {\n    height: 100%;\n    width: ${scorePercent}%;\n    background: ${scoreColor};\n    border-radius: 10px;\n    transition: width 0.5s;\n  }\n  .score-value {\n    font-size: 42px;\n    font-weight: 700;\n    color: ${scoreColor};\n  }\n  .score-label {\n    font-size: 16px;\n    color: ${scoreColor};\n    font-weight: 600;\n  }\n  .score-summary {\n    margin-top: 12px;\n    color: #475569;\n    font-size: 14px;\n  }\n  \n  /* ─── SECTIONS ─── */\n  .section {\n    margin-bottom: 28px;\n  }\n  .section-title {\n    font-size: 18px;\n    font-weight: 700;\n    color: #1e293b;\n    margin-bottom: 16px;\n    padding-bottom: 8px;\n    border-bottom: 2px solid #e2e8f0;\n  }\n  .section-title .icon { margin-right: 8px; }\n  \n  /* ─── POINTS FORTS / FAIBLESSES ─── */\n  .analysis-grid {\n    display: grid;\n    grid-template-columns: 1fr 1fr;\n    gap: 20px;\n    margin-bottom: 28px;\n  }\n  .analysis-card {\n    padding: 16px;\n    border-radius: 10px;\n    border: 1px solid #e2e8f0;\n  }\n  .analysis-card.strength {\n    background: #f0fdf4;\n    border-color: #bbf7d0;\n  }\n  .analysis-card.weakness {\n    background: #fef2f2;\n    border-color: #fecaca;\n  }\n  .analysis-card h4 {\n    font-size: 14px;\n    font-weight: 600;\n    margin-bottom: 6px;\n  }\n  .analysis-card.strength h4 { color: #166534; }\n  .analysis-card.weakness h4 { color: #991b1b; }\n  .analysis-card p {\n    font-size: 13px;\n    color: #475569;\n  }\n  \n  /* ─── CONCURRENTS ─── */\n  .competitors-table {\n    width: 100%;\n    border-collapse: collapse;\n    font-size: 14px;\n  }\n  .competitors-table th {\n    background: #f1f5f9;\n    padding: 10px 14px;\n    text-align: left;\n    font-weight: 600;\n    color: #475569;\n  }\n  .competitors-table td {\n    padding: 10px 14px;\n    border-bottom: 1px solid #e2e8f0;\n  }\n  .competitors-table tr.you {\n    background: #eff6ff;\n    font-weight: 600;\n  }\n  \n  /* ─── ACTIONS ─── */\n  .action-item {\n    display: flex;\n    gap: 14px;\n    padding: 14px;\n    margin-bottom: 10px;\n    background: #f8fafc;\n    border-radius: 8px;\n    border-left: 4px solid #2563eb;\n  }\n  .action-number {\n    font-size: 20px;\n    font-weight: 700;\n    color: #2563eb;\n    min-width: 30px;\n  }\n  .action-content h4 {\n    font-size: 14px;\n    font-weight: 600;\n    margin-bottom: 4px;\n  }\n  .action-meta {\n    font-size: 12px;\n    color: #64748b;\n  }\n  .badge {\n    display: inline-block;\n    padding: 2px 8px;\n    border-radius: 4px;\n    font-size: 11px;\n    font-weight: 600;\n    margin-right: 6px;\n  }\n  .badge-easy { background: #dcfce7; color: #166534; }\n  .badge-medium { background: #fef3c7; color: #92400e; }\n  .badge-hard { background: #fee2e2; color: #991b1b; }\n  .badge-impact-high { background: #dbeafe; color: #1e40af; }\n  \n  /* ─── CTA ─── */\n  .cta-section {\n    text-align: center;\n    margin-top: 36px;\n    padding: 32px;\n    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);\n    border-radius: 12px;\n    color: white;\n  }\n  .cta-section h3 {\n    font-size: 20px;\n    margin-bottom: 8px;\n  }\n  .cta-section p {\n    font-size: 14px;\n    opacity: 0.9;\n    margin-bottom: 20px;\n  }\n  .cta-button {\n    display: inline-block;\n    padding: 14px 32px;\n    background: #ffffff;\n    color: #1e40af;\n    font-weight: 700;\n    font-size: 16px;\n    border-radius: 8px;\n    text-decoration: none;\n  }\n  .cta-price {\n    margin-top: 10px;\n    font-size: 13px;\n    opacity: 0.8;\n  }\n  \n  /* ─── FOOTER ─── */\n  .footer {\n    margin-top: 32px;\n    padding-top: 20px;\n    border-top: 1px solid #e2e8f0;\n    text-align: center;\n    font-size: 12px;\n    color: #94a3b8;\n  }\n</style>\n</head>\n<body>\n<div class=\"page\">\n\n  <!-- HEADER -->\n  <div class=\"header\">\n    <div class=\"logo\">Expert<span>Local</span>.fr</div>\n    <div class=\"date\">Diagnostic généré le ${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>\n  </div>\n\n  <!-- COMMERCE INFO -->\n  <div class=\"commerce-info\">\n    <div class=\"commerce-name\">${f.name}</div>\n    <div class=\"commerce-details\">${f.category} — ${f.address || d.ville}</div>\n    <div class=\"commerce-rating\">\n      ${stars(f.rating)} ${f.rating}/5\n      <span class=\"count\">(${f.reviewCount} avis Google)</span>\n    </div>\n  </div>\n\n  <!-- SCORE DE RISQUE -->\n  <div class=\"score-section\">\n    <div class=\"score-title\">Score de risque concurrentiel</div>\n    <div class=\"score-gauge\"><div class=\"score-gauge-fill\"></div></div>\n    <div class=\"score-value\">${a.score_risque}/10</div>\n    <div class=\"score-label\">Risque ${scoreLabel}</div>\n    <div class=\"score-summary\">${a.resume_situation}</div>\n  </div>\n\n  <!-- ANALYSE -->\n  <div class=\"analysis-grid\">\n    <div>\n      <div class=\"section-title\">✅ Points forts</div>\n      ${a.points_forts.map(p => `\n        <div class=\"analysis-card strength\">\n          <h4>${p.titre}</h4>\n          <p>${p.detail}</p>\n        </div>\n      `).join('')}\n    </div>\n    <div>\n      <div class=\"section-title\">⚠️ Axes d'amélioration</div>\n      ${a.faiblesses.map(f => `\n        <div class=\"analysis-card weakness\">\n          <h4>${f.titre}</h4>\n          <p>${f.detail}</p>\n          <p><em>Impact : ${f.impact}</em></p>\n        </div>\n      `).join('')}\n    </div>\n  </div>\n\n  <!-- CONCURRENTS -->\n  ${d.competitors && d.competitors.length > 0 ? `\n  <div class=\"section\">\n    <div class=\"section-title\">📊 Votre position vs concurrents</div>\n    <table class=\"competitors-table\">\n      <thead>\n        <tr><th>Commerce</th><th>Note</th><th>Avis</th></tr>\n      </thead>\n      <tbody>\n        <tr class=\"you\">\n          <td>➤ ${f.name}</td>\n          <td>${f.rating}/5</td>\n          <td>${f.reviewCount}</td>\n        </tr>\n        ${d.competitors.map(c => `\n          <tr>\n            <td>${c.name}</td>\n            <td>${c.rating}/5</td>\n            <td>${c.reviewCount}</td>\n          </tr>\n        `).join('')}\n      </tbody>\n    </table>\n  </div>\n  ` : ''}\n\n  <!-- POTENTIEL -->\n  <div class=\"section\">\n    <div class=\"section-title\">🎯 Potentiel sur 30 jours</div>\n    <div style=\"background:#f0fdf4;padding:16px;border-radius:8px;text-align:center;\">\n      <div style=\"font-size:28px;font-weight:700;color:#166534;\">+${a.potentiel_avis_30j.estimation} avis</div>\n      <div style=\"font-size:13px;color:#475569;margin-top:4px;\">${a.potentiel_avis_30j.methode}</div>\n    </div>\n  </div>\n\n  <!-- ACTIONS PRIORITAIRES -->\n  <div class=\"section\">\n    <div class=\"section-title\">🚀 Vos 3 actions prioritaires</div>\n    ${a.actions_prioritaires.map((act, i) => {\n      const diffBadge = act.difficulte === 'facile' ? 'badge-easy' : act.difficulte === 'moyen' ? 'badge-medium' : 'badge-hard';\n      return `\n      <div class=\"action-item\">\n        <div class=\"action-number\">${i + 1}</div>\n        <div class=\"action-content\">\n          <h4>${act.action}</h4>\n          <div class=\"action-meta\">\n            <span class=\"badge ${diffBadge}\">${act.difficulte}</span>\n            <span class=\"badge badge-impact-high\">Impact ${act.impact}</span>\n            <span>⏱ ${act.delai}</span>\n          </div>\n        </div>\n      </div>`;\n    }).join('')}\n  </div>\n\n  <!-- RECOMMANDATION -->\n  <div class=\"section\">\n    <div class=\"section-title\">💬 Notre recommandation</div>\n    <p style=\"font-size:14px;color:#475569;line-height:1.7;\">${a.recommandation_segment}</p>\n  </div>\n\n  <!-- CTA -->\n  <div class=\"cta-section\">\n    <h3>Passez à l'action maintenant</h3>\n    <p>Mettez en place ces recommandations avec notre Kit Express, conçu pour les commerçants qui veulent des résultats concrets.</p>\n    <a href=\"${kitExpressUrl}\" class=\"cta-button\">Découvrir le Kit Express →</a>\n    <div class=\"cta-price\">49€ · Résultats en 30 jours · Satisfait ou remboursé</div>\n  </div>\n\n  <!-- FOOTER -->\n  <div class=\"footer\">\n    <p>Ce diagnostic a été généré automatiquement par ExpertLocal.fr à partir des données publiques de Google Maps.</p>\n    <p>© ${new Date().getFullYear()} ExpertLocal.fr — Tous droits réservés</p>\n  </div>\n\n</div>\n</body>\n</html>`;\n\nreturn [{\n  json: {\n    ...d,\n    htmlDiagnostic: html,\n    pdfFilename: `diagnostic-${d.nom_commerce.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`\n  }\n}];\n\n\n"
+      },
+      "id": "cebd9d63-de62-4f5d-ad58-e2d76717787d",
+      "name": "⑪ Génération HTML Diagnostic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════\n// PRÉPARATION EMAIL SELON SEGMENT\n// ═══════════════════════════════════════════\n\nconst data = $('⑪ Génération HTML Diagnostic').first().json;\nconst pdfBinary = $input.first().binary;\nconst segment = data.segment;\nconst prenom = data.prenom;\nconst nomCommerce = data.fiche.name;\nconst score = data.analysis.score_risque;\n\nconst kitExpressUrl = `https://expert-local.fr/kit-express?email=${encodeURIComponent(data.email)}&commerce=${encodeURIComponent(data.nom_commerce)}`;\n\n// Templates email par segment\nconst templates = {\n  '0-5': {\n    subject: `${prenom}, votre commerce est invisible sur Google — voici comment corriger ça`,\n    htmlBody: `\n      <div style=\"font-family:Inter,sans-serif;max-width:600px;margin:0 auto;color:#1e293b;\">\n        <p>Bonjour ${prenom},</p>\n        <p>Votre diagnostic pour <strong>${nomCommerce}</strong> est prêt. Et il y a une bonne nouvelle : vous avez une <strong>marge de progression énorme</strong>.</p>\n        <p>Avec seulement ${data.fiche.reviewCount} avis Google, votre commerce est quasiment <strong>invisible</strong> face à vos concurrents. Chaque semaine sans action, ce sont des clients qui choisissent un concurrent mieux noté.</p>\n        <p>Votre score de risque concurrentiel : <strong style=\"color:${score >= 7 ? '#ef4444' : '#f59e0b'};font-size:18px;\">${score}/10</strong></p>\n        <p><strong>La bonne nouvelle ?</strong> C'est le moment le plus facile pour agir. Quelques actions simples peuvent transformer votre visibilité en 30 jours.</p>\n        <p>👉 <strong>Consultez votre diagnostic complet en pièce jointe</strong> pour découvrir vos 3 actions prioritaires.</p>\n        <hr style=\"border:none;border-top:1px solid #e2e8f0;margin:24px 0;\">\n        <p>Envie de passer à l'action immédiatement ?</p>\n        <p><a href=\"${kitExpressUrl}\" style=\"display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;\">Découvrir le Kit Express — 49€</a></p>\n        <p style=\"font-size:12px;color:#94a3b8;\">Résultats en 30 jours · Satisfait ou remboursé</p>\n        <p>À bientôt,<br><strong>L'équipe ExpertLocal.fr</strong></p>\n      </div>`\n  },\n  '6-20': {\n    subject: `${prenom}, ${nomCommerce} a du potentiel — voici comment dépasser vos concurrents`,\n    htmlBody: `\n      <div style=\"font-family:Inter,sans-serif;max-width:600px;margin:0 auto;color:#1e293b;\">\n        <p>Bonjour ${prenom},</p>\n        <p>Votre diagnostic pour <strong>${nomCommerce}</strong> est prêt.</p>\n        <p>Avec ${data.fiche.reviewCount} avis et une note de ${data.fiche.rating}/5, vous avez des <strong>bases solides</strong>. Mais vos concurrents ne restent pas immobiles.</p>\n        <p>Votre score de risque concurrentiel : <strong style=\"color:${score >= 7 ? '#ef4444' : '#f59e0b'};font-size:18px;\">${score}/10</strong></p>\n        <p>L'analyse montre que vous pourriez obtenir <strong>+${data.analysis.potentiel_avis_30j.estimation} avis en 30 jours</strong> avec les bonnes actions. C'est ce qui fera la différence.</p>\n        <p>👉 <strong>Ouvrez votre diagnostic en pièce jointe</strong> pour voir le comparatif avec vos concurrents et vos 3 actions prioritaires.</p>\n        <hr style=\"border:none;border-top:1px solid #e2e8f0;margin:24px 0;\">\n        <p>Prêt à passer devant vos concurrents ?</p>\n        <p><a href=\"${kitExpressUrl}\" style=\"display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;\">Découvrir le Kit Express — 49€</a></p>\n        <p style=\"font-size:12px;color:#94a3b8;\">Résultats en 30 jours · Satisfait ou remboursé</p>\n        <p>À bientôt,<br><strong>L'équipe ExpertLocal.fr</strong></p>\n      </div>`\n  },\n  '21+': {\n    subject: `${prenom}, l'analyse premium de ${nomCommerce} — comment rester N°1`,\n    htmlBody: `\n      <div style=\"font-family:Inter,sans-serif;max-width:600px;margin:0 auto;color:#1e293b;\">\n        <p>Bonjour ${prenom},</p>\n        <p>Votre diagnostic pour <strong>${nomCommerce}</strong> est prêt.</p>\n        <p>Avec ${data.fiche.reviewCount} avis et ${data.fiche.rating}/5, vous faites partie des commerces les <strong>mieux référencés</strong> de votre zone. Félicitations.</p>\n        <p>Mais l'analyse révèle des <strong>axes d'optimisation</strong> qui pourraient consolider votre avance — et empêcher vos concurrents de vous rattraper.</p>\n        <p>Votre score de risque concurrentiel : <strong style=\"color:${score >= 7 ? '#ef4444' : score >= 4 ? '#f59e0b' : '#22c55e'};font-size:18px;\">${score}/10</strong></p>\n        <p>👉 <strong>Consultez votre diagnostic premium en pièce jointe</strong> pour des recommandations avancées.</p>\n        <hr style=\"border:none;border-top:1px solid #e2e8f0;margin:24px 0;\">\n        <p>Pour aller encore plus loin :</p>\n        <p><a href=\"${kitExpressUrl}\" style=\"display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;\">Découvrir le Kit Express — 49€</a></p>\n        <p style=\"font-size:12px;color:#94a3b8;\">Stratégie avancée · Résultats en 30 jours</p>\n        <p>À bientôt,<br><strong>L'équipe ExpertLocal.fr</strong></p>\n      </div>`\n  }\n};\n\nconst template = templates[segment] || templates['0-5'];\n\nreturn [{\n  json: {\n    ...data,\n    emailSubject: template.subject,\n    emailHtml: template.htmlBody\n  },\n  binary: pdfBinary\n}];\n"
+      },
+      "id": "ba62c569-a76d-4ebe-98b7-2ebbfce18808",
+      "name": "⑬ Préparation Email Segmenté",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2208,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sender"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "4b5276b4-bb8a-40f9-a04e-9e80cff0427b",
+      "name": "⑭ Envoi Email Brevo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2304,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.NOTION_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Notion-Version",
+              "value": "2022-06-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"parent\": {\n    \"database_id\": \"{{ $env.NOTION_DB_PIPELINE }}\"\n  },\n  \"properties\": {\n    \"Nom Commerce\": {\n      \"title\": [\n        { \"text\": { \"content\": \"{{ $json.fiche.name }}\" } }\n      ]\n    },\n    \"Prénom\": {\n      \"rich_text\": [\n        { \"text\": { \"content\": \"{{ $json.prenom }}\" } }\n      ]\n    },\n    \"Email\": {\n      \"email\": \"{{ $json.email }}\"\n    },\n    \"Ville\": {\n      \"rich_text\": [\n        { \"text\": { \"content\": \"{{ $json.ville }}\" } }\n      ]\n    },\n    \"Segment\": {\n      \"select\": {\n        \"name\": \"{{ $json.segment }}\"\n      }\n    },\n    \"Score Risque\": {\n      \"number\": {{ $json.analysis.score_risque }}\n    },\n    \"Note Google\": {\n      \"number\": {{ $json.fiche.rating }}\n    },\n    \"Nb Avis\": {\n      \"number\": {{ $json.fiche.reviewCount }}\n    },\n    \"Statut\": {\n      \"status\": {\n        \"name\": \"Diagnostic envoyé\"\n      }\n    },\n    \"Date Diagnostic\": {\n      \"date\": {\n        \"start\": \"{{ $json.timestamp.split('T')[0] }}\"\n      }\n    },\n    \"Lien Google\": {\n      \"url\": {{ $json.fiche.url ? JSON.stringify($json.fiche.url) : 'null' }}\n    },\n    \"Source\": {\n      \"select\": {\n        \"name\": \"Formulaire site\"\n      }\n    }\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "ad47f0f9-9456-4b77-b06e-5f2f2d7a0476",
+      "name": "⑮ Création Notion Pipeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2560,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": {\n    \"name\": \"ExpertLocal.fr\",\n    \"email\": \"contact@expert-local.fr\"\n  },\n  \"to\": [\n    {\n      \"email\": \"{{ $('② Validation Données').item.json.email }}\",\n      \"name\": \"{{ $('② Validation Données').item.json.prenom }}\"\n    }\n  ],\n  \"subject\": \"Votre diagnostic est en cours de préparation\",\n  \"htmlContent\": \"<div style='font-family:Inter,sans-serif;max-width:600px;margin:0 auto;'><p>Bonjour {{ $('② Validation Données').item.json.prenom }},</p><p>Merci pour votre demande de diagnostic pour <strong>{{ $('② Validation Données').item.json.nom_commerce }}</strong>.</p><p>Nous n'avons malheureusement pas pu trouver automatiquement votre fiche Google Maps. Notre équipe va vérifier manuellement et vous envoyer votre diagnostic sous 24h.</p><p>Si vous avez le lien de votre fiche Google, répondez simplement à cet email.</p><p>À très vite,<br><strong>L'équipe ExpertLocal.fr</strong></p></div>\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "d8d551fc-edb5-4425-9a7e-3d590cea8c36",
+      "name": "Email Fiche Non Trouvée",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.NOTION_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Notion-Version",
+              "value": "2022-06-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"parent\": {\n    \"database_id\": \"{{ $env.NOTION_DB_PIPELINE }}\"\n  },\n  \"properties\": {\n    \"Nom Commerce\": {\n      \"title\": [\n        { \"text\": { \"content\": \"{{ $json.nom_commerce }}\" } }\n      ]\n    },\n    \"Prénom\": {\n      \"rich_text\": [\n        { \"text\": { \"content\": \"{{ $json.prenom }}\" } }\n      ]\n    },\n    \"Email\": {\n      \"email\": \"{{ $json.email }}\"\n    },\n    \"Ville\": {\n      \"rich_text\": [\n        { \"text\": { \"content\": \"{{ $json.ville }}\" } }\n      ]\n    },\n    \"Segment\": {\n      \"select\": {\n        \"name\": \"{{ $json.segment }}\"\n      }\n    },\n    \"Statut\": {\n      \"status\": {\n        \"name\": \"Fiche non trouvée\"\n      }\n    },\n    \"Date Diagnostic\": {\n      \"date\": {\n        \"start\": \"{{ $json.timestamp.split('T')[0] }}\"\n      }\n    },\n    \"Source\": {\n      \"select\": {\n        \"name\": \"Formulaire site\"\n      }\n    }\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "163258b2-9db5-4c60-aa71-28b711e8e547",
+      "name": "Notion — Fiche Non Trouvée",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1056,
+        304
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c6a62e3f-7840-4f0a-bdc2-981bf9dc6a82",
+      "name": "✅ Fin — Succès",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "aa4e7a77-138c-4a08-b61b-1ccc2e975f2e",
+      "name": "⚠️ Fin — Fiche Non Trouvée",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// ═══════════════════════════════════════════\n// CONVERSION HTML → PDF VIA GOTENBERG\n// Mode : Run Once for Each Item\n// ═══════════════════════════════════════════\n\nconst item = $input.item.json;\n\nconst html = item.htmlDiagnostic;\nconst filename = item.pdfFilename;\n\n// Buffer du HTML\nconst htmlBuffer = Buffer.from(html, 'utf-8');\n\n// On prépare un fichier binaire pour n8n\nconst binaryHtml = await this.helpers.prepareBinaryData(\n  htmlBuffer,\n  'index.html',\n  'text/html'\n);\n\n// Requête vers Gotenberg\nconst response = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://gotenberg:3000/forms/chromium/convert/html',\n  body: {\n    marginTop: '0.4',\n    marginBottom: '0.4',\n    marginLeft: '0.4',\n    marginRight: '0.4',\n    paperWidth: '8.27',\n    paperHeight: '11.69',\n  },\n  // On envoie le fichier HTML comme binaire\n  // n8n gère automatiquement le multipart correct\n  formData: {\n    files: binaryHtml,\n  },\n  encoding: 'arraybuffer',\n  returnFullResponse: false,\n});\n\n// Conversion en binaire PDF\nconst binaryData = await this.helpers.prepareBinaryData(\n  Buffer.from(response),\n  filename,\n  'application/pdf'\n);\n\nreturn {\n  json: item,\n  binary: {\n    data: binaryData,\n  },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        -464
+      ],
+      "id": "fa9b577c-d472-466f-aba1-c5afed4f03dd",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://gotenberg:3000/forms/chromium/convert/html",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "files[]",
+              "inputDataFieldName": "htmlFile"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "pdf"
+            }
+          }
+        }
+      },
+      "name": "Gotenberg Convert HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        2016,
+        -224
+      ],
+      "id": "3916de4f-ec45-48ea-8f90-1cd8c6fd67f1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $json.htmlDiagnostic;\n\nif (!html) {\n  return [{\n    json: {\n      error: \"htmlDiagnostic manquant\",\n      received: $json\n    }\n  }];\n}\n\nconst b64 = Buffer.from(html).toString('base64');\n\nreturn [{\n  json: {},\n  binary: {\n    htmlFile: {\n      data: b64,\n      fileName: 'index.html',\n      mimeType: 'text/html'\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        0
+      ],
+      "id": "c2cdd045-0435-4d8d-b980-0b7add40a21a",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ne rien modifier, transmettre tous les items reçus\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        0
+      ],
+      "id": "303a538a-af2c-4c0e-8490-a6912d12a2b5",
+      "name": "Code in JavaScript2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "① Webhook Formulaire": {
+      "main": [
+        [
+          {
+            "node": "② Validation Données",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "② Validation Données": {
+      "main": [
+        [
+          {
+            "node": "③ Données valides ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "③ Données valides ?": {
+      "main": [
+        [
+          {
+            "node": "Réponse OK au site",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Réponse Erreur au site",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Réponse OK au site": {
+      "main": [
+        [
+          {
+            "node": "④ Lien Google fourni ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "④ Lien Google fourni ?": {
+      "main": [
+        [
+          {
+            "node": "⑤a Apify Scrape Direct",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "⑤b Apify Recherche Auto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑤a Apify Scrape Direct": {
+      "main": [
+        [
+          {
+            "node": "⑥ Extraction Données",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑤b Apify Recherche Auto": {
+      "main": [
+        [
+          {
+            "node": "⑥ Extraction Données",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑥ Extraction Données": {
+      "main": [
+        [
+          {
+            "node": "⑦ Fiche trouvée ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑦ Fiche trouvée ?": {
+      "main": [
+        [
+          {
+            "node": "⑧ Préparation Prompt Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Fiche Non Trouvée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑧ Préparation Prompt Gemini": {
+      "main": [
+        [
+          {
+            "node": "⑨ Analyse Gemini Pro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑨ Analyse Gemini Pro": {
+      "main": [
+        [
+          {
+            "node": "⑩ Parse Réponse IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑩ Parse Réponse IA": {
+      "main": [
+        [
+          {
+            "node": "⑪ Génération HTML Diagnostic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑪ Génération HTML Diagnostic": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑬ Préparation Email Segmenté": {
+      "main": [
+        [
+          {
+            "node": "⑭ Envoi Email Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑭ Envoi Email Brevo": {
+      "main": [
+        [
+          {
+            "node": "⑮ Création Notion Pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑮ Création Notion Pipeline": {
+      "main": [
+        [
+          {
+            "node": "✅ Fin — Succès",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Fiche Non Trouvée": {
+      "main": [
+        [
+          {
+            "node": "Notion — Fiche Non Trouvée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion — Fiche Non Trouvée": {
+      "main": [
+        [
+          {
+            "node": "⚠️ Fin — Fiche Non Trouvée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    },
+    "Gotenberg Convert HTML": {
+      "main": [
+        [
+          {
+            "node": "⑬ Préparation Email Segmenté",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Gotenberg Convert HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Paris",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "54124f59-6488-48d5-b7b4-39595b774e6f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "eee3f4e847b8c9878a5d6379d99eacc8e5355b0753c568fb9ee289b1528c4f3b"
+  },
+  "id": "bcJmRXWrSNSU_Dpfpa1Dc",
+  "tags": [
+    {
+      "updatedAt": "2026-02-07T23:48:56.869Z",
+      "createdAt": "2026-02-07T23:48:56.869Z",
+      "id": "HkKdfVGtJeX2yIqs",
+      "name": "phase-1"
+    },
+    {
+      "updatedAt": "2026-02-07T23:48:56.874Z",
+      "createdAt": "2026-02-07T23:48:56.874Z",
+      "id": "sJt9zkm6tS7VbM2W",
+      "name": "diagnostic"
+    },
+    {
+      "updatedAt": "2026-02-07T23:48:56.858Z",
+      "createdAt": "2026-02-07T23:48:56.858Z",
+      "id": "ttxRqrYnpuJzO0Km",
+      "name": "expert-local"
+    }
+  ]
+}
