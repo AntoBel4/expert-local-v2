@@ -308,8 +308,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1552,
-        -208
+        1520,
+        -304
       ]
     },
     {
@@ -321,8 +321,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2208,
-        -224
+        2144,
+        -320
       ]
     },
     {
@@ -343,13 +343,8 @@
           ]
         },
         "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "sender"
-            }
-          ]
-        },
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": {\n    \"name\": \"Antoine d'Expert-Local.fr\",\n    \"email\": \"contact@expert-local.fr\"\n  },\n  \"to\": [\n    {\n      \"email\": \"{{$json.email || $('① Webhook Formulaire').item.json.body.email}}\"\n    }\n  ],\n  \"templateId\": 4,\n  \"params\": {\n    \"prenom\": \"{{$json.prenom || $('① Webhook Formulaire').item.json.body.prenom || 'Bonjour'}}\",\n    \"nom_commerce\": \"{{$json.fiche && $json.fiche.name ? $json.fiche.name : ($json.nom_commerce ? $json.nom_commerce : $('① Webhook Formulaire').item.json.body.nom_commerce)}}\",\n    \"ville\": \"{{$json.ville || $('① Webhook Formulaire').item.json.body.ville || ''}}\",\n    \"score_risque\": \"{{$json.analysis && $json.analysis.score_risque ? $json.analysis.score_risque : 0}}\"\n  },\n  \"attachment\": [\n  {\n    \"name\": \"{{$json.pdfFileName}}\",\n    \"content\": \"{{$json.pdfBase64}}\"\n  }\n]\n}",
         "options": {
           "timeout": 15000
         }
@@ -359,7 +354,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2304,
+        2416,
         0
       ],
       "retryOnFail": true,
@@ -389,7 +384,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"parent\": {\n    \"database_id\": \"{{ $env.NOTION_DB_PIPELINE }}\"\n  },\n  \"properties\": {\n    \"Nom Commerce\": {\n      \"title\": [\n        { \"text\": { \"content\": \"{{ $json.fiche.name }}\" } }\n      ]\n    },\n    \"Prénom\": {\n      \"rich_text\": [\n        { \"text\": { \"content\": \"{{ $json.prenom }}\" } }\n      ]\n    },\n    \"Email\": {\n      \"email\": \"{{ $json.email }}\"\n    },\n    \"Ville\": {\n      \"rich_text\": [\n        { \"text\": { \"content\": \"{{ $json.ville }}\" } }\n      ]\n    },\n    \"Segment\": {\n      \"select\": {\n        \"name\": \"{{ $json.segment }}\"\n      }\n    },\n    \"Score Risque\": {\n      \"number\": {{ $json.analysis.score_risque }}\n    },\n    \"Note Google\": {\n      \"number\": {{ $json.fiche.rating }}\n    },\n    \"Nb Avis\": {\n      \"number\": {{ $json.fiche.reviewCount }}\n    },\n    \"Statut\": {\n      \"status\": {\n        \"name\": \"Diagnostic envoyé\"\n      }\n    },\n    \"Date Diagnostic\": {\n      \"date\": {\n        \"start\": \"{{ $json.timestamp.split('T')[0] }}\"\n      }\n    },\n    \"Lien Google\": {\n      \"url\": {{ $json.fiche.url ? JSON.stringify($json.fiche.url) : 'null' }}\n    },\n    \"Source\": {\n      \"select\": {\n        \"name\": \"Formulaire site\"\n      }\n    }\n  }\n}",
+        "jsonBody": "={\n  \"parent\": {\n    \"database_id\": \"{{ $env.NOTION_DB_PIPELINE }}\"\n  },\n  \"properties\": {\n    \"Nom Commerce\": {\n      \"title\": [\n        {\n          \"text\": {\n            \"content\": \"{{$json.fiche && $json.fiche.name ? $json.fiche.name : ($json.nom_commerce ? $json.nom_commerce : ($('① Webhook Formulaire').item.json.body.nom_commerce ? $('① Webhook Formulaire').item.json.body.nom_commerce : 'Commerce sans nom'))}}\"\n          }\n        }\n      ]\n    },\n    \"Prénom\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\": \"{{$json.prenom ? $json.prenom : ($('① Webhook Formulaire').item.json.body.prenom ? $('① Webhook Formulaire').item.json.body.prenom : '')}}\"\n          }\n        }\n      ]\n    },\n    \"Email\": {\n      \"email\": {{$json.email ? JSON.stringify($json.email) : ($('① Webhook Formulaire').item.json.body.email ? JSON.stringify($('① Webhook Formulaire').item.json.body.email) : 'null')}}\n    },\n    \"Ville\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\": \"{{$json.ville ? $json.ville : ($('① Webhook Formulaire').item.json.body.ville ? $('① Webhook Formulaire').item.json.body.ville : '')}}\"\n          }\n        }\n      ]\n    },\n    \"Segment\": {\n      \"select\": {\n        \"name\": \"{{$json.segment ? $json.segment : ($('① Webhook Formulaire').item.json.body.nb_avis ? $('① Webhook Formulaire').item.json.body.nb_avis : '0-5')}}\"\n      }\n    },\n    \"Score Risque\": {\n      \"number\": {{$json.analysis && $json.analysis.score_risque ? Number($json.analysis.score_risque) : 0}}\n    },\n    \"Note Google\": {\n      \"number\": {{$json.fiche && $json.fiche.rating ? Number($json.fiche.rating) : 0}}\n    },\n    \"Nb Avis\": {\n      \"number\": {{$json.fiche && $json.fiche.reviewCount ? Number($json.fiche.reviewCount) : 0}}\n    },\n    \"Statut\": {\n      \"select\": {\n        \"name\": \"Diagnostic envoyé\"\n      }\n    },\n    \"Date Diagnostic\": {\n      \"date\": {\n        \"start\": \"{{$json.timestamp ? $json.timestamp.split('T')[0] : ($('① Webhook Formulaire').item.json.body.timestamp ? $('① Webhook Formulaire').item.json.body.timestamp.split('T')[0] : new Date().toISOString().split('T')[0])}}\"\n      }\n    },\n    \"Lien Google\": {\n      \"url\": {{$json.fiche && $json.fiche.url ? JSON.stringify($json.fiche.url) : ($('① Webhook Formulaire').item.json.body.lien_google ? JSON.stringify($('① Webhook Formulaire').item.json.body.lien_google) : 'null')}}\n    },\n    \"Source\": {\n      \"select\": {\n        \"name\": \"Formulaire site\"\n      }\n    }\n  }\n}",
         "options": {
           "timeout": 10000
         }
@@ -506,8 +501,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1520,
-        -464
+        1040,
+        -624
       ],
       "id": "fa9b577c-d472-466f-aba1-c5afed4f03dd",
       "name": "Code in JavaScript"
@@ -540,8 +535,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [
-        2016,
-        -224
+        1968,
+        -320
       ],
       "id": "3916de4f-ec45-48ea-8f90-1cd8c6fd67f1"
     },
@@ -570,9 +565,60 @@
       ],
       "id": "303a538a-af2c-4c0e-8490-a6912d12a2b5",
       "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first();\n\nconst pdfBinary = await this.helpers.getBinaryDataBuffer(0, 'pdf');\n\nreturn [\n  {\n    json: {\n      ...input.json,\n      pdfBase64: pdfBinary.toString('base64'),\n      pdfFileName: input.binary?.pdf?.fileName || input.json.pdfFilename || 'diagnostic-expert-local.pdf'\n    },\n    binary: input.binary\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        -320
+      ],
+      "id": "9fe7ef41-eea8-4f70-a42d-7849a74a7fba",
+      "name": "⑬b Préparation PJ PDF"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "① Webhook Formulaire": [
+      {
+        "json": {
+          "headers": {
+            "host": "prospect.estarellas.online",
+            "user-agent": "node",
+            "content-length": "254",
+            "accept": "*/*",
+            "accept-encoding": "br, gzip, deflate",
+            "accept-language": "*",
+            "content-type": "application/json",
+            "sec-fetch-mode": "cors",
+            "via": "1.1 Caddy",
+            "x-forwarded-for": "31.32.140.17",
+            "x-forwarded-host": "prospect.estarellas.online",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "prenom": "anto",
+            "email": "estarellas.antoine@orange.fr",
+            "nom_commerce": "Tabac Les Flambarts",
+            "ville": "Dreux",
+            "nb_avis": "0-5",
+            "lien_google": "https://maps.app.goo.gl/qwM5jK49dJFuXJk78",
+            "source": "landing-expert-local",
+            "timestamp": "2026-03-14T13:37:48.740Z"
+          },
+          "webhookUrl": "https://prospect.estarellas.online/webhook/expert-local-diagnostic",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "connections": {
     "① Webhook Formulaire": {
       "main": [
@@ -742,7 +788,7 @@
       "main": [
         [
           {
-            "node": "⑭ Envoi Email Brevo",
+            "node": "⑬b Préparation PJ PDF",
             "type": "main",
             "index": 0
           }
@@ -830,17 +876,28 @@
           }
         ]
       ]
+    },
+    "⑬b Préparation PJ PDF": {
+      "main": [
+        [
+          {
+            "node": "⑭ Envoi Email Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": true,
+    "availableInMCP": false,
     "timeSavedMode": "fixed",
     "timezone": "Europe/Paris",
     "callerPolicy": "workflowsFromSameOwner"
   },
-  "versionId": "54124f59-6488-48d5-b7b4-39595b774e6f",
+  "versionId": "0cfced6b-8bec-45dc-a76f-fa0d66713119",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "eee3f4e847b8c9878a5d6379d99eacc8e5355b0753c568fb9ee289b1528c4f3b"
