@@ -1,0 +1,451 @@
+{
+  "name": "EL — Prospection — Import & Envoi J0",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "el-nurturing-import",
+        "options": {}
+      },
+      "id": "0a1fa224-c41f-4567-89bb-89ded4d31307",
+      "name": "① Webhook Import",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        528,
+        -96
+      ],
+      "webhookId": "el-nurturing-import-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════════\n// PARSE CSV OU JSON + FILTRE SCORE >= 5\n// ═══════════════════════════════════════════════\n\nconst body = $input.first().json.body || $input.first().json;\nlet raw = [];\n\nif (body.prospects && Array.isArray(body.prospects)) {\n  // Mode JSON direct : { prospects: [...] }\n  raw = body.prospects;\n\n} else if (body.csv_content && typeof body.csv_content === 'string') {\n  // Mode CSV string : { csv_content: '...' }\n  const csv = body.csv_content;\n  const lines = csv.split(/\\r?\\n/).filter(l => l.trim());\n  if (lines.length < 2) throw new Error('CSV vide ou invalide (moins de 2 lignes)');\n\n  const headers = lines[0].split(',').map(h => h.replace(/\"/g, '').trim());\n  for (let i = 1; i < lines.length; i++) {\n    const vals = lines[i].match(/(?:\"[^\"]*\"|[^,]+)/g) || [];\n    const row = {};\n    headers.forEach((h, idx) => {\n      row[h] = (vals[idx] || '').replace(/\"/g, '').trim();\n    });\n    raw.push(row);\n  }\n\n} else {\n  throw new Error('Payload invalide. Attendu : { prospects: [...] } ou { csv_content: \"...\" }');\n}\n\n// ── Calcul des dates de relance ──\nconst SCORE_MIN = 5;\nconst now = new Date();\nconst pad = n => String(n).padStart(2, '0');\nconst toDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;\nconst j0    = toDate(now);\nconst j2due = toDate(new Date(now.getTime() + 2 * 86400000));\nconst j5due = toDate(new Date(now.getTime() + 5 * 86400000));\n\n// ── Normalisation + filtre ──\nconst filtered = raw\n  .filter(p => {\n    const score = parseInt(\n      p.score_priorite || p['Score Priorité'] || p.Score || 0\n    );\n    return score >= SCORE_MIN;\n  })\n  .map(p => ({\n    nom_entreprise: (p.nom_entreprise  || p.Entreprise   || '').trim(),\n    commune:        (p.commune         || p.Commune      || '').trim(),\n    email:          (p.email           || p.Email        || '').toLowerCase().trim(),\n    telephone:      (p.telephone       || p['Téléphone'] || '').trim(),\n    score:    parseInt(p.score_priorite  || p['Score Priorité'] || 0),\n    score_label:    (p.score_label     || p.Priorité     || '').trim(),\n    note_google: parseFloat(p.note_google || p['Note Google'] || 0),\n    nb_avis:    parseInt(p.nb_avis     || p['Nb Avis']   || 0),\n    site_web:       (p.site_web        || p['Site Web']  || '').trim(),\n    maps_url:       (p.google_maps_url || p['Fiche Google Maps'] || '').trim(),\n    activite:       (p.activite        || p['Activité']  || '').trim(),\n    date_j0:    j0,\n    date_j2_due: j2due,\n    date_j5_due: j5due,\n  }));\n\nif (filtered.length === 0) {\n  throw new Error(`Aucun prospect avec score >= ${SCORE_MIN} dans le fichier.`);\n}\n\nconsole.log(`[Import] ${filtered.length}/${raw.length} prospects retenus (score >= ${SCORE_MIN})`);\nreturn filtered.map(p => ({ json: p }));"
+      },
+      "id": "43ce1a70-e93b-4531-beb0-a68be33f6a95",
+      "name": "② Parse et Filtre",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.notion.com/v1/databases/301db593d5b68150a80cc114a02a3856/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"filter\":{\"property\":\"Nom Commerce\",\"title\":{\"equals\":\"{{$json.nom_entreprise}}\"}},\"page_size\":1}",
+        "options": {}
+      },
+      "id": "fde32fe8-f07d-4656-af64-9f176638fef8",
+      "name": "③ Notion — Vérif Doublon",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1008,
+        -96
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Vérifie si le prospect existe déjà en base\nconst notionResp = $input.first().json;\nconst prospect  = $('② Parse et Filtre').item.json;\n\nconst isDuplicate = !!(notionResp.results && notionResp.results.length > 0);\n\nconsole.log(`[Dédup] ${prospect.nom_entreprise} — ${isDuplicate ? 'DOUBLON' : 'NOUVEAU'}`);\n\nreturn [{ json: { ...prospect, _is_duplicate: isDuplicate } }];"
+      },
+      "id": "e93e9562-47b6-41d7-bfe4-c259b1d7124d",
+      "name": "④ Check Doublon",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json._is_duplicate ? 'doublon' : 'nouveau'}}",
+              "value2": "nouveau"
+            }
+          ]
+        }
+      },
+      "id": "5e7b8ccf-8019-43ab-bb44-baaf5da84c53",
+      "name": "⑤ Nouveau Prospect ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1488,
+        -96
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f4152bfd-5517-4102-ae32-b7abcc9ccabc",
+      "name": "⏭ Skip Doublon",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════════\n// PRÉPARE LE BODY DE CRÉATION NOTION\n// ═══════════════════════════════════════════════\n\nconst p = $input.first().json;\nconst hasEmail = !!(p.email && p.email.includes('@') && p.email.includes('.'));\nconst statut   = hasEmail ? 'J0 - En cours' : 'Pas d\\'email';\n\nconst notionBody = {\n  parent: { database_id: '301db593d5b68150a80cc114a02a3856' },\n  properties: {\n    'Nom Commerce':    { title:       [{ text: { content: p.nom_entreprise || 'N/A' } }] },\n    'Email':           { email:        hasEmail ? p.email : null },\n    'Téléphone':       { phone_number: p.telephone || null },\n    'Score':           { number:       p.score },\n    'Score Label':     { select:       { name: p.score_label || 'Inconnu' } },\n    'Commune':         { rich_text:    [{ text: { content: p.commune } }] },\n    'Activité':        { rich_text:    [{ text: { content: p.activite } }] },\n    'Note Google':     { number:       p.note_google },\n    'Nb Avis':         { number:       p.nb_avis },\n    'Site Web':        { url:          p.site_web  || null },\n    'Google Maps URL': { url:          p.maps_url  || null },\n    'Source':          { select:       { name: 'webapp_prospection' } },\n    'Statut':          { select:       { name: statut } },\n    'Date Import':     { date:         { start: p.date_j0 } },\n    'Date J0':         { date:         { start: p.date_j0 } },\n    'Date J2 Due':     { date:         { start: p.date_j2_due } },\n    'Date J5 Due':     { date:         { start: p.date_j5_due } },\n  }\n};\n\nreturn [{ json: { ...p, _has_email: hasEmail, _notion_body: JSON.stringify(notionBody) } }];"
+      },
+      "id": "700ca5f5-a6ce-4ca2-8f82-fad1bdc196e7",
+      "name": "⑥ Prépare Notion Body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1728,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json._notion_body}}",
+        "options": {}
+      },
+      "id": "25aab0f0-3f97-499d-ae9f-573c73a77a71",
+      "name": "⑦ Notion — Créer Prospect",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1968,
+        -96
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Fusionne les données prospect avec l'ID Notion créé\nconst notionPage = $input.first().json;\nconst prev = $('⑥ Prépare Notion Body').item.json;\n\nif (!notionPage.id) {\n  throw new Error(`Notion n'a pas retourné d'ID pour ${prev.nom_entreprise}`);\n}\n\nreturn [{ json: { ...prev, _notion_page_id: notionPage.id } }];"
+      },
+      "id": "842dc1ac-7565-4ba7-8ff3-b71c64bbb3f0",
+      "name": "Merge Notion ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2208,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json._has_email ? 'oui' : 'non'}}",
+              "value2": "oui"
+            }
+          ]
+        }
+      },
+      "id": "1b9ba307-c442-4733-a7fb-df655d253b5e",
+      "name": "⑧ Email Disponible ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        -96
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c4d6bd41-4177-4c45-add3-3d941bdc9170",
+      "name": "⏭ Pas d'email — Notion notifié",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2688,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "sendInBlueApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": {\n    \"name\": \"Antoine — Expert Local\",\n    \"email\": \"no-reply@expert-local.fr\"\n  },\n  \"to\": [{\n    \"email\": \"{{$json.email}}\",\n    \"name\":  \"{{$json.nom_entreprise}}\"\n  }],\n  \"templateId\": 5,\n  \"params\": {\n    \"NOM_COMMERCE\": \"{{$json.nom_entreprise}}\",\n    \"COMMUNE\":      \"{{$json.commune}}\",\n    \"ACTIVITE\":     \"{{$json.activite}}\",\n    \"SCORE\":        {{$json.score}},\n    \"NOTE_GOOGLE\":  {{$json.note_google}},\n    \"NB_AVIS\":      {{$json.nb_avis}}\n  }\n}",
+        "options": {}
+      },
+      "id": "0dcb4b79-b0fb-4863-a3e7-b8d2fd7bd983",
+      "name": "⑨ Brevo — Envoi J0",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2688,
+        -96
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "Wa4UuneFf2W62hxB",
+          "name": "Brevo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const brevoResp = $input.first().json;\nconst prev = $('Merge Notion ID').item.json;\nreturn [{ json: { ...prev, _brevo_message_id: brevoResp.messageId || 'sent' } }];"
+      },
+      "id": "56246ef9-a042-4aa1-8d8c-d0c1594d390c",
+      "name": "Merge Brevo Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2928,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/pages/{{$json._notion_page_id}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"properties\":{\"Statut\":{\"select\":{\"name\":\"J0 - Envoyé\"}}}}",
+        "options": {}
+      },
+      "id": "8de9b8f5-0d7b-4e7e-a2a4-b16095fcb409",
+      "name": "⑩ Notion — Statut J0 Envoyé",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        3168,
+        -96
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "52c2141f-4ce2-447d-91ee-a198dcd0804a",
+      "name": "✅ Prospect traité",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3408,
+        -96
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "① Webhook Import": {
+      "main": [
+        [
+          {
+            "node": "② Parse et Filtre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "② Parse et Filtre": {
+      "main": [
+        [
+          {
+            "node": "③ Notion — Vérif Doublon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "③ Notion — Vérif Doublon": {
+      "main": [
+        [
+          {
+            "node": "④ Check Doublon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "④ Check Doublon": {
+      "main": [
+        [
+          {
+            "node": "⑤ Nouveau Prospect ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑤ Nouveau Prospect ?": {
+      "main": [
+        [
+          {
+            "node": "⑥ Prépare Notion Body",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "⏭ Skip Doublon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑥ Prépare Notion Body": {
+      "main": [
+        [
+          {
+            "node": "⑦ Notion — Créer Prospect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑦ Notion — Créer Prospect": {
+      "main": [
+        [
+          {
+            "node": "Merge Notion ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Notion ID": {
+      "main": [
+        [
+          {
+            "node": "⑧ Email Disponible ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑧ Email Disponible ?": {
+      "main": [
+        [
+          {
+            "node": "⑨ Brevo — Envoi J0",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "⏭ Pas d'email — Notion notifié",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑨ Brevo — Envoi J0": {
+      "main": [
+        [
+          {
+            "node": "Merge Brevo Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Brevo Response": {
+      "main": [
+        [
+          {
+            "node": "⑩ Notion — Statut J0 Envoyé",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑩ Notion — Statut J0 Envoyé": {
+      "main": [
+        [
+          {
+            "node": "✅ Prospect traité",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "7403dd21-7ac7-44fd-bcd2-731887f0784c",
+  "meta": {
+    "instanceId": "eee3f4e847b8c9878a5d6379d99eacc8e5355b0753c568fb9ee289b1528c4f3b"
+  },
+  "id": "qeCbF2ZYPxnPoi2yXP3b-",
+  "tags": [
+    {
+      "name": "prospection",
+      "id": "2Wde9fQzgTCK4I7e",
+      "updatedAt": "2026-03-16T20:48:41.726Z",
+      "createdAt": "2026-03-16T20:48:41.726Z"
+    },
+    {
+      "name": "nurturing",
+      "id": "EDxGzJSP6kumGn1n",
+      "updatedAt": "2026-03-16T20:48:41.719Z",
+      "createdAt": "2026-03-16T20:48:41.719Z"
+    },
+    {
+      "updatedAt": "2026-02-07T23:48:56.858Z",
+      "createdAt": "2026-02-07T23:48:56.858Z",
+      "id": "ttxRqrYnpuJzO0Km",
+      "name": "expert-local"
+    }
+  ]
+}

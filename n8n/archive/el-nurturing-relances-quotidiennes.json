@@ -1,0 +1,439 @@
+{
+  "name": "EL — Prospection — Relances Quotidiennes J+2 & J+5",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "22222222-0002-0002-0002-000000000001",
+      "name": "① Schedule 9h quotidien",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst pad = n => String(n).padStart(2, '0');\nconst today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;\nconsole.log(`[Relances] Date du jour : ${today}`);\nreturn [{ json: { today } }];"
+      },
+      "id": "22222222-0002-0002-0002-000000000002",
+      "name": "② Date du jour",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.notion.com/v1/databases/A_REMPLIR_NOTION_DB_PROSPECTS/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"filter\":{\"and\":[{\"property\":\"Statut\",\"select\":{\"equals\":\"J0 - Envoyé\"}},{\"property\":\"Date J2 Due\",\"date\":{\"on_or_before\":\"{{.today}}\"}}]},\"page_size\":100}",
+        "options": {}
+      },
+      "id": "22222222-0002-0002-0002-000000000003",
+      "name": "③A Notion — Query J2 Pending",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1680,
+        100
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const resp = .first().json;\nconst results = resp.results || [];\nif (results.length === 0) { console.log(\"[J+2] Aucun prospect\"); return []; }\nconsole.log();\nreturn results.map(page => {\n  const props = page.properties;\n  return { json: {\n    notion_page_id: page.id,\n    email:         props['Email']?.email || '',\n    nom_entreprise: props['Nom Commerce']?.title?.[0]?.plain_text || '',\n    commune:       props['Commune']?.rich_text?.[0]?.plain_text || '',\n    score:         props['Score']?.number || 0,\n    note_google:   props['Note Google']?.number || 0,\n    nb_avis:       props['Nb Avis']?.number || 0,\n    activite:      props['Activité']?.rich_text?.[0]?.plain_text || '',\n  }};\n}).filter(item => item.json.email && item.json.email.includes('@'));"
+      },
+      "id": "22222222-0002-0002-0002-000000000004",
+      "name": "④A Extrait Prospects J2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1420,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "A_REMPLIR_BREVO_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"sender\":{\"name\":\"Antoine — Expert Local\",\"email\":\"no-reply@expert-local.fr\"},\"to\":[{\"email\":\"{{.email}}\",\"name\":\"{{.nom_entreprise}}\"}],\"templateId\":A_REMPLIR_TEMPLATE_J2,\"params\":{\"NOM_COMMERCE\":\"{{.nom_entreprise}}\",\"COMMUNE\":\"{{.commune}}\",\"ACTIVITE\":\"{{.activite}}\",\"SCORE\":{{.score}},\"NOTE_GOOGLE\":{{.note_google}},\"NB_AVIS\":{{.nb_avis}}}}",
+        "options": {}
+      },
+      "id": "22222222-0002-0002-0002-000000000005",
+      "name": "⑤A Brevo — Envoi J+2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1160,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const brevoResp = .first().json;\nconst prev = .item.json;\nreturn [{ json: { ...prev, _brevo_ok: !!brevoResp.messageId } }];"
+      },
+      "id": "22222222-0002-0002-0002-000000000006",
+      "name": "Merge J2 Brevo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -900,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/pages/{{.notion_page_id}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"properties\":{\"Statut\":{\"select\":{\"name\":\"J2 - Envoyé\"}}}}",
+        "options": {}
+      },
+      "id": "22222222-0002-0002-0002-000000000007",
+      "name": "⑥A Notion — Statut J2 Envoyé",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -640,
+        100
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "22222222-0002-0002-0002-000000000008",
+      "name": "✅ J+2 traité",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.notion.com/v1/databases/A_REMPLIR_NOTION_DB_PROSPECTS/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"filter\":{\"and\":[{\"property\":\"Statut\",\"select\":{\"equals\":\"J2 - Envoyé\"}},{\"property\":\"Date J5 Due\",\"date\":{\"on_or_before\":\"{{.today}}\"}}]},\"page_size\":100}",
+        "options": {}
+      },
+      "id": "22222222-0002-0002-0002-000000000009",
+      "name": "③B Notion — Query J5 Pending",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1680,
+        500
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const resp = .first().json;\nconst results = resp.results || [];\nif (results.length === 0) { console.log(\"[J+5] Aucun prospect\"); return []; }\nconsole.log();\nreturn results.map(page => {\n  const props = page.properties;\n  return { json: {\n    notion_page_id: page.id,\n    email:         props['Email']?.email || '',\n    nom_entreprise: props['Nom Commerce']?.title?.[0]?.plain_text || '',\n    commune:       props['Commune']?.rich_text?.[0]?.plain_text || '',\n    score:         props['Score']?.number || 0,\n    note_google:   props['Note Google']?.number || 0,\n    nb_avis:       props['Nb Avis']?.number || 0,\n    activite:      props['Activité']?.rich_text?.[0]?.plain_text || '',\n  }};\n}).filter(item => item.json.email && item.json.email.includes('@'));"
+      },
+      "id": "22222222-0002-0002-0002-000000000010",
+      "name": "④B Extrait Prospects J5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1420,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "A_REMPLIR_BREVO_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"sender\":{\"name\":\"Antoine — Expert Local\",\"email\":\"no-reply@expert-local.fr\"},\"to\":[{\"email\":\"{{.email}}\",\"name\":\"{{.nom_entreprise}}\"}],\"templateId\":A_REMPLIR_TEMPLATE_J5,\"params\":{\"NOM_COMMERCE\":\"{{.nom_entreprise}}\",\"COMMUNE\":\"{{.commune}}\",\"ACTIVITE\":\"{{.activite}}\",\"SCORE\":{{.score}},\"NOTE_GOOGLE\":{{.note_google}},\"NB_AVIS\":{{.nb_avis}}}}",
+        "options": {}
+      },
+      "id": "22222222-0002-0002-0002-000000000011",
+      "name": "⑤B Brevo — Envoi J+5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1160,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const brevoResp = .first().json;\nconst prev = .item.json;\nreturn [{ json: { ...prev, _brevo_ok: !!brevoResp.messageId } }];"
+      },
+      "id": "22222222-0002-0002-0002-000000000012",
+      "name": "Merge J5 Brevo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -900,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/pages/{{.notion_page_id}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"properties\":{\"Statut\":{\"select\":{\"name\":\"Séquence terminée\"}}}}",
+        "options": {}
+      },
+      "id": "22222222-0002-0002-0002-000000000013",
+      "name": "⑥B Notion — Séquence terminée",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -640,
+        500
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "FJbYvS2QHuscfm50",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "22222222-0002-0002-0002-000000000014",
+      "name": "✅ J+5 traité",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "① Schedule 9h quotidien": {
+      "main": [
+        [
+          {
+            "node": "② Date du jour",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "② Date du jour": {
+      "main": [
+        [
+          {
+            "node": "③A Notion — Query J2 Pending",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "③B Notion — Query J5 Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "③A Notion — Query J2 Pending": {
+      "main": [
+        [
+          {
+            "node": "④A Extrait Prospects J2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "④A Extrait Prospects J2": {
+      "main": [
+        [
+          {
+            "node": "⑤A Brevo — Envoi J+2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑤A Brevo — Envoi J+2": {
+      "main": [
+        [
+          {
+            "node": "Merge J2 Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge J2 Brevo": {
+      "main": [
+        [
+          {
+            "node": "⑥A Notion — Statut J2 Envoyé",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑥A Notion — Statut J2 Envoyé": {
+      "main": [
+        [
+          {
+            "node": "✅ J+2 traité",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "③B Notion — Query J5 Pending": {
+      "main": [
+        [
+          {
+            "node": "④B Extrait Prospects J5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "④B Extrait Prospects J5": {
+      "main": [
+        [
+          {
+            "node": "⑤B Brevo — Envoi J+5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑤B Brevo — Envoi J+5": {
+      "main": [
+        [
+          {
+            "node": "Merge J5 Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge J5 Brevo": {
+      "main": [
+        [
+          {
+            "node": "⑥B Notion — Séquence terminée",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑥B Notion — Séquence terminée": {
+      "main": [
+        [
+          {
+            "node": "✅ J+5 traité",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris"
+  },
+  "versionId": "el-nurturing-relances-v1",
+  "meta": {
+    "instanceId": "eee3f4e847b8c9878a5d6379d99eacc8e5355b0753c568fb9ee289b1528c4f3b"
+  },
+  "id": "el-nurturing-relances-v1",
+  "tags": [
+    {
+      "name": "expert-local"
+    },
+    {
+      "name": "prospection"
+    },
+    {
+      "name": "nurturing"
+    }
+  ]
+}
