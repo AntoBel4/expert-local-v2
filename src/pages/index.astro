@@ -24,7 +24,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="hero-content">
         <div class="authority-badge">
-          <div class="badge-avatar">AE</div>
+          <img class="badge-avatar" src="/photo-profil.jpg" alt="Antoine Estarellas" width="36" height="36">
           <div class="badge-info">
             <span class="badge-name">Antoine Estarellas</span>
             <span class="badge-role">Conseiller numérique · Expert Google Local</span>
@@ -164,13 +164,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p class="section-subtitle">78 secondes pour comprendre pourquoi vos concurrents vous devancent — et comment inverser la tendance dès demain.</p>
       </div>
       <div class="video-wrapper">
-        <div class="video-placeholder card card--glass">
-          <div class="video-play-btn">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M8 5V19L19 12L8 5Z" fill="white"/></svg>
-          </div>
-          <p class="video-label">Voir la méthode 2026</p>
-          <p class="video-sub">1 min 18 sec · Sous-titres inclus</p>
-        </div>
+        <video class="video-player card card--glass" controls preload="metadata" poster="/video-thumbnail.jpg" playsinline>
+          <source src="/expert-local-video.mp4" type="video/mp4">
+          Votre navigateur ne prend pas en charge la vidéo.
+        </video>
       </div>
       <div class="video-trust">
         <span>🔇 Sous-titres inclus</span>
@@ -261,7 +258,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div class="pricing-popular">⭐ Le plus populaire</div>
           <div class="pricing-badge pricing-badge--kit">KIT EXPRESS</div>
           <h3>La Méthode Complète</h3>
-          <div class="pricing-price">49€ <span class="pricing-ttc">TTC</span></div>
+          <div class="pricing-price">49€ <span class="pricing-ttc">*</span></div>
           <p class="pricing-desc">Tout le matériel pour obtenir vos 10 premiers avis 5★ en autonomie.</p>
           <ul class="pricing-features">
             <li>✓ Tout le diagnostic gratuit</li>
@@ -276,8 +273,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <label style="display: flex; gap: 10px; cursor: pointer; align-items: flex-start;">
               <input type="checkbox" id="bump-kit" name="bump" style="width: 20px; height: 20px; accent-color: var(--color-primary); margin-top: 3px;">
               <span style="font-size: 0.9em; line-height: 1.3;">
-                <strong>+ Ajouter les 5 Messages Vocaux de Relance (19€)</strong><br>
-                <small>Maximisez vos résultats avec les scripts audios.</small>
+                <strong>Kit Relance+ (19€)</strong><br>
+                <small>5 messages vocaux prêts à envoyer + 5 scripts SMS avancés</small>
               </span>
             </label>
           </div>
@@ -287,19 +284,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="card pricing-card">
           <div class="pricing-badge pricing-badge--pro">PACK PRO</div>
           <h3>Domination Locale</h3>
-          <div class="pricing-price">179€ <span class="pricing-ttc">TTC</span></div>
+          <div class="pricing-price">179€ <span class="pricing-ttc">*</span></div>
           <p class="pricing-desc">Kit digital + matériel pro livré + appel stratégique personnalisé.</p>
           <ul class="pricing-features">
             <li>✓ Tout le Kit Express</li>
-            <li>✓ Matériel professionnel imprimé et livré</li>
-            <li>✓ Audit personnalisé de votre fiche Google</li>
-            <li>✓ Appel stratégique 30 min</li>
+            <li>✓ Audit approfondi de votre fiche Google (8-10 pages)</li>
+            <li>✓ Benchmark de vos 3 concurrents locaux</li>
+            <li>✓ Appel stratégique personnalisé 45 min</li>
             <li>✓ Suivi à J+10</li>
           </ul>
           <button class="btn btn--secondary btn--full btn-checkout" data-plan="pro">Devenir PRO</button>
         </div>
 
       </div>
+      <p class="pricing-tva-note">* TVA non applicable, article 293 B du CGI.</p>
     </div>
   </section>
 
@@ -526,8 +524,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const form = document.getElementById('diagnosticForm');
     if (!form) return;
 
-    // L'URL est maintenant notre Netlify Function
-    const API_URL = '/.netlify/functions/submit-diagnostic';
+    // Appel direct au webhook n8n (plus de Netlify Function)
+    const API_URL = 'https://prospect.estarellas.online/webhook/expert-local-diagnostic';
 
     // Navigation étapes
     form.querySelectorAll('.btn-next').forEach(btn => {
@@ -694,7 +692,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
 
       try {
-        const response = await fetch('/.netlify/functions/create-checkout', {
+        const response = await fetch('https://api.estarellas.online/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -784,11 +782,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .badge-avatar {
     width: 36px; height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-    display: flex; align-items: center; justify-content: center;
-    font-weight: var(--weight-bold);
-    font-size: var(--text-sm);
-    color: #fff;
+    object-fit: cover;
   }
   .badge-info { display: flex; flex-direction: column; }
   .badge-name { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary); }
@@ -967,28 +961,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .video-section::before { top: 0; }
   .video-section::after { bottom: 0; }
   .video-wrapper { max-width: 800px; margin: 0 auto; }
-  .video-placeholder {
+  .video-player {
+    width: 100%;
     aspect-ratio: 16/9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-3);
-    cursor: pointer;
-    transition: all var(--transition-base);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.3);
   }
-  .video-placeholder:hover { border-color: var(--color-primary); box-shadow: var(--shadow-glow); }
-  .video-play-btn {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 0 16px rgba(230,126,34,0.15), 0 12px 40px rgba(230,126,34,0.4);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  .video-play-btn svg { margin-left: 4px; }
-  .video-label { font-weight: var(--weight-bold); font-size: var(--text-lg); }
-  .video-sub { color: var(--color-text-muted); font-size: var(--text-sm); }
   .video-trust {
     display: flex;
     justify-content: center;
@@ -1088,6 +1067,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-bottom: var(--space-2);
   }
   .pricing-ttc { font-size: var(--text-sm); color: var(--color-text-muted); font-weight: var(--weight-regular); }
+  .pricing-tva-note { font-size: var(--text-xs); color: var(--color-text-muted); text-align: center; margin-top: var(--space-4); }
   .pricing-desc {
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
