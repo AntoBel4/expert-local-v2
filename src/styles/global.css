@@ -1079,3 +1079,69 @@ ul, ol { list-style: none; }
 
   .urgent-content { font-size: var(--text-xs); }
 }
+
+/* ══════════════════════════════════════
+   21. BLOG STYLES
+   ══════════════════════════════════════ */
+.magazine-grid {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  margin: var(--space-12) 0;
+}
+
+/* Prose content - Blog articles */
+.prose {
+  max-width: 65ch;
+  margin: 0 auto;
+  color: var(--color-on-surface-variant);
+  line-height: 1.7;
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--color-on-surface);
+  margin: var(--space-8) 0 var(--space-4);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+}
+.prose h2 { font-size: var(--text-2xl); }
+.prose h3 { font-size: var(--text-xl); }
+.prose h4 { font-size: var(--text-lg); }
+
+.prose p {
+  margin: var(--space-4) 0;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--space-6);
+  margin: var(--space-4) 0;
+}
+.prose li {
+  margin: var(--space-2) 0;
+}
+
+.prose img,
+.prose video {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  margin: var(--space-6) 0;
+}
+
+.prose a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  color: var(--color-primary-container);
+}
+
+/* Dark mode adjustments */
+.dark .prose {
+  --tw-prose-body: var(--color-on-surface-variant);
+  --tw-prose-headings: var(--color-on-surface);
+  --tw-prose-links: var(--color-primary);
+  --tw-prose-bold: var(--color-on-surface);
+}
