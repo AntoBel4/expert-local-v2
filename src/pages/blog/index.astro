@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<BaseLayout title="Blog | Expert Local" description="Conseils pour améliorer votre visibilité locale et obtenir plus d'avis Google">
+  <div class="container py-12">
+    <h1 class="text-4xl font-bold mb-8 text-center ember-gradient">Blog Expert Local</h1>
+    
+    <div class="magazine-grid">
+      {posts.map(post => (
+        <a href={`/blog/${post.slug}`} class="glass-card hover:scale-[1.02] transition-transform">
+          <article>
+            {post.data.image && (
+              <img src={post.data.image} alt="" loading="lazy" class="w-full h-48 object-cover rounded-t-lg" />
+            )}
+            <div class="p-6">
+              <h2 class="text-xl font-bold mb-2">{post.data.title}</h2>
+              <p class="text-gray-400 mb-4">{post.data.description}</p>
+              <div class="flex justify-between items-center text-sm text-gray-500">
+                <span>{post.data.author}</span>
+                <span>{post.data.date.toLocaleDateString('fr-FR')}</span>
+              </div>
+            </div>
+          </article>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
