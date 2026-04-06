@@ -13,4 +13,16 @@ const blog = defineCollection({
   })
 });
 
+export const collections = { blog };import { defineCollection } from 'astro:content';
+
+const blog = defineCollection({
+  schema: {
+    title: { type: 'string', required: true },
+    description: { type: 'string', required: true },
+    author: { type: 'string', required: true },
+    date: { type: 'date', required: true },
+    image: { type: 'string', required: false }
+  }
+});
+
 export const collections = { blog };
