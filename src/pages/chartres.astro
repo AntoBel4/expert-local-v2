@@ -1,20 +1,13 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { Image } from 'astro:assets';
+import VilleTemplate from '../components/VilleTemplate.astro';
 ---
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AdministrativeArea",
-  "name": "Chartres",
-  "identifier": "28000",
-  "containedInPlace": {
-    "@type": "AdministrativeArea",
-    "name": "Eure-et-Loir"
-  }
-}
-</script>
+<VilleTemplate ville={{
+  nom: "Chartres",
+  codePostal: "28000",
+  casReel: "Salon de coiffure",
+  domaine: "Coiffeur"
+}}>
 
 <BaseLayout 
   title="Expert Local Chartres | Obtenez 10 Avis Google 5★ en 10 Jours"
