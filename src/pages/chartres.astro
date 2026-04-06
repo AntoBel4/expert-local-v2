@@ -1,13 +1,25 @@
 ---
-import VilleTemplate from '../components/VilleTemplate.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 ---
 
-<VilleTemplate ville={{
-  nom: "Chartres",
-  codePostal: "28000",
-  casReel: "Salon de coiffure",
-  domaine: "Coiffeur"
-}}>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AdministrativeArea",
+  "name": "Chartres",
+  "identifier": "28000",
+  "containedInPlace": {
+    "@type": "AdministrativeArea",
+    "name": "Eure-et-Loir"
+  }
+}
+</script>
+
+<BaseLayout 
+  title="Expert Local Chartres | Obtenez 10 Avis Google 5★ en 10 Jours"
+  description="Expert en réputation Google pour commerçants et artisans à Chartres. Obtenez 10 avis Google 5★ en 10 jours et dominez les résultats locaux."
+>
 
 <BaseLayout 
   title="Expert Local Chartres | Obtenez 10 Avis Google 5★ en 10 Jours"
