@@ -6,12 +6,15 @@ import { Image } from 'astro:assets';
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "AdministrativeArea",
-  "name": "Dreux",
-  "identifier": "28100",
-  "containedInPlace": {
-    "@type": "AdministrativeArea",
-    "name": "Eure-et-Loir"
+  "@type": "ProfessionalService",
+  "name": "Expert Local Dreux",
+  "image": "/photo-profil.jpg",
+  "priceRange": "€€",
+  "areaServed": "Dreux",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "15"
   }
 }
 </script>
@@ -42,7 +45,7 @@ import { Image } from 'astro:assets';
         <div class="authority-badge">
           <Image
             src="/photo-profil.jpg"
-            alt="Antoine Estarellas"
+            alt="Antoine Estarellas - Expert en visibilité locale et avis Google"
             width={36}
             height={36}
             format="webp"

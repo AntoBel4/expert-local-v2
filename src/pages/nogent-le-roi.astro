@@ -6,12 +6,15 @@ import { Image } from 'astro:assets';
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "AdministrativeArea",
-  "name": "Nogent-le-Roi",
-  "identifier": "28210",
-  "containedInPlace": {
-    "@type": "AdministrativeArea",
-    "name": "Eure-et-Loir"
+  "@type": "ProfessionalService",
+  "name": "Expert Local Nogent-le-Roi",
+  "image": "/photo-profil.jpg",
+  "priceRange": "€€",
+  "areaServed": "Nogent-le-Roi",
+  "aggregateRating": {
+    "@type": "AggregateRating", 
+    "ratingValue": "4.9",
+    "reviewCount": "15"
   }
 }
 </script>
@@ -42,7 +45,7 @@ import { Image } from 'astro:assets';
         <div class="authority-badge">
           <Image
             src="/photo-profil.jpg"
-            alt="Antoine Estarellas"
+            alt="Antoine Estarellas - Expert en visibilité locale et avis Google" 
             width={36}
             height={36}
             format="webp"

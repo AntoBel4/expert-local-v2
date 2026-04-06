@@ -13,7 +13,7 @@ const posts = (await getCollection('blog')).sort(
     
     <div class="magazine-grid">
       {posts.map(post => (
-        <a href={`/blog/${post.id}`} class="glass-card hover:scale-[1.02] transition-transform">
+        <a href={`/blog/${post.id}/`} class="glass-card hover:scale-[1.02] transition-transform">
           <article>
             {post.data.image && (
               <img src={post.data.image} alt="" loading="lazy" class="w-full h-48 object-cover rounded-t-lg" />
