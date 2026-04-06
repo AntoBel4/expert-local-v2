@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://expert-local.fr',
+  site: 'https://expert-local.fr/',
+  trailingSlash: 'always',
   integrations: [sitemap()],
   compressHTML: true,
   build: {

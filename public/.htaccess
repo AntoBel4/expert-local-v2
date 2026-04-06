@@ -11,7 +11,7 @@
   RewriteRule ^(.*)$ $1.html [NC,L]
 
   # Redirect /ville to /ville.html
-  RewriteRule ^(chartres|dreux|chateaudun|nogent-le-roi)/?$ $1.html [NC,L]
+  RewriteRule ^(chartres|dreux|chateaudun|nogent-le-roi)/?$ $1/ [NC,L,R=301]
 
   # Gestion spécifique de /blog
   RewriteRule ^blog/?$ blog/index.html [NC,L]

@@ -28,7 +28,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
   <title>{title}</title>
   <meta name="description" content={description} />
-  <link rel="canonical" href={canonicalUrl} />
+  <link rel="canonical" href={`${canonicalUrl}${!canonicalUrl.endsWith('/') ? '/' : ''}`} />
 
   {noindex && <meta name="robots" content="noindex, nofollow" />}
 
