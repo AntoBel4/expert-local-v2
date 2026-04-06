@@ -4,5 +4,6 @@ Allow: /
 Disallow: /merci-diagnostic/
 Disallow: /merci-kit/
 Disallow: /merci-pro/
+Disallow: /api/
 
 Sitemap: https://expert-local.fr/sitemap.xml
