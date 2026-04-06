@@ -13,6 +13,9 @@
   # Redirect /ville to /ville.html
   RewriteRule ^(chartres|dreux|chateaudun|nogent-le-roi)/?$ $1.html [NC,L]
 
+  # Gestion spécifique de /blog
+  RewriteRule ^blog/?$ blog/index.html [NC,L]
+
   # Custom 404 Error
   ErrorDocument 404 /404.html
 </IfModule>
