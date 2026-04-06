@@ -1,0 +1,440 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+---
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AdministrativeArea",
+  "name": "Châteaudun",
+  "identifier": "28200",
+  "containedInPlace": {
+    "@type": "AdministrativeArea",
+    "name": "Eure-et-Loir"
+  }
+}
+</script>
+
+<BaseLayout 
+  title="Expert Local Châteaudun | Obtenez 10 Avis Google 5★ en 10 Jours"
+  description="Expert en réputation Google pour commerçants et artisans à Châteaudun. Obtenez 10 avis Google 5★ en 10 jours et dominez les résultats locaux."
+>
+
+  <!-- ═══════════════════════════════════
+       BARRE D'URGENCE
+  ═══════════════════════════════════ -->
+  <div class="urgent-bar">
+    <div class="container urgent-content">
+      <span class="urgent-badge"><span class="material-symbols-outlined icon-sm">warning</span> URGENT 2026</span>
+      <span class="urgent-text">Google pénalise les fiches avec moins de 10 avis récents. Chaque jour sans action, vous perdez des chantiers et la confiance de vos clients à Châteaudun.</span>
+      <a href="#diagnostic" class="urgent-cta">Vérifier mon statut →</a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       HERO
+  ═══════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+
+      <div class="hero-content">
+        <div class="authority-badge">
+          <Image
+            src="/photo-profil.jpg"
+            alt="Antoine Estarellas"
+            width={36}
+            height={36}
+            format="webp"
+            loading="lazy"
+            decoding="async"
+            class="badge-avatar"
+          />
+          <div class="badge-info">
+            <span class="badge-name">Antoine Estarellas</span>
+            <span class="badge-role">Expert en Avis Google Maps | Spécialiste Artisans Châteaudun</span>
+          </div>
+          <div class="badge-check"><span class="material-symbols-outlined icon-filled icon-sm">verified</span></div>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="text-gradient">10 Avis Google Maps en 10 jours</span> à Châteaudun | Votre méthode pour dominer les résultats locaux.
+        </h1>
+
+        <p class="hero-subtitle">
+          Les QR Codes seuls ne fonctionnent <strong class="text-coral">PLUS</strong>.
+          En 2026, il faut une <span class="text-mint">méthode psychologique</span>
+          qui transforme vos clients satisfaits en ambassadeurs pour améliorer votre <strong>réputation locale à Châteaudun</strong>.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">87%</span><span class="stat-txt">de réussite</span></div>
+          <div class="stat"><span class="stat-num">24-48h</span><span class="stat-txt">premiers résultats</span></div>
+          <div class="stat"><span class="stat-num">15+</span><span class="stat-txt">commerces aidés</span></div>
+        </div>
+
+        <a href="#diagnostic" class="btn btn--primary btn--large hero-cta">
+          <span class="material-symbols-outlined">gps_fixed</span> Diagnostic Gratuit — 60 secondes
+        </a>
+
+        <div class="hero-trust">
+          <span><span class="material-symbols-outlined icon-sm icon-filled" style="color:var(--color-secondary)">check_circle</span> Testé à Châteaudun</span>
+          <span><span class="material-symbols-outlined icon-sm icon-filled" style="color:var(--color-secondary)">check_circle</span> Méthode 2026</span>
+          <span><span class="material-symbols-outlined icon-sm icon-filled" style="color:var(--color-secondary)">check_circle</span> Aucun engagement</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <span class="hero-video-label">
+          <span class="material-symbols-outlined icon-sm">movie</span>
+          Méthode en vidéo
+        </span>
+        <h3 class="hero-video-title">Regardez comment nos clients passent de <em class="text-gradient">invisibles à incontournables</em> sur Google</h3>
+        <p class="hero-video-subtitle">78 secondes pour comprendre pourquoi vos concurrents vous devancent — et comment inverser la tendance dès demain.</p>
+        <div class="hero-media">
+          <video class="hero-video" controls preload="metadata" poster="/video-thumbnail.webp" playsinline>
+            <source src="/expert-local-video.mp4" type="video/mp4">
+            Votre navigateur ne prend pas en charge la vidéo.
+          </video>
+        </div>
+        <div class="video-trust">
+          <span><span class="material-symbols-outlined icon-sm">closed_caption</span> Sous-titres inclus</span>
+          <span><span class="material-symbols-outlined icon-sm">timer</span> 1 min 18 sec</span>
+          <span><span class="material-symbols-outlined icon-sm">location_on</span> Cas réels Châteaudun</span>
+          <span><span class="material-symbols-outlined icon-sm">lock</span> Aucune inscription</span>
+        </div>
+        <div class="local-badge glass-card">
+          <span class="material-symbols-outlined icon-filled" style="color:var(--color-primary)">location_on</span>
+          <div>
+            <strong>Spécialiste Châteaudun</strong>
+            <small>Je connais vos concurrents locaux</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social proof: comparison card -->
+    <div class="container hero-proof">
+      <div class="comparison-card glass-card">
+        <div class="comparison-header">
+          <h4>Résultats réels à Châteaudun</h4>
+          <div class="comparison-tabs">
+            <button class="tab-btn tab-btn--active" data-tab="before">AVANT</button>
+            <button class="tab-btn" data-tab="after">APRÈS</button>
+          </div>
+        </div>
+        <div class="tab-panel" id="panel-before">
+          <div class="rating rating--low">
+            <span class="rating-stars">★★★☆☆</span>
+            <span class="rating-num">3.2</span>
+          </div>
+          <div class="review-count">14 avis</div>
+          <div class="points">
+            <div class="point point--bad"><span class="material-symbols-outlined icon-sm">cancel</span><span>1 avis par mois</span></div>
+            <div class="point point--bad"><span class="material-symbols-outlined icon-sm">cancel</span><span>Position 5 sur Google</span></div>
+            <div class="point point--bad"><span class="material-symbols-outlined icon-sm">cancel</span><span>Clients ne laissent pas d'avis</span></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="panel-after" style="display: none;">
+          <div class="rating rating--high">
+            <span class="rating-stars">★★★★★</span>
+            <span class="rating-num">4.7</span>
+          </div>
+          <div class="review-count">38 avis</div>
+          <div class="points">
+            <div class="point point--good"><span class="material-symbols-outlined icon-sm icon-filled">check_circle</span><span>10 avis en 10 jours</span></div>
+            <div class="point point--good"><span class="material-symbols-outlined icon-sm icon-filled">check_circle</span><span>Position 1 sur Google</span></div>
+            <div class="point point--good"><span class="material-symbols-outlined icon-sm icon-filled">check_circle</span><span>+240% de visibilité</span></div>
+          </div>
+        </div>
+        <div class="comparison-footer">
+          <span>Cas réel : Restaurant à Châteaudun</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       MENACE / URGENCE
+  ═══════════════════════════════════ -->
+  <section class="section section--dark" id="menace">
+    <div class="container">
+      <div class="section-header" style="text-align:left;max-width:720px;">
+        <span class="section-label section-label--coral"><span class="material-symbols-outlined icon-sm">warning</span> ALERTE 2026</span>
+        <h2 class="section-title">Pourquoi les artisans de Châteaudun perdent des clients sans le savoir : La nouvelle règle Google qui <span class="text-coral">menace votre commerce à Châteaudun</span></h2>
+        <p class="section-subtitle" style="margin:0;">En 2026, Google a changé ses algorithmes. Voici ce que vos concurrents savent déjà :</p>
+      </div>
+      <div class="problem-grid">
+        <div class="threat-card">
+          <div class="threat-number">01</div>
+          <h3>#1 : L'effet "Local Ghost"</h3>
+          <p>Google privilégie la fraîcheur des avis. Les fiches avec moins de <strong>10 avis récents</strong> sont progressivement invisibilisées dans les résultats locaux.</p>
+          <div class="threat-data"><span>Impact :</span><span class="data-critical">-67% de visibilité</span></div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-number">02</div>
+          <h3>#2 : La fenêtre des 48h</h3>
+          <p>Un avis laissé dans les 48h après la prestation a 4x plus de chances d'être 5★. Après 72h, c'est trop tard.</p>
+          <div class="threat-data"><span>Chance 5★ :</span><span class="data-warning">74% → 18%</span></div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-number">03</div>
+          <h3>#3 : L'IA Google détecte</h3>
+          <p>L'IA de Google détecte les avis "forcés". Seuls les avis organiques obtenus par psychologie sont valorisés.</p>
+          <div class="threat-data"><span>Détection IA :</span><span class="data-info">92% précision</span></div>
+        </div>
+      </div>
+
+      <div class="threat-bottom">
+        <p class="threat-conclusion">
+          <strong>Concrètement ?</strong> Un restaurant de Châteaudun perdait <span class="text-coral">16 clients par mois</span> sans le savoir. Soit un potentiel de croissance non réalisé. Chaque jour sans avis Google Maps, c'est un client de moins et une réputation en ligne en danger.
+        </p>
+        <a href="#diagnostic" class="btn btn--primary btn--large">Vérifier mon statut gratuitement</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       MÉTHODE — Bento Grid
+  ═══════════════════════════════════ -->
+  <section class="section" id="methode">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label section-label--primary"><span class="material-symbols-outlined icon-sm">psychology</span> La méthode</span>
+        <h2 class="section-title">3 principes psychologiques.<br><span class="text-gradient">10 avis en 10 jours.</span></h2>
+        <p class="section-subtitle">Ce n'est pas une question de chance. C'est une question de timing, de mots et de système.</p>
+      </div>
+      <div class="bento-grid">
+
+        <!-- Card 1: large -->
+        <div class="bento-large glass-card method-card">
+          <div class="method-step">1</div>
+          <h3>Le bon moment</h3>
+          <p class="method-concept">Le "Whaou Effect"</p>
+          <p>N'attendez pas la facture. Le meilleur moment pour obtenir un avis 5★, c'est la seconde exacte où le client découvre le résultat.</p>
+          <div class="method-stat">
+            <span class="method-stat-num">74%</span>
+            <span>de conversion dans les 48h</span>
+          </div>
+        </div>
+
+        <!-- Card 2: small -->
+        <div class="bento-small method-card">
+          <div class="method-step">2</div>
+          <h3>Les bons mots</h3>
+          <p class="method-concept">Scripts Psychologiques</p>
+          <p>Ne dites jamais "Pouvez-vous me laisser un avis ?". Demandez des "étoiles", pas un "avis écrit". L'écrit viendra naturellement.</p>
+          <div class="method-stat">
+            <span class="method-stat-num">3x</span>
+            <span>plus efficace qu'une demande classique</span>
+          </div>
+        </div>
+
+        <!-- Card 3: wide -->
+        <div class="bento-wide glass-card method-card">
+          <div class="method-step">3</div>
+          <div>
+            <h3>Le bon système</h3>
+            <p class="method-concept">Automatisation Invisible</p>
+            <p>QR Codes, SMS de relance 24h, suivi — tout est automatisé. Vous n'y pensez plus, les avis arrivent seuls.</p>
+            <div class="method-stat">
+              <span class="method-stat-num">10x</span>
+              <span>plus efficace qu'un QR seul</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="method-cta">
+        <a href="#diagnostic" class="btn btn--primary btn--large">Tester la méthode — Diagnostic gratuit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       OFFRE / PRICING
+  ═══════════════════════════════════ -->
+  <section class="section section--dark" id="offre">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label section-label--primary"><span class="material-symbols-outlined icon-sm">diamond</span> Les offres</span>
+        <h2 class="section-title">Choisissez votre niveau d'accompagnement</h2>
+        <p class="section-subtitle">Du diagnostic gratuit à l'accompagnement complet, faites le choix qui vous correspond.</p>
+      </div>
+      <div class="pricing-grid">
+
+        <div class="pricing-card">
+          <div class="pricing-badge pricing-badge--free">GRATUIT</div>
+          <h3>Diagnostic 2026</h3>
+          <div class="pricing-price">0€</div>
+          <p class="pricing-desc">Découvrez votre score de risque Google et vos 3 actions prioritaires.</p>
+          <ul class="pricing-features">
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Score de risque personnalisé</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Analyse de vos concurrents</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> 3 actions prioritaires</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> PDF envoyé par email</li>
+          </ul>
+          <a href="#diagnostic" class="btn btn--secondary btn--full">Recevoir mon diagnostic</a>
+        </div>
+
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-popular"><span class="material-symbols-outlined icon-filled icon-sm">star</span> Le plus populaire</div>
+          <div class="pricing-badge pricing-badge--kit">KIT EXPRESS</div>
+          <h3>La Méthode Complète</h3>
+          <div class="pricing-price">49€ <span class="pricing-ttc">*</span></div>
+          <p class="pricing-desc">Tout le matériel pour obtenir vos 10 premiers avis 5★ en autonomie.</p>
+          <ul class="pricing-features">
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Tout le diagnostic gratuit</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Scripts face-à-face prêts à l'emploi</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Templates SMS/WhatsApp</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Générateur de QR Code</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Templates visuels (chevalets, stickers)</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Masterclass vidéo</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Plan d'action 10 jours</li>
+          </ul>
+          <div class="order-bump">
+            <label>
+              <input type="checkbox" id="bump-kit" name="bump">
+              <span class="order-bump-text">
+                <strong>Kit Relance+ (19€)</strong><br>
+                <small>5 messages vocaux prêts à envoyer + 5 scripts SMS avancés</small>
+              </span>
+            </label>
+          </div>
+          <button class="btn btn--primary btn--full btn--large btn-checkout" data-plan="kit">Commencer maintenant</button>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-badge pricing-badge--pro">PACK PRO</div>
+          <h3>Domination Locale</h3>
+          <div class="pricing-price">179€ <span class="pricing-ttc">*</span></div>
+          <p class="pricing-desc">Kit digital + matériel pro livré + appel stratégique personnalisé.</p>
+          <ul class="pricing-features">
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Tout le Kit Express</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Audit approfondi de votre fiche Google (8-10 pages)</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Benchmark de vos 3 concurrents locaux</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Appel stratégique personnalisé 45 min</li>
+            <li><span class="material-symbols-outlined icon-filled">check_circle</span> Suivi à J+10</li>
+          </ul>
+          <button class="btn btn--secondary btn--full btn-checkout" data-plan="pro">Devenir PRO</button>
+        </div>
+
+      </div>
+      <p class="pricing-tva-note">* TVA non applicable, article 293 B du CGI.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       TÉMOIGNAGES
+  ═══════════════════════════════════ -->
+  <section class="section" id="resultats">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label section-label--primary"><span class="material-symbols-outlined icon-sm">bar_chart</span> Résultats</span>
+        <h2 class="section-title">Ils ont utilisé la méthode</h2>
+        <p class="section-subtitle">Des résultats concrets à Châteaudun.</p>
+      </div>
+      <div class="testimonials-grid">
+
+        <div class="glass-card testimonial-card">
+          <div class="testimonial-stars">
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+          </div>
+          <p class="testimonial-text">"11 avis → 29 avis en 10 jours. Ma note est passée de 3.5 à 4.8. Position 1 sur Google Maps à Châteaudun."</p>
+          <div class="testimonial-author">
+            <strong>Restaurant</strong>
+            <span>Châteaudun (28)</span>
+          </div>
+          <div class="testimonial-result">
+            <span class="badge badge--success">+210% de visibilité</span>
+          </div>
+        </div>
+
+        <div class="glass-card testimonial-card">
+          <div class="testimonial-stars">
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+          </div>
+          <p class="testimonial-text">"Je perdais 16 clients par mois sans le savoir. Après la méthode, mes appels ont augmenté de 55% en 3 semaines."</p>
+          <div class="testimonial-author">
+            <strong>Garagiste</strong>
+            <span>Châteaudun (28)</span>
+          </div>
+          <div class="testimonial-result">
+            <span class="badge badge--success">+55% d'appels entrants</span>
+          </div>
+        </div>
+
+        <div class="glass-card testimonial-card">
+          <div class="testimonial-stars">
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+            <span class="material-symbols-outlined icon-filled">star</span>
+          </div>
+          <p class="testimonial-text">"La méthode psychologique fonctionne vraiment. Mes clients laissent des avis sans que j'aie besoin de supplier."</p>
+          <div class="testimonial-author">
+            <strong>Fleuriste</strong>
+            <span>Châteaudun (28)</span>
+          </div>
+          <div class="testimonial-result">
+            <span class="badge badge--success">10 avis 5★ en 9 jours</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       FAQ
+  ═══════════════════════════════════ -->
+  <section class="section section--dark" id="faq">
+    <div class="container container--narrow">
+      <div class="section-header">
+        <span class="section-label section-label--primary"><span class="material-symbols-outlined icon-sm">help</span> FAQ</span>
+        <h2 class="section-title">Questions fréquentes</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Est-ce que ça marche pour tout type de commerce à Châteaudun ?</summary>
+          <p>Oui. La méthode repose sur la psychologie humaine universelle (principe de réciprocité). Elle fonctionne pour les coiffeurs, restaurants, plombiers, électriciens, artisans, boutiques — tout commerce qui a des clients satisfaits à Châteaudun.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Combien de temps faut-il pour voir des résultats ?</summary>
+          <p>Les premiers avis arrivent en 24 à 48h. En 10 jours, vous pouvez obtenir 10 avis 5★ si vous appliquez la méthode quotidiennement.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Est-ce que les avis obtenus sont authentiques ?</summary>
+          <p>Absolument. La méthode ne crée pas de faux avis. Elle vous aide à demander au bon moment, avec les bons mots, pour que vos vrais clients partagent leur expérience.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Quelle est la garantie de satisfaction ?</summary>
+          <p>Si vous n'êtes pas satisfait après avoir suivi la méthode, vous pouvez demander un remboursement sous 24h. Il suffit d'envoyer un email à support@expert-local.fr avec votre reçu de commande.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  // Comparison card tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-btn--active'));
+      btn.classList.add('tab-btn--active');
+      document.getElementById('panel-before').style.display = tab === 'before' ? '' : 'none';
+      document.getElementById('panel-after').style.display = tab === 'after' ? '' : 'none';
+    });
+  });
+</script>
