@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from '@astrojs/image/components';
 ---
 
 <script type="application/ld+json">
@@ -37,7 +38,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="hero-content">
         <div class="authority-badge">
-          <img class="badge-avatar" src="/photo-profil.jpg" alt="Antoine Estarellas" width="36" height="36">
+          <Image 
+            src="/photo-profil.jpg" 
+            alt="Antoine Estarellas" 
+            width={36}
+            height={36}
+            format="webp"
+            loading="lazy"
+            decoding="async"
+            class="badge-avatar"
+          />
           <div class="badge-info">
             <span class="badge-name">Antoine Estarellas</span>
             <span class="badge-role">Conseiller numérique · Expert Google Local</span>
