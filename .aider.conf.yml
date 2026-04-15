@@ -1,0 +1,14 @@
+model: openrouter/alibabacloud/qwen-3.6-chat
+architect: true
+# Fichiers que l'IA peut modifier (SEO/Front)
+edit-format: architect
+# Protection du Backend : On liste les dossiers sensibles en lecture seule
+read: 
+  - "server/**"
+  - "api/**"
+  - "n8n/**"
+  - ".env"
+# Pour ne pas polluer tes commits
+attribute-author: true
+# Interface en français pour plus de confort
+chat-language: fr

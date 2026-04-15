@@ -1,0 +1,2118 @@
+
+# 2026-04-06 02:34:02.378196
++y
+
+# 2026-04-06 02:37:32.941722
++Agis en tant qu'Expert SEO/GEO et Orchestrateur.OBJECTIFS :1. Analyse le fichier `src/pages/index.astro`.2. Repère le lien mort `/#blog` et prépare sa suppression.3. Vérifie le Schema.org (JSON-LD) : nous devons impérativement passer de '@type': 'State' à '@type': 'AdministrativeArea' pour l'Eure-et-Loir (28).4. Vérifie la présence d'une balise `<link rel='canonical' href='https://expert-local.fr/'>` dans le <head>. Si elle manque, prépare son ajout.5. Vérifie s'il existe un fichier `public/robots.txt`. Si oui, propose d'ajouter 'Disallow: /api/' par sécurité. S'il n'existe pas, prépare sa création avec les règles de base + cette restriction.CONTRAINTES :- INTERDICTION de modifier le CSS (styles) ou le design pour le moment.- INTERDICTION de toucher à la logique de paiement Stripe ou aux formulaires.- Reste focalisé sur la sémantique HTML et les métadonnées pour les IA (GEO).Fais-moi un rapport détaillé de tes trouvailles et des modifications prévues. Attends ma validation avant d'appliquer les changements.
+
+# 2026-04-06 02:37:39.655034
++y
+
+# 2026-04-06 02:49:49.956926
++/diff
+
+# 2026-04-06 02:51:02.824128
++/add astro.config.mjs
+
+# 2026-04-06 02:51:36.344727
++Agis en tant qu'Expert SEO/GEO & Astro Developer. Nous lançons l'Audit Technique Global basé sur mon rapport détaillé.
++
++MISSIONS :
++
++1. HIÉRARCHIE & META (BaseLayout.astro) :
++   - Transforme les balises <title> et <meta name="description"> pour qu'elles utilisent des props Astro ({Astro.props.title}, etc.).
++   - Configure les valeurs par défaut : 
++     * Title : "Obtenez 10 avis 5 en 10 jours | expert-local.fr"
++     * Meta Description : "Méthode psychologique pour artisans du 28 : QR codes, scripts face-à-face & SMS. Diagnostic gratuit."
++
++2. STRUCTURE Hn & NETTOYAGE (index.astro, Header.astro, Footer.astro) :
++   - Assure-toi qu'il n'y a qu'UN SEUL <h1> (la promesse principale).
++   - Nettoie les liens morts : supprime définitivement toute référence à '/#blog' (ou transforme-la en lien invisible/placeholder si nécessaire, mais ne laisse pas de lien 404).
++   - Harmonise les IDs de sections (#methode, #pourquoi, #diagnostic) avec les ancres de la Navbar dans le Header.
++
++3. SCHEMA MARKUP AVANCÉ (index.astro) :
++   - En plus du bloc AdministrativeArea déjà présent, ajoute le schéma de type 'Service' & 'ProfessionalService' (areaServed: Eure-et-Loir) fourni dans mon rapport. Assure-toi que les deux scripts JSON-LD coexistent sans erreur.
++
++4. PERFORMANCE & IMAGES (index.astro) :
++   - Pour chaque balise <img> locale, utilise le composant <Image /> d'Astro (import { Image } from 'astro:assets').
++   - Ajoute format="webp", loading="lazy" et des dimensions (width/height) pour optimiser le Core Web Vitals.
++
++5. SITEMAP (astro.config.mjs) :
++   - Vérifie l'intégration du plugin sitemap. S'il n'est pas présent, prépare sa configuration avec 'site: https://expert-local.fr'.
++
++CONTRAINTES STRICTES :
++- NE MODIFIE PAS le CSS (classes Tailwind ou balises <style>).
++- NE TOUCHE PAS aux formulaires de diagnostic ou aux boutons Stripe.
++- Le but est purement SEO/GEO (Sémantique et Métadonnées).
++
++Fais-moi un résumé des actions prévues avant de générer les patches.
+
+# 2026-04-06 02:51:40.295843
++y
+
+# 2026-04-06 02:57:48.829158
++/diff
+
+# 2026-04-06 02:58:23.791702
++/undo
+
+# 2026-04-06 03:00:25.880629
++n
+
+# 2026-04-06 03:01:03.073713
++On reprend l'audit SEO là où on s'est arrêté. On travaille par étapes pour garantir l'intégrité du fichier.
++
++Étape 1 : Structure & Meta
++
++Dans src/pages/index.astro, vérifie qu'il n'y a qu'un seul <h1>.
++
++Injecte les deux blocs JSON-LD (AdministrativeArea + Service) dans le head.
++
++Supprime toute trace de /#blog dans le Header et le Footer.
++
++Vérifie que BaseLayout.astro gère bien les titres dynamiques.
++
++Étape 2 : Configuration
++
++Assure-toi que astro.config.mjs a bien l'intégration @astrojs/sitemap.
+
+# 2026-04-06 03:01:05.737387
++y
+
+# 2026-04-06 03:03:18.668516
++Agis en tant qu'Expert Web Performance & Astro. Nous lançons la Phase de Performance (Images & UX).
++
++MISSIONS :
++
++1. OPTIMISATION DES IMAGES (src/pages/index.astro) :
++   - Importe le composant : import { Image } from 'astro:assets';
++   - Pour chaque balise <img> locale (celles qui pointent vers /images/ ou des fichiers locaux) :
++     * Remplace-la par le composant <Image />.
++     * Ajoute les attributs : format="webp", loading="lazy", decoding="async".
++     * Assure-toi que des dimensions width et height sont présentes pour éviter le Layout Shift (CLS).
++   - Pour les images distantes (URL externes), garde la balise <img> mais ajoute loading="lazy".
++
++2. UX & NAVIGATION (index.astro) :
++   - Dans la balise <style> globale ou le layout, ajoute la règle : 
++     html { scroll-behavior: smooth; }
++   - C'est la SEULE modification de style autorisée.
++
++3. VÉRIFICATION FINALE SEO :
++   - Confirme que la balise <link rel="canonical" href="https://expert-local.fr/" /> est bien présente.
++   - Vérifie une dernière fois que public/robots.txt contient bien le 'Disallow: /api/'.
++
++CONTRAINTES :
++- Ne modifie AUCUNE classe Tailwind.
++- Ne touche pas au contenu textuel (on fera le copywriting après).
++- Garde l'intégrité de la page de 1300 lignes. 
++
++Fais-moi un résumé des images optimisées avant de lancer les patches.
+
+# 2026-04-06 03:03:23.763439
++y
+
+# 2026-04-06 03:04:29.156968
++/diff
+
+# 2026-04-06 03:05:53.245306
++Attends, petite correction technique : 
++1. Utilise l'import moderne pour les images : 'import { Image } from "astro:assets";' au lieu de '@astrojs/image/components'.
++2. Continue le remplacement des balises <img> locales par le composant <Image /> dans tout le reste du fichier index.astro.
++3. N'oublie pas de bien garder format="webp" et les dimensions (width/height) pour chaque image.
++
++Une fois l'import corrigé, tu peux lancer le reste des patches.
+
+# 2026-04-06 03:07:52.208557
++Attends, DeepSeek, il y a une erreur de syntaxe dans tes derniers patches :
++
++1. ATTRIBUTS URL : Les attributs 'poster' (balise <video>) et 'content' (balise meta og:image) n'acceptent pas 'new Image()'. Ce sont des chaînes de caractères. Remets simplement les chemins directs (ex: '/video-thumbnail.webp' et '/images/og-image-2026.webp') pour ces deux cas précis.
++
++2. BALAYAGE FINAL : Scanne une dernière fois tout le fichier 'index.astro' (les 1300 lignes). S'il reste la MOINDRE balise <img> classique, remplace-la par le composant <Image /> avec format="webp" et loading="lazy". 
++
++3. NETTOYAGE : Supprime l'import inutile de '@astrojs/image/components' s'il traîne encore, pour ne garder que 'import { Image } from "astro:assets";'.
++
++Fais ces corrections pour clore proprement la Phase 3.
+
+# 2026-04-06 03:10:07.553996
++/undo
+
+# 2026-04-06 03:10:29.850962
++DeepSeek, tu bloques sur l'indentation des blocs SEARCH/REPLACE. On va simplifier pour éviter les erreurs de matching :
++
++1. RECHERCHE UNIQUE : Trouve la ligne contenant 'poster={new Image' et remplace TOUT l'attribut poster par : poster="/video-thumbnail.webp"
++
++2. RECHERCHE UNIQUE : Trouve la balise meta 'og:image' et assure-toi que son content est : "/images/og-image-2026.webp" (pas d'objet new Image).
++
++3. RECHERCHE UNIQUE : Trouve la balise <img> qui a la classe 'badge-avatar'. Remplace-la par ce bloc précis, en faisant attention à l'indentation de ton bloc SEARCH :
++<Image
++  src="/photo-profil.jpg"
++  alt="Antoine Estarellas"
++  width={36}
++  height={36}
++  format="webp"
++  loading="lazy"
++  decoding="async"
++  class="badge-avatar"
++/>
++
++Utilise des blocs SEARCH très courts (une seule ligne si possible) pour identifier l'endroit à modifier.
+
+# 2026-04-06 03:13:14.293674
++Agis en tant qu'Expert Copywriter SEO & Psychologue de la Vente. 
++Nous lançons la Phase 4 : Optimisation sémantique pour l'Eure-et-Loir.
++
++CONTEXTE :
++Le site s'adresse à des artisans (plombiers, électriciens, menuisiers du 28) qui ont des fiches Google Maps mal notées ou vides. Ton but est de les convaincre que ma méthode "10 avis en 10 jours" est la seule solution fiable.
++
++MISSIONS :
++
++1. MOTS-CLÉS : Intègre de manière naturelle (pas de bourrage) les concepts suivants dans le texte de index.astro :
++   - "Avis Google Maps artisan 28"
++   - "Réputation en ligne Eure-et-Loir"
++   - "Visibilité locale Chartres Dreux"
++   - "Preuve sociale pour entrepreneurs"
++
++2. TONALITÉ : Le ton doit être : "L'expert qui comprend la réalité du terrain". Pas de jargon marketing pompeux. On parle de "chantiers", de "confiance des clients", de "bouche-à-oreille numérique".
++
++3. OPTIMISATION HN : 
++   - Retravaille le <h1> pour qu'il soit ultra-percutant.
++   - Retravaille les <h2> (Méthode, Pourquoi nous, FAQ) pour qu'ils contiennent des mots-clés GEO (Eure-et-Loir, 28).
++
++4. PSYCHOLOGIE : Renforce l'urgence dans la "Barre d'urgence" et la section "Menace" (ce que l'artisan perd chaque jour en laissant une mauvaise note).
++
++CONTRAINTES :
++- NE TOUCHE PAS au code technique (JSON-LD, Imports, Balises Image).
++- NE TOUCHE PAS au CSS.
++- Modifie uniquement les textes à l'intérieur des balises HTML.
++
++Fais-moi une proposition pour le Header et le premier tiers de la page (Hero + Menace).
+
+# 2026-04-06 03:13:17.702064
++y
+
+# 2026-04-06 03:22:23.527509
++/diff
+
+# 2026-04-06 03:25:58.633426
++Agis en tant qu'Expert Copywriter SEO et conseiller en stratégie locale. 
++Objectif : Optimiser le texte de 'src/pages/index.astro' pour la conversion et le SEO, en restant 100% INTÈGRE.
++
++1. IDENTITÉ DU PROFIL (URGENT) :
++   - Localise le badge d'autorité (.authority-badge).
++   - Supprime "Conseiller numérique". 
++   - Remplace par : "Expert en Avis Google Maps | Spécialiste Artisans Eure-et-Loir".
++   - Le but est de montrer ta spécialisation locale sans utiliser de titre administratif.
++
++2. RÉVISIONS SEO SÉMANTIQUES :
++   - Intègre les mots-clés "Avis Google Maps artisan 28" et "Réputation locale Chartres/Dreux" de façon fluide.
++   - H1 : "10 Avis Google Maps en 10 jours en Eure-et-Loir | Votre méthode pour dominer les résultats locaux."
++   - H2 : Ajoute une mention géographique (ex: "Pourquoi les artisans du 28 perdent des clients sans le savoir").
++
++3. CHARTE D'INTÉGRITÉ (Garde-fous) :
++   - PAS de promesses de gains financiers garantis (Utilise : "Potentiel de croissance", "Manque à gagner évité").
++   - PAS de mensonges sur l'algorithme (Utilise : "Google privilégie la fraîcheur des avis" au lieu de "Google va supprimer votre fiche").
++   - Ton : Direct, professionnel, empathique. On parle de "chantiers", de "confiance" et de "bouche-à-oreille moderne".
++
++4. CHAMP D'ACTION :
++   - Modifie le Header, le Hero et la section Menace. 
++   - Garde intact tout le code technique (Imports, Scripts, CSS, Images).
++
++Propose tes modifications sous forme de blocs SEARCH/REPLACE précis.
+
+# 2026-04-06 03:30:18.837085
++/diff
+
+# 2026-04-06 03:35:30.930017
++tu peux commit
+
+# 2026-04-06 03:56:09.506535
++/model openrouter/anthropic/claude-3.5-sonnet
+
+# 2026-04-06 03:59:03.405256
++URGENT : On répare le design. Le site est actuellement cassé car le CSS et le HTML ne sont pas alignés.
++Utilise le code HTML/CSS de Stitch ci-dessous comme SEULE source d'inspiration visuelle pour refondre 'src/pages/index.astro' et 'src/layouts/BaseLayout.astro'.
++
++CONSIGNES DE SÉCURITÉ ABSOLUE :
++1. PRÉSERVATION VIDÉO : Ma balise <video> doit rester INTACTE avec ses attributs (poster, preload, mp4). Place-la dans la colonne de droite du Hero (lg:col-span-5).
++2. PRÉSERVATION TEXTE : Garde 100% du copywriting de Mistral (Phase 4). Ne remplace PAS mes titres sur les '10 avis', 'Eure-et-Loir', 'Chartres', 'Dreux' par les textes génériques de Stitch.
++3. LOGIQUE ASTRO : N'efface pas les imports de composants (Image d'astro:assets). Remplace les balises <img> de Stitch par mon composant <Image /> optimisé précédemment.
++4. DESIGN SYSTEM : Copie la 'tailwind.config' et les styles CSS (glass-card, ember-gradient) dans le <head> de BaseLayout.astro.
++5. NETTOYAGE : Supprime tout l'ancien CSS qui crée des conflits. On repart sur la base Dark de Stitch.
++
++VOICI LE CODE STITCH À APPLIQUER :
++<!DOCTYPE html>
++
++<html class="dark" lang="fr"><head>
++<meta charset="utf-8"/>
++<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
++<title>Expert-Local.fr | L'Autorité Locale en Eure-et-Loir (28)</title>
++<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
++<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
++<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
++<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
++<style>
++        body { font-family: 'Inter', sans-serif; }
++        h1, h2, h3, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
++        .material-symbols-outlined {
++            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
++        }
++        .glass-card {
++            background: rgba(50, 53, 60, 0.6);
++            backdrop-filter: blur(20px);
++        }
++        .ember-gradient {
++            background: linear-gradient(135deg, #ffb595 0%, #ff7f3f 100%);
++        }
++    </style>
++<script id="tailwind-config">
++        tailwind.config = {
++            darkMode: "class",
++            theme: {
++                extend: {
++                    "colors": {
++                        "on-background": "#e0e2ec",
++                        "inverse-surface": "#e0e2ec",
++                        "on-secondary-fixed-variant": "#005233",
++                        "error": "#ffb4ab",
++                        "on-surface": "#e0e2ec",
++                        "surface-container-low": "#191b23",
++                        "surface-tint": "#ffb595",
++                        "inverse-primary": "#a23f00",
++                        "on-primary": "#571e00",
++                        "primary": "#ffb595",
++                        "on-secondary-fixed": "#002112",
++                        "primary-container": "#ff7f3f",
++                        "secondary-fixed": "#71fcb6",
++                        "on-error-container": "#ffdad6",
++                        "inverse-on-surface": "#2d3038",
++                        "on-primary-container": "#662500",
++                        "on-tertiary-fixed-variant": "#930013",
++                        "surface-bright": "#363941",
++                        "primary-fixed": "#ffdbcd",
++                        "on-secondary-container": "#003b24",
++                        "tertiary-container": "#ff7b74",
++                        "outline": "#a68b80",
++                        "surface-variant": "#32353c",
++                        "on-tertiary": "#68000a",
++                        "surface-container-lowest": "#0b0e15",
++                        "on-primary-fixed": "#351000",
++                        "on-primary-fixed-variant": "#7c2e00",
++                        "tertiary-fixed-dim": "#ffb3ad",
++                        "background": "#10131a",
++                        "tertiary-fixed": "#ffdad7",
++                        "secondary-fixed-dim": "#51df9c",
++                        "surface-container-highest": "#32353c",
++                        "surface": "#10131a",
++                        "error-container": "#93000a",
++                        "on-secondary": "#003822",
++                        "outline-variant": "#574239",
++                        "on-tertiary-fixed": "#410004",
++                        "primary-fixed-dim": "#ffb595",
++                        "surface-container": "#1d2027",
++                        "secondary": "#51df9c",
++                        "surface-dim": "#10131a",
++                        "on-error": "#690005",
++                        "secondary-container": "#00b173",
++                        "on-tertiary-container": "#7a000e",
++                        "on-surface-variant": "#dfc0b4",
++                        "surface-container-high": "#272a31",
++                        "tertiary": "#ffb3ad"
++                    },
++                    "borderRadius": {
++                        "DEFAULT": "0.125rem",
++                        "lg": "0.25rem",
++                        "xl": "0.5rem",
++                        "full": "0.75rem"
++                    }
++                }
++            }
++        }
++    </script>
++</head>
++<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
++<!-- TopNavBar -->
++<nav class="fixed top-0 w-full z-50 bg-[#10131A]/80 backdrop-blur-xl">
++<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
++<div class="text-xl font-bold tracking-tighter text-[#E0E2EC]">Expert-Local.fr</div>
++<div class="hidden md:flex items-center gap-8">
++<a class="text-[#FFB595] font-bold border-b-2 border-[#FF7F3F] pb-1 hover:translate-y-[-2px] transition-transform duration-200" href="#">Visibilité Locale</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Méthode</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Offres</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Contact</a>
++</div>
++<button class="ember-gradient text-on-primary-fixed font-bold px-6 py-2.5 rounded-xl hover:translate-y-[-2px] transition-all duration-200 shadow-lg shadow-primary/10">
++                Diagnostic Gratuit
++            </button>
++</div>
++</nav>
++<main class="pt-20">
++<!-- Hero Section -->
++<section class="relative min-h-[921px] flex items-center px-8 overflow-hidden">
++<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
++<div class="lg:col-span-7 z-10">
++<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-secondary text-sm font-bold mb-6">
++<span class="material-symbols-outlined text-sm">location_on</span>
++                        CHARTRES  DREUX  CHÂTEAUDUN
++                    </div>
++<h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.1] mb-8 tracking-tight">
++                        Augmentez vos avis clients et votre <span class="text-primary">visibilité sur Google</span> en Eure-et-Loir (28)
++                    </h1>
++<p class="text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed">
++                        Ne laissez plus vos concurrents capter vos clients locaux. Nous transformons votre savoir-faire artisanal en autorité digitale incontestable.
++                    </p>
++<div class="flex flex-col sm:flex-row gap-4">
++<button class="ember-gradient text-on-primary-fixed text-lg font-bold px-8 py-4 rounded-xl hover:translate-y-[-2px] transition-all duration-200 flex items-center justify-center gap-2">
++                            Obtenir mon Diagnostic Gratuit
++                            <span class="material-symbols-outlined">trending_up</span>
++</button>
++<button class="bg-surface-container-highest/20 border border-outline-variant/20 px-8 py-4 rounded-xl font-bold hover:translate-y-[-2px] transition-all duration-200">
++                            Voir nos résultats
++                        </button>
++</div>
++</div>
++<div class="lg:col-span-5 relative">
++<div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/5 aspect-square lg:aspect-[4/5]">
++<img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" data-alt="Close up of a professional electrician working on a fuse box in a local workshop, warm dramatic lighting, high quality craftsmanship" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWFNpIqyabi3IIOkaWsb3aAfy6xyENBXKZjBykchifAeJ9XMDk7ISM5vC5yZq5EsEMXo-8ui-CwsRlewTr_Wv-ARmW5XNHvMODOIR8C5T5-bPKKJ_yPI1-h-e8bO0M0D_B-ZXNUBiNo1ERnRsEuhkyJ6CxkQ9W86RVSfVZG4xWc0EH5yFK_JZB88PBRxh91PJm8iEm4ZzmMDOxi2-WMY82ug3OQiD5thn7LC4U_ra-kBiVkXSWhsibPHllyRvklv80Crt6Rzvjof8"/>
++<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
++</div>
++<!-- Floating trust card -->
++<div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-xl border border-outline-variant/10 max-w-[240px]">
++<div class="flex items-center gap-2 text-secondary font-bold mb-1">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
++                            +450% de Visibilité
++                        </div>
++<p class="text-sm text-on-surface/70">Moyenne constatée pour nos artisans partenaires en 28.</p>
++</div>
++</div>
++</div>
++</section>
++<!-- Problem Section -->
++<section class="py-24 px-8 bg-surface-container-lowest">
++<div class="max-w-7xl mx-auto">
++<div class="max-w-3xl">
++<span class="text-primary font-bold tracking-widest text-sm uppercase block mb-4">L'ENJEU</span>
++<h2 class="text-4xl lg:text-5xl font-bold mb-12">Le Google Map Pack : Le nouveau terrain de bataille des artisans.</h2>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">01</div>
++<h3 class="text-xl font-bold">L'Invisibilité Fatale</h3>
++<p class="text-on-surface-variant leading-relaxed">92% des recherches locales s'arrêtent aux 3 premiers résultats. Si vous n'y êtes pas, vous n'existez pas pour vos futurs clients.</p>
++</div>
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">02</div>
++<h3 class="text-xl font-bold">La Preuve Sociale</h3>
++<p class="text-on-surface-variant leading-relaxed">Un artisan avec 10 avis 5 étoiles sera toujours privilégié face à un expert avec 0 avis. La confiance est votre monnaie.</p>
++</div>
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">03</div>
++<h3 class="text-xl font-bold">La Dictature de l'Algorithme</h3>
++<p class="text-on-surface-variant leading-relaxed">Google privilégie les fiches actives et optimisées. Le talent ne suffit plus, il faut le faire savoir techniquement.</p>
++</div>
++</div>
++</div>
++</section>
++<!-- Solution Section: Bento Grid -->
++<section class="py-32 px-8">
++<div class="max-w-7xl mx-auto">
++<div class="text-center mb-20">
++<h2 class="text-4xl lg:text-6xl font-bold mb-6">Notre Méthode : Les 3 Piliers de l'Autorité</h2>
++<p class="text-on-surface-variant max-w-2xl mx-auto">Une approche psychologique et technique conçue exclusivement pour le marché de l'Eure-et-Loir.</p>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
++<div class="md:col-span-8 glass-card rounded-2xl p-10 flex flex-col justify-end relative overflow-hidden group">
++<div class="absolute inset-0 z-0 opacity-20 group-hover:opacity-30 transition-opacity">
++<img class="w-full h-full object-cover" data-alt="Abstract macro shot of precision tools and high-tech equipment in a modern workshop environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOKeuIa0eBc5ENzdvGugrt1u-HCKNNINp3S5OL7CsynVquIEsdkhoPxILFKwrlvkEsTM9hSPkXu61RsrDREzH8N63AFdT6HGtFS_iyRRQsSeE3lNmNG0w9ZCnPb0DNa4eLFUoKWlBNsHiPicsltovcPJ7nhDasvMPHNkfH5Lrkju_VarTs4qHIROfT_zOmMaO0Fwe192TUgYPJ-IoQ9xaIV8prGfzNxIQnvoz2xfpSSmgVcxE-AzG9stS_gnxVzj29hMCA0WXIqzg"/>
++</div>
++<div class="z-10">
++<h3 class="text-3xl font-bold mb-4">Psychologie de la Capture</h3>
++<p class="text-on-surface-variant max-w-md">Nous optimisons votre profil pour déclencher un appel immédiat. Photos pro, descriptions persuasives et mots-clés locaux stratégiques.</p>
++</div>
++</div>
++<div class="md:col-span-4 bg-surface-container-high rounded-2xl p-10 flex flex-col items-center justify-center text-center">
++<div class="w-20 h-20 rounded-full bg-secondary-container/20 flex items-center justify-center mb-6 text-secondary">
++<span class="material-symbols-outlined text-4xl">reviews</span>
++</div>
++<h3 class="text-2xl font-bold mb-4">Flux d'Avis Automatisé</h3>
++<p class="text-on-surface-variant">Système sans effort pour récolter des avis positifs de vos clients satisfaits à chaque fin de chantier.</p>
++</div>
++<div class="md:col-span-4 bg-primary-container/10 border border-primary/20 rounded-2xl p-10">
++<h3 class="text-2xl font-bold mb-4">Domination Géographique</h3>
++<p class="text-on-surface-variant">Signaux de proximité renforcés pour apparaître prioritairement à Chartres, Dreux et dans tout le 28.</p>
++</div>
++<div class="md:col-span-8 glass-card rounded-2xl p-10 flex items-center gap-8">
++<div class="hidden sm:block w-32 h-32 flex-shrink-0 bg-surface-container-highest rounded-xl overflow-hidden">
++<img class="w-full h-full object-cover" data-alt="Architecture blueprint and measuring tape on a wooden desk with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1zubtVW-CbBiMo95g6G1NGDDaDOKLRTdNKjq_oA-dh8QQNSeUXGpw5gPybPK-U6c6UkQLZ4P72DGFgSNuEw3bBd-DiDK14_WcGSOPmxRc59hlAkXtpfxJzC7nEO9tSC6YraVjY5ytCHRK6Lt4rVFkacrxhJj9IcT7gnDsZm03lXRysSuzBjXC7dQ9IA8yQUo3u4tu8JX8FKAykLQEKHMVvtUc15dcDO6MZYjqIujIUz-lqAEBDGBUEFpisdSn-QgOk2DtZLNbs2w"/>
++</div>
++<div>
++<h3 class="text-2xl font-bold mb-4">Analyse de Données en Temps Réel</h3>
++<p class="text-on-surface-variant">Suivez vos appels, vos demandes de devis et votre position sur la carte via un tableau de bord simplifié.</p>
++</div>
++</div>
++</div>
++</div>
++</section>
++<!-- Proof Section -->
++<section class="py-24 px-8 bg-surface-container-low">
++<div class="max-w-7xl mx-auto">
++<div class="flex justify-between items-end mb-16">
++<div>
++<h2 class="text-4xl font-bold mb-4">Ils dominent déjà le 28</h2>
++<p class="text-on-surface-variant">Témoignages de nos partenaires locaux.</p>
++</div>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
++<!-- Testimonial 1 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"Grâce à Expert-Local, nous sommes passés de 3 à 45 avis en 4 mois. Mon téléphone n'arrête pas de sonner pour des chantiers sur Chartres."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">JD</div>
++<div>
++<div class="font-bold">Jean D.</div>
++<div class="text-sm text-on-surface-variant">Menuisier, Chartres (28)</div>
++</div>
++</div>
++</div>
++<!-- Testimonial 2 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"La visibilité locale était un mystère pour moi. Ils ont tout pris en main et les résultats sont là : +30% de CA cette année."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">ML</div>
++<div>
++<div class="font-bold">Marc L.</div>
++<div class="text-sm text-on-surface-variant">Plombier-Chauffagiste, Dreux (28)</div>
++</div>
++</div>
++</div>
++<!-- Testimonial 3 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"Indispensable pour tout artisan qui veut durer. L'accompagnement est top et très concret."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">SF</div>
++<div>
++<div class="font-bold">Sophie F.</div>
++<div class="text-sm text-on-surface-variant">Paysagiste, Maintenon (28)</div>
++</div>
++</div>
++</div>
++</div>
++</div>
++</section>
++<!-- Offers Section -->
++<section class="py-32 px-8">
++<div class="max-w-7xl mx-auto">
++<div class="text-center mb-20">
++<h2 class="text-4xl lg:text-5xl font-bold mb-6">Prêt à prendre la première place ?</h2>
++<p class="text-on-surface-variant">Des solutions adaptées à chaque étape de votre croissance.</p>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
++<!-- Offer 1 -->
++<div class="bg-surface-container rounded-2xl p-10 flex flex-col hover:translate-y-[-8px] transition-transform duration-300">
++<h3 class="text-xl font-bold mb-2">Diagnostic</h3>
++<div class="text-4xl font-black mb-6">Gratuit</div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Audit de votre fiche Google
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Analyse de la concurrence
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                3 axes d'amélioration immédiats
++                            </li>
++</ul>
++<button class="w-full border border-outline-variant py-3 rounded-xl font-bold hover:bg-surface-container-high transition-colors">Commander</button>
++</div>
++<!-- Offer 2 - Featured -->
++<div class="bg-surface-container-high rounded-2xl p-10 flex flex-col relative scale-105 border-2 border-primary shadow-2xl shadow-primary/10">
++<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary-fixed px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Populaire</div>
++<h3 class="text-xl font-bold mb-2">Kit Express</h3>
++<div class="text-4xl font-black mb-6">299€ <span class="text-sm font-normal text-on-surface-variant">/ unique</span></div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Optimisation SEO Complète
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Setup système d'avis QR Code
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Shooting photo local (Option)
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Support dédié 30 jours
++                            </li>
++</ul>
++<button class="w-full ember-gradient text-on-primary-fixed py-4 rounded-xl font-bold shadow-lg shadow-primary/20">Démarrer maintenant</button>
++</div>
++<!-- Offer 3 -->
++<div class="bg-surface-container rounded-2xl p-10 flex flex-col hover:translate-y-[-8px] transition-transform duration-300">
++<h3 class="text-xl font-bold mb-2">Domination Locale</h3>
++<div class="text-4xl font-black mb-6">99€ <span class="text-sm font-normal text-on-surface-variant">/ mois</span></div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Gestion active des avis
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Posts Google bimensuels
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Rapport mensuel de performance
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Veille concurrentielle 28
++                            </li>
++</ul>
++<button class="w-full border border-outline-variant py-3 rounded-xl font-bold hover:bg-surface-container-high transition-colors">Choisir l'autorité</button>
++</div>
++</div>
++</div>
++</section>
++<!-- Final CTA & Form -->
++<section class="py-32 px-8 bg-surface-container-lowest">
++<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
++<div>
++<h2 class="text-5xl font-extrabold mb-8">Ne laissez pas vos clients passer chez le voisin.</h2>
++<p class="text-xl text-on-surface-variant mb-12 leading-relaxed">Remplissez ce questionnaire de 2 minutes pour recevoir votre audit personnalisé directement dans votre boîte mail.</p>
++<div class="space-y-6">
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
++<span class="material-symbols-outlined">bolt</span>
++</div>
++<span class="font-medium">Réponse sous 24h ouvrées</span>
++</div>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
++<span class="material-symbols-outlined">map</span>
++</div>
++<span class="font-medium">Expertise 100% locale (Eure-et-Loir)</span>
++</div>
++</div>
++</div>
++<div class="bg-surface-container p-10 rounded-3xl border border-outline-variant/10 shadow-2xl">
++<form class="space-y-6">
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Nom de votre entreprise</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="Ex: Menuiserie Dupont Chartres" type="text"/>
++</div>
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Votre Ville principale</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="Ex: Dreux, Maintenon..." type="text"/>
++</div>
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Email professionnel</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="votre@email.fr" type="email"/>
++</div>
++<button class="w-full ember-gradient text-on-primary-fixed py-5 rounded-xl font-bold text-lg shadow-xl shadow-primary/30 hover:scale-[1.02] transition-transform" type="submit">
++                            Recevoir mon Diagnostic Gratuit
++                        </button>
++<p class="text-center text-xs text-on-surface-variant">Confidentialité garantie. Aucun spam.</p>
++</form>
++</div>
++</div>
++</section>
++</main>
++<!-- Footer -->
++<footer class="bg-[#10131A] w-full py-12 border-t border-[#E0E2EC]/10">
++<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
++<div class="space-y-4">
++<div class="text-lg font-black text-[#E0E2EC]">Expert-Local.fr</div>
++<p class="text-[#E0E2EC]/50 text-sm max-w-xs">L'autorité digitale pour les artisans et commerçants d'Eure-et-Loir.</p>
++</div>
++<div class="flex flex-wrap justify-center gap-8">
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Mentions Légales</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Politique de Confidentialité</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Diagnostic SEO Chartres</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Artisans 28</a>
++</div>
++<div class="text-[#E0E2EC]/50 text-sm">
++                 2024 Expert-Local.fr - L'Autorité Locale en Eure-et-Loir (28)
++            </div>
++</div>
++</footer>
++<!-- FAB for quick action -->
++<button class="fixed bottom-8 right-8 w-16 h-16 ember-gradient rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center text-on-primary-fixed z-50 hover:scale-110 transition-transform">
++<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_call</span>
++</button>
++</body></html>
+
+# 2026-04-06 03:59:09.165132
++y
+
+# 2026-04-06 03:59:13.916168
++a
+
+# 2026-04-06 04:04:34.508643
++Claude, agis en tant qu'Architecte Senior Full-Stack. Nous effectuons une fusion critique (STITCH & ANTIGRAVITY) sur 'src/pages/index.astro' et 'src/layouts/BaseLayout.astro'.
++
++CONTEXTE :
++Le site actuel contient un copywriting de haute précision (Mistral) et une tuyauterie technique (DeepSeek). Le design est actuellement incohérent. Nous migrons vers le thème "Dark Ember" de Google Stitch.
++
++TES MISSIONS (Raisonnement étendu requis) :
++
++1. DESIGN SYSTEM (BaseLayout) :
++   - Injecte la configuration Tailwind et les styles CSS (glass-card, ember-gradient, fonts) de Stitch dans le <head>.
++   - Configure le mode Dark par défaut (class="dark").
++
++2. STRUCTURE HERO & VIDÉO :
++   - Utilise la grille 'magazine-grid' de Stitch.
++   - IMPORTANT : Conserve ma balise <video> optimisée. Place-la impérativement dans la colonne de droite du Hero (col-span-5). Ne la remplace pas par une image <img>.
++
++3. INTÉGRITÉ DU COPYWRITING :
++   - NE TOUCHE PAS aux textes. Garde les titres sur les "10 avis en 10 jours", les mentions "Eure-et-Loir", "Chartres", "Dreux" et le badge "Artisan comme vous".
++   - Fusionne mon 'Authority Badge' avec le style visuel 'glass-card' de Stitch.
++
++4. TUYAUTERIE & BACK-END :
++   - Assure-toi que les ID des sections (ex: id="diagnostic", id="menace") restent identiques pour que les liens d'ancrage fonctionnent.
++   - Vérifie que le formulaire de contact conserve ses attributs de soumission (method, action, names).
++
++5. NETTOYAGE :
++   - Remplace les images de démo 'googleusercontent' par mes composants <Image /> locaux.
++   - Supprime tout l'ancien CSS qui n'appartient pas au nouveau Design System.
++
++VOICI LE CODE STITCH À UTILISER COMME RÉFÉRENCE VISUELLE :
++<!DOCTYPE html>
++
++<html class="dark" lang="fr"><head>
++<meta charset="utf-8"/>
++<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
++<title>Expert-Local.fr | L'Autorité Locale en Eure-et-Loir (28)</title>
++<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
++<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
++<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
++<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
++<style>
++        body { font-family: 'Inter', sans-serif; }
++        h1, h2, h3, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
++        .material-symbols-outlined {
++            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
++        }
++        .glass-card {
++            background: rgba(50, 53, 60, 0.6);
++            backdrop-filter: blur(20px);
++        }
++        .ember-gradient {
++            background: linear-gradient(135deg, #ffb595 0%, #ff7f3f 100%);
++        }
++    </style>
++<script id="tailwind-config">
++        tailwind.config = {
++            darkMode: "class",
++            theme: {
++                extend: {
++                    "colors": {
++                        "on-background": "#e0e2ec",
++                        "inverse-surface": "#e0e2ec",
++                        "on-secondary-fixed-variant": "#005233",
++                        "error": "#ffb4ab",
++                        "on-surface": "#e0e2ec",
++                        "surface-container-low": "#191b23",
++                        "surface-tint": "#ffb595",
++                        "inverse-primary": "#a23f00",
++                        "on-primary": "#571e00",
++                        "primary": "#ffb595",
++                        "on-secondary-fixed": "#002112",
++                        "primary-container": "#ff7f3f",
++                        "secondary-fixed": "#71fcb6",
++                        "on-error-container": "#ffdad6",
++                        "inverse-on-surface": "#2d3038",
++                        "on-primary-container": "#662500",
++                        "on-tertiary-fixed-variant": "#930013",
++                        "surface-bright": "#363941",
++                        "primary-fixed": "#ffdbcd",
++                        "on-secondary-container": "#003b24",
++                        "tertiary-container": "#ff7b74",
++                        "outline": "#a68b80",
++                        "surface-variant": "#32353c",
++                        "on-tertiary": "#68000a",
++                        "surface-container-lowest": "#0b0e15",
++                        "on-primary-fixed": "#351000",
++                        "on-primary-fixed-variant": "#7c2e00",
++                        "tertiary-fixed-dim": "#ffb3ad",
++                        "background": "#10131a",
++                        "tertiary-fixed": "#ffdad7",
++                        "secondary-fixed-dim": "#51df9c",
++                        "surface-container-highest": "#32353c",
++                        "surface": "#10131a",
++                        "error-container": "#93000a",
++                        "on-secondary": "#003822",
++                        "outline-variant": "#574239",
++                        "on-tertiary-fixed": "#410004",
++                        "primary-fixed-dim": "#ffb595",
++                        "surface-container": "#1d2027",
++                        "secondary": "#51df9c",
++                        "surface-dim": "#10131a",
++                        "on-error": "#690005",
++                        "secondary-container": "#00b173",
++                        "on-tertiary-container": "#7a000e",
++                        "on-surface-variant": "#dfc0b4",
++                        "surface-container-high": "#272a31",
++                        "tertiary": "#ffb3ad"
++                    },
++                    "borderRadius": {
++                        "DEFAULT": "0.125rem",
++                        "lg": "0.25rem",
++                        "xl": "0.5rem",
++                        "full": "0.75rem"
++                    }
++                }
++            }
++        }
++    </script>
++</head>
++<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
++<!-- TopNavBar -->
++<nav class="fixed top-0 w-full z-50 bg-[#10131A]/80 backdrop-blur-xl">
++<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
++<div class="text-xl font-bold tracking-tighter text-[#E0E2EC]">Expert-Local.fr</div>
++<div class="hidden md:flex items-center gap-8">
++<a class="text-[#FFB595] font-bold border-b-2 border-[#FF7F3F] pb-1 hover:translate-y-[-2px] transition-transform duration-200" href="#">Visibilité Locale</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Méthode</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Offres</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Contact</a>
++</div>
++<button class="ember-gradient text-on-primary-fixed font-bold px-6 py-2.5 rounded-xl hover:translate-y-[-2px] transition-all duration-200 shadow-lg shadow-primary/10">
++                Diagnostic Gratuit
++            </button>
++</div>
++</nav>
++<main class="pt-20">
++<!-- Hero Section -->
++<section class="relative min-h-[921px] flex items-center px-8 overflow-hidden">
++<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
++<div class="lg:col-span-7 z-10">
++<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-secondary text-sm font-bold mb-6">
++<span class="material-symbols-outlined text-sm">location_on</span>
++                        CHARTRES  DREUX  CHÂTEAUDUN
++                    </div>
++<h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.1] mb-8 tracking-tight">
++                        Augmentez vos avis clients et votre <span class="text-primary">visibilité sur Google</span> en Eure-et-Loir (28)
++                    </h1>
++<p class="text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed">
++                        Ne laissez plus vos concurrents capter vos clients locaux. Nous transformons votre savoir-faire artisanal en autorité digitale incontestable.
++                    </p>
++<div class="flex flex-col sm:flex-row gap-4">
++<button class="ember-gradient text-on-primary-fixed text-lg font-bold px-8 py-4 rounded-xl hover:translate-y-[-2px] transition-all duration-200 flex items-center justify-center gap-2">
++                            Obtenir mon Diagnostic Gratuit
++                            <span class="material-symbols-outlined">trending_up</span>
++</button>
++<button class="bg-surface-container-highest/20 border border-outline-variant/20 px-8 py-4 rounded-xl font-bold hover:translate-y-[-2px] transition-all duration-200">
++                            Voir nos résultats
++                        </button>
++</div>
++</div>
++<div class="lg:col-span-5 relative">
++<div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/5 aspect-square lg:aspect-[4/5]">
++<img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" data-alt="Close up of a professional electrician working on a fuse box in a local workshop, warm dramatic lighting, high quality craftsmanship" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWFNpIqyabi3IIOkaWsb3aAfy6xyENBXKZjBykchifAeJ9XMDk7ISM5vC5yZq5EsEMXo-8ui-CwsRlewTr_Wv-ARmW5XNHvMODOIR8C5T5-bPKKJ_yPI1-h-e8bO0M0D_B-ZXNUBiNo1ERnRsEuhkyJ6CxkQ9W86RVSfVZG4xWc0EH5yFK_JZB88PBRxh91PJm8iEm4ZzmMDOxi2-WMY82ug3OQiD5thn7LC4U_ra-kBiVkXSWhsibPHllyRvklv80Crt6Rzvjof8"/>
++<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
++</div>
++<!-- Floating trust card -->
++<div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-xl border border-outline-variant/10 max-w-[240px]">
++<div class="flex items-center gap-2 text-secondary font-bold mb-1">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
++                            +450% de Visibilité
++                        </div>
++<p class="text-sm text-on-surface/70">Moyenne constatée pour nos artisans partenaires en 28.</p>
++</div>
++</div>
++</div>
++</section>
++<!-- Problem Section -->
++<section class="py-24 px-8 bg-surface-container-lowest">
++<div class="max-w-7xl mx-auto">
++<div class="max-w-3xl">
++<span class="text-primary font-bold tracking-widest text-sm uppercase block mb-4">L'ENJEU</span>
++<h2 class="text-4xl lg:text-5xl font-bold mb-12">Le Google Map Pack : Le nouveau terrain de bataille des artisans.</h2>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">01</div>
++<h3 class="text-xl font-bold">L'Invisibilité Fatale</h3>
++<p class="text-on-surface-variant leading-relaxed">92% des recherches locales s'arrêtent aux 3 premiers résultats. Si vous n'y êtes pas, vous n'existez pas pour vos futurs clients.</p>
++</div>
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">02</div>
++<h3 class="text-xl font-bold">La Preuve Sociale</h3>
++<p class="text-on-surface-variant leading-relaxed">Un artisan avec 10 avis 5 étoiles sera toujours privilégié face à un expert avec 0 avis. La confiance est votre monnaie.</p>
++</div>
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">03</div>
++<h3 class="text-xl font-bold">La Dictature de l'Algorithme</h3>
++<p class="text-on-surface-variant leading-relaxed">Google privilégie les fiches actives et optimisées. Le talent ne suffit plus, il faut le faire savoir techniquement.</p>
++</div>
++</div>
++</div>
++</section>
++<!-- Solution Section: Bento Grid -->
++<section class="py-32 px-8">
++<div class="max-w-7xl mx-auto">
++<div class="text-center mb-20">
++<h2 class="text-4xl lg:text-6xl font-bold mb-6">Notre Méthode : Les 3 Piliers de l'Autorité</h2>
++<p class="text-on-surface-variant max-w-2xl mx-auto">Une approche psychologique et technique conçue exclusivement pour le marché de l'Eure-et-Loir.</p>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
++<div class="md:col-span-8 glass-card rounded-2xl p-10 flex flex-col justify-end relative overflow-hidden group">
++<div class="absolute inset-0 z-0 opacity-20 group-hover:opacity-30 transition-opacity">
++<img class="w-full h-full object-cover" data-alt="Abstract macro shot of precision tools and high-tech equipment in a modern workshop environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOKeuIa0eBc5ENzdvGugrt1u-HCKNNINp3S5OL7CsynVquIEsdkhoPxILFKwrlvkEsTM9hSPkXu61RsrDREzH8N63AFdT6HGtFS_iyRRQsSeE3lNmNG0w9ZCnPb0DNa4eLFUoKWlBNsHiPicsltovcPJ7nhDasvMPHNkfH5Lrkju_VarTs4qHIROfT_zOmMaO0Fwe192TUgYPJ-IoQ9xaIV8prGfzNxIQnvoz2xfpSSmgVcxE-AzG9stS_gnxVzj29hMCA0WXIqzg"/>
++</div>
++<div class="z-10">
++<h3 class="text-3xl font-bold mb-4">Psychologie de la Capture</h3>
++<p class="text-on-surface-variant max-w-md">Nous optimisons votre profil pour déclencher un appel immédiat. Photos pro, descriptions persuasives et mots-clés locaux stratégiques.</p>
++</div>
++</div>
++<div class="md:col-span-4 bg-surface-container-high rounded-2xl p-10 flex flex-col items-center justify-center text-center">
++<div class="w-20 h-20 rounded-full bg-secondary-container/20 flex items-center justify-center mb-6 text-secondary">
++<span class="material-symbols-outlined text-4xl">reviews</span>
++</div>
++<h3 class="text-2xl font-bold mb-4">Flux d'Avis Automatisé</h3>
++<p class="text-on-surface-variant">Système sans effort pour récolter des avis positifs de vos clients satisfaits à chaque fin de chantier.</p>
++</div>
++<div class="md:col-span-4 bg-primary-container/10 border border-primary/20 rounded-2xl p-10">
++<h3 class="text-2xl font-bold mb-4">Domination Géographique</h3>
++<p class="text-on-surface-variant">Signaux de proximité renforcés pour apparaître prioritairement à Chartres, Dreux et dans tout le 28.</p>
++</div>
++<div class="md:col-span-8 glass-card rounded-2xl p-10 flex items-center gap-8">
++<div class="hidden sm:block w-32 h-32 flex-shrink-0 bg-surface-container-highest rounded-xl overflow-hidden">
++<img class="w-full h-full object-cover" data-alt="Architecture blueprint and measuring tape on a wooden desk with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1zubtVW-CbBiMo95g6G1NGDDaDOKLRTdNKjq_oA-dh8QQNSeUXGpw5gPybPK-U6c6UkQLZ4P72DGFgSNuEw3bBd-DiDK14_WcGSOPmxRc59hlAkXtpfxJzC7nEO9tSC6YraVjY5ytCHRK6Lt4rVFkacrxhJj9IcT7gnDsZm03lXRysSuzBjXC7dQ9IA8yQUo3u4tu8JX8FKAykLQEKHMVvtUc15dcDO6MZYjqIujIUz-lqAEBDGBUEFpisdSn-QgOk2DtZLNbs2w"/>
++</div>
++<div>
++<h3 class="text-2xl font-bold mb-4">Analyse de Données en Temps Réel</h3>
++<p class="text-on-surface-variant">Suivez vos appels, vos demandes de devis et votre position sur la carte via un tableau de bord simplifié.</p>
++</div>
++</div>
++</div>
++</div>
++</section>
++<!-- Proof Section -->
++<section class="py-24 px-8 bg-surface-container-low">
++<div class="max-w-7xl mx-auto">
++<div class="flex justify-between items-end mb-16">
++<div>
++<h2 class="text-4xl font-bold mb-4">Ils dominent déjà le 28</h2>
++<p class="text-on-surface-variant">Témoignages de nos partenaires locaux.</p>
++</div>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
++<!-- Testimonial 1 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"Grâce à Expert-Local, nous sommes passés de 3 à 45 avis en 4 mois. Mon téléphone n'arrête pas de sonner pour des chantiers sur Chartres."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">JD</div>
++<div>
++<div class="font-bold">Jean D.</div>
++<div class="text-sm text-on-surface-variant">Menuisier, Chartres (28)</div>
++</div>
++</div>
++</div>
++<!-- Testimonial 2 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"La visibilité locale était un mystère pour moi. Ils ont tout pris en main et les résultats sont là : +30% de CA cette année."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">ML</div>
++<div>
++<div class="font-bold">Marc L.</div>
++<div class="text-sm text-on-surface-variant">Plombier-Chauffagiste, Dreux (28)</div>
++</div>
++</div>
++</div>
++<!-- Testimonial 3 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"Indispensable pour tout artisan qui veut durer. L'accompagnement est top et très concret."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">SF</div>
++<div>
++<div class="font-bold">Sophie F.</div>
++<div class="text-sm text-on-surface-variant">Paysagiste, Maintenon (28)</div>
++</div>
++</div>
++</div>
++</div>
++</div>
++</section>
++<!-- Offers Section -->
++<section class="py-32 px-8">
++<div class="max-w-7xl mx-auto">
++<div class="text-center mb-20">
++<h2 class="text-4xl lg:text-5xl font-bold mb-6">Prêt à prendre la première place ?</h2>
++<p class="text-on-surface-variant">Des solutions adaptées à chaque étape de votre croissance.</p>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
++<!-- Offer 1 -->
++<div class="bg-surface-container rounded-2xl p-10 flex flex-col hover:translate-y-[-8px] transition-transform duration-300">
++<h3 class="text-xl font-bold mb-2">Diagnostic</h3>
++<div class="text-4xl font-black mb-6">Gratuit</div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Audit de votre fiche Google
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Analyse de la concurrence
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                3 axes d'amélioration immédiats
++                            </li>
++</ul>
++<button class="w-full border border-outline-variant py-3 rounded-xl font-bold hover:bg-surface-container-high transition-colors">Commander</button>
++</div>
++<!-- Offer 2 - Featured -->
++<div class="bg-surface-container-high rounded-2xl p-10 flex flex-col relative scale-105 border-2 border-primary shadow-2xl shadow-primary/10">
++<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary-fixed px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Populaire</div>
++<h3 class="text-xl font-bold mb-2">Kit Express</h3>
++<div class="text-4xl font-black mb-6">299€ <span class="text-sm font-normal text-on-surface-variant">/ unique</span></div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Optimisation SEO Complète
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Setup système d'avis QR Code
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Shooting photo local (Option)
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Support dédié 30 jours
++                            </li>
++</ul>
++<button class="w-full ember-gradient text-on-primary-fixed py-4 rounded-xl font-bold shadow-lg shadow-primary/20">Démarrer maintenant</button>
++</div>
++<!-- Offer 3 -->
++<div class="bg-surface-container rounded-2xl p-10 flex flex-col hover:translate-y-[-8px] transition-transform duration-300">
++<h3 class="text-xl font-bold mb-2">Domination Locale</h3>
++<div class="text-4xl font-black mb-6">99€ <span class="text-sm font-normal text-on-surface-variant">/ mois</span></div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Gestion active des avis
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Posts Google bimensuels
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Rapport mensuel de performance
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Veille concurrentielle 28
++                            </li>
++</ul>
++<button class="w-full border border-outline-variant py-3 rounded-xl font-bold hover:bg-surface-container-high transition-colors">Choisir l'autorité</button>
++</div>
++</div>
++</div>
++</section>
++<!-- Final CTA & Form -->
++<section class="py-32 px-8 bg-surface-container-lowest">
++<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
++<div>
++<h2 class="text-5xl font-extrabold mb-8">Ne laissez pas vos clients passer chez le voisin.</h2>
++<p class="text-xl text-on-surface-variant mb-12 leading-relaxed">Remplissez ce questionnaire de 2 minutes pour recevoir votre audit personnalisé directement dans votre boîte mail.</p>
++<div class="space-y-6">
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
++<span class="material-symbols-outlined">bolt</span>
++</div>
++<span class="font-medium">Réponse sous 24h ouvrées</span>
++</div>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
++<span class="material-symbols-outlined">map</span>
++</div>
++<span class="font-medium">Expertise 100% locale (Eure-et-Loir)</span>
++</div>
++</div>
++</div>
++<div class="bg-surface-container p-10 rounded-3xl border border-outline-variant/10 shadow-2xl">
++<form class="space-y-6">
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Nom de votre entreprise</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="Ex: Menuiserie Dupont Chartres" type="text"/>
++</div>
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Votre Ville principale</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="Ex: Dreux, Maintenon..." type="text"/>
++</div>
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Email professionnel</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="votre@email.fr" type="email"/>
++</div>
++<button class="w-full ember-gradient text-on-primary-fixed py-5 rounded-xl font-bold text-lg shadow-xl shadow-primary/30 hover:scale-[1.02] transition-transform" type="submit">
++                            Recevoir mon Diagnostic Gratuit
++                        </button>
++<p class="text-center text-xs text-on-surface-variant">Confidentialité garantie. Aucun spam.</p>
++</form>
++</div>
++</div>
++</section>
++</main>
++<!-- Footer -->
++<footer class="bg-[#10131A] w-full py-12 border-t border-[#E0E2EC]/10">
++<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
++<div class="space-y-4">
++<div class="text-lg font-black text-[#E0E2EC]">Expert-Local.fr</div>
++<p class="text-[#E0E2EC]/50 text-sm max-w-xs">L'autorité digitale pour les artisans et commerçants d'Eure-et-Loir.</p>
++</div>
++<div class="flex flex-wrap justify-center gap-8">
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Mentions Légales</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Politique de Confidentialité</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Diagnostic SEO Chartres</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Artisans 28</a>
++</div>
++<div class="text-[#E0E2EC]/50 text-sm">
++                 2024 Expert-Local.fr - L'Autorité Locale en Eure-et-Loir (28)
++            </div>
++</div>
++</footer>
++<!-- FAB for quick action -->
++<button class="fixed bottom-8 right-8 w-16 h-16 ember-gradient rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center text-on-primary-fixed z-50 hover:scale-110 transition-transform">
++<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_call</span>
++</button>
++</body></html>
+
+# 2026-04-06 04:04:38.399543
++a
+
+# 2026-04-06 04:07:01.459264
++/clear
+
+# 2026-04-06 04:07:10.570241
++/add src/layouts/BaseLayout.astro src/pages/index.astro
+
+# 2026-04-06 04:09:04.100577
++Claude, mission de FUSION DESIGN (Stitch Dark Ember). 
++On répare le site 'Expert-Local.fr'.
++
++INSTRUCTIONS CRITIQUES :
++1. SOURCE DESIGN : Utilise exclusivement le code HTML/CSS que je te colle ci-dessous pour reconstruire le design de 'src/pages/index.astro' et 'src/layouts/BaseLayout.astro'.
++2. MOTEUR INTACT : INTERDICTION de changer mon copywriting (Mistral). Garde les titres sur les '10 avis', 'Eure-et-Loir', 'Chartres', 'Dreux'.
++3. VIDÉO : Garde ma balise <video> actuelle (avec poster et mp4). Place-la dans la colonne droite du Hero (col-span-5) à la place de l'image de l'électricien de Stitch.
++4. FORMULAIRE : Garde ma 'tuyauterie' (method="POST", action, et les attributs 'name' des inputs).
++5. ASTRO : Remplace les <img> de Stitch par mon composant <Image /> et mes assets locaux.
++
++VOICI LE CODE DE RÉFÉRENCE STITCH À APPLIQUER :
++
++<!DOCTYPE html>
++
++<html class="dark" lang="fr"><head>
++<meta charset="utf-8"/>
++<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
++<title>Expert-Local.fr | L'Autorité Locale en Eure-et-Loir (28)</title>
++<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
++<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
++<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
++<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
++<style>
++        body { font-family: 'Inter', sans-serif; }
++        h1, h2, h3, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
++        .material-symbols-outlined {
++            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
++        }
++        .glass-card {
++            background: rgba(50, 53, 60, 0.6);
++            backdrop-filter: blur(20px);
++        }
++        .ember-gradient {
++            background: linear-gradient(135deg, #ffb595 0%, #ff7f3f 100%);
++        }
++    </style>
++<script id="tailwind-config">
++        tailwind.config = {
++            darkMode: "class",
++            theme: {
++                extend: {
++                    "colors": {
++                        "on-background": "#e0e2ec",
++                        "inverse-surface": "#e0e2ec",
++                        "on-secondary-fixed-variant": "#005233",
++                        "error": "#ffb4ab",
++                        "on-surface": "#e0e2ec",
++                        "surface-container-low": "#191b23",
++                        "surface-tint": "#ffb595",
++                        "inverse-primary": "#a23f00",
++                        "on-primary": "#571e00",
++                        "primary": "#ffb595",
++                        "on-secondary-fixed": "#002112",
++                        "primary-container": "#ff7f3f",
++                        "secondary-fixed": "#71fcb6",
++                        "on-error-container": "#ffdad6",
++                        "inverse-on-surface": "#2d3038",
++                        "on-primary-container": "#662500",
++                        "on-tertiary-fixed-variant": "#930013",
++                        "surface-bright": "#363941",
++                        "primary-fixed": "#ffdbcd",
++                        "on-secondary-container": "#003b24",
++                        "tertiary-container": "#ff7b74",
++                        "outline": "#a68b80",
++                        "surface-variant": "#32353c",
++                        "on-tertiary": "#68000a",
++                        "surface-container-lowest": "#0b0e15",
++                        "on-primary-fixed": "#351000",
++                        "on-primary-fixed-variant": "#7c2e00",
++                        "tertiary-fixed-dim": "#ffb3ad",
++                        "background": "#10131a",
++                        "tertiary-fixed": "#ffdad7",
++                        "secondary-fixed-dim": "#51df9c",
++                        "surface-container-highest": "#32353c",
++                        "surface": "#10131a",
++                        "error-container": "#93000a",
++                        "on-secondary": "#003822",
++                        "outline-variant": "#574239",
++                        "on-tertiary-fixed": "#410004",
++                        "primary-fixed-dim": "#ffb595",
++                        "surface-container": "#1d2027",
++                        "secondary": "#51df9c",
++                        "surface-dim": "#10131a",
++                        "on-error": "#690005",
++                        "secondary-container": "#00b173",
++                        "on-tertiary-container": "#7a000e",
++                        "on-surface-variant": "#dfc0b4",
++                        "surface-container-high": "#272a31",
++                        "tertiary": "#ffb3ad"
++                    },
++                    "borderRadius": {
++                        "DEFAULT": "0.125rem",
++                        "lg": "0.25rem",
++                        "xl": "0.5rem",
++                        "full": "0.75rem"
++                    }
++                }
++            }
++        }
++    </script>
++</head>
++<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
++<!-- TopNavBar -->
++<nav class="fixed top-0 w-full z-50 bg-[#10131A]/80 backdrop-blur-xl">
++<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
++<div class="text-xl font-bold tracking-tighter text-[#E0E2EC]">Expert-Local.fr</div>
++<div class="hidden md:flex items-center gap-8">
++<a class="text-[#FFB595] font-bold border-b-2 border-[#FF7F3F] pb-1 hover:translate-y-[-2px] transition-transform duration-200" href="#">Visibilité Locale</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Méthode</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Offres</a>
++<a class="text-[#E0E2EC]/70 hover:text-[#E0E2EC] transition-colors hover:translate-y-[-2px] transition-transform duration-200" href="#">Contact</a>
++</div>
++<button class="ember-gradient text-on-primary-fixed font-bold px-6 py-2.5 rounded-xl hover:translate-y-[-2px] transition-all duration-200 shadow-lg shadow-primary/10">
++                Diagnostic Gratuit
++            </button>
++</div>
++</nav>
++<main class="pt-20">
++<!-- Hero Section -->
++<section class="relative min-h-[921px] flex items-center px-8 overflow-hidden">
++<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
++<div class="lg:col-span-7 z-10">
++<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-secondary text-sm font-bold mb-6">
++<span class="material-symbols-outlined text-sm">location_on</span>
++                        CHARTRES  DREUX  CHÂTEAUDUN
++                    </div>
++<h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.1] mb-8 tracking-tight">
++                        Augmentez vos avis clients et votre <span class="text-primary">visibilité sur Google</span> en Eure-et-Loir (28)
++                    </h1>
++<p class="text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed">
++                        Ne laissez plus vos concurrents capter vos clients locaux. Nous transformons votre savoir-faire artisanal en autorité digitale incontestable.
++                    </p>
++<div class="flex flex-col sm:flex-row gap-4">
++<button class="ember-gradient text-on-primary-fixed text-lg font-bold px-8 py-4 rounded-xl hover:translate-y-[-2px] transition-all duration-200 flex items-center justify-center gap-2">
++                            Obtenir mon Diagnostic Gratuit
++                            <span class="material-symbols-outlined">trending_up</span>
++</button>
++<button class="bg-surface-container-highest/20 border border-outline-variant/20 px-8 py-4 rounded-xl font-bold hover:translate-y-[-2px] transition-all duration-200">
++                            Voir nos résultats
++                        </button>
++</div>
++</div>
++<div class="lg:col-span-5 relative">
++<div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/5 aspect-square lg:aspect-[4/5]">
++<img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" data-alt="Close up of a professional electrician working on a fuse box in a local workshop, warm dramatic lighting, high quality craftsmanship" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWFNpIqyabi3IIOkaWsb3aAfy6xyENBXKZjBykchifAeJ9XMDk7ISM5vC5yZq5EsEMXo-8ui-CwsRlewTr_Wv-ARmW5XNHvMODOIR8C5T5-bPKKJ_yPI1-h-e8bO0M0D_B-ZXNUBiNo1ERnRsEuhkyJ6CxkQ9W86RVSfVZG4xWc0EH5yFK_JZB88PBRxh91PJm8iEm4ZzmMDOxi2-WMY82ug3OQiD5thn7LC4U_ra-kBiVkXSWhsibPHllyRvklv80Crt6Rzvjof8"/>
++<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
++</div>
++<!-- Floating trust card -->
++<div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-xl border border-outline-variant/10 max-w-[240px]">
++<div class="flex items-center gap-2 text-secondary font-bold mb-1">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
++                            +450% de Visibilité
++                        </div>
++<p class="text-sm text-on-surface/70">Moyenne constatée pour nos artisans partenaires en 28.</p>
++</div>
++</div>
++</div>
++</section>
++<!-- Problem Section -->
++<section class="py-24 px-8 bg-surface-container-lowest">
++<div class="max-w-7xl mx-auto">
++<div class="max-w-3xl">
++<span class="text-primary font-bold tracking-widest text-sm uppercase block mb-4">L'ENJEU</span>
++<h2 class="text-4xl lg:text-5xl font-bold mb-12">Le Google Map Pack : Le nouveau terrain de bataille des artisans.</h2>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">01</div>
++<h3 class="text-xl font-bold">L'Invisibilité Fatale</h3>
++<p class="text-on-surface-variant leading-relaxed">92% des recherches locales s'arrêtent aux 3 premiers résultats. Si vous n'y êtes pas, vous n'existez pas pour vos futurs clients.</p>
++</div>
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">02</div>
++<h3 class="text-xl font-bold">La Preuve Sociale</h3>
++<p class="text-on-surface-variant leading-relaxed">Un artisan avec 10 avis 5 étoiles sera toujours privilégié face à un expert avec 0 avis. La confiance est votre monnaie.</p>
++</div>
++<div class="space-y-4">
++<div class="text-primary-container text-5xl font-black opacity-20">03</div>
++<h3 class="text-xl font-bold">La Dictature de l'Algorithme</h3>
++<p class="text-on-surface-variant leading-relaxed">Google privilégie les fiches actives et optimisées. Le talent ne suffit plus, il faut le faire savoir techniquement.</p>
++</div>
++</div>
++</div>
++</section>
++<!-- Solution Section: Bento Grid -->
++<section class="py-32 px-8">
++<div class="max-w-7xl mx-auto">
++<div class="text-center mb-20">
++<h2 class="text-4xl lg:text-6xl font-bold mb-6">Notre Méthode : Les 3 Piliers de l'Autorité</h2>
++<p class="text-on-surface-variant max-w-2xl mx-auto">Une approche psychologique et technique conçue exclusivement pour le marché de l'Eure-et-Loir.</p>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
++<div class="md:col-span-8 glass-card rounded-2xl p-10 flex flex-col justify-end relative overflow-hidden group">
++<div class="absolute inset-0 z-0 opacity-20 group-hover:opacity-30 transition-opacity">
++<img class="w-full h-full object-cover" data-alt="Abstract macro shot of precision tools and high-tech equipment in a modern workshop environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOKeuIa0eBc5ENzdvGugrt1u-HCKNNINp3S5OL7CsynVquIEsdkhoPxILFKwrlvkEsTM9hSPkXu61RsrDREzH8N63AFdT6HGtFS_iyRRQsSeE3lNmNG0w9ZCnPb0DNa4eLFUoKWlBNsHiPicsltovcPJ7nhDasvMPHNkfH5Lrkju_VarTs4qHIROfT_zOmMaO0Fwe192TUgYPJ-IoQ9xaIV8prGfzNxIQnvoz2xfpSSmgVcxE-AzG9stS_gnxVzj29hMCA0WXIqzg"/>
++</div>
++<div class="z-10">
++<h3 class="text-3xl font-bold mb-4">Psychologie de la Capture</h3>
++<p class="text-on-surface-variant max-w-md">Nous optimisons votre profil pour déclencher un appel immédiat. Photos pro, descriptions persuasives et mots-clés locaux stratégiques.</p>
++</div>
++</div>
++<div class="md:col-span-4 bg-surface-container-high rounded-2xl p-10 flex flex-col items-center justify-center text-center">
++<div class="w-20 h-20 rounded-full bg-secondary-container/20 flex items-center justify-center mb-6 text-secondary">
++<span class="material-symbols-outlined text-4xl">reviews</span>
++</div>
++<h3 class="text-2xl font-bold mb-4">Flux d'Avis Automatisé</h3>
++<p class="text-on-surface-variant">Système sans effort pour récolter des avis positifs de vos clients satisfaits à chaque fin de chantier.</p>
++</div>
++<div class="md:col-span-4 bg-primary-container/10 border border-primary/20 rounded-2xl p-10">
++<h3 class="text-2xl font-bold mb-4">Domination Géographique</h3>
++<p class="text-on-surface-variant">Signaux de proximité renforcés pour apparaître prioritairement à Chartres, Dreux et dans tout le 28.</p>
++</div>
++<div class="md:col-span-8 glass-card rounded-2xl p-10 flex items-center gap-8">
++<div class="hidden sm:block w-32 h-32 flex-shrink-0 bg-surface-container-highest rounded-xl overflow-hidden">
++<img class="w-full h-full object-cover" data-alt="Architecture blueprint and measuring tape on a wooden desk with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1zubtVW-CbBiMo95g6G1NGDDaDOKLRTdNKjq_oA-dh8QQNSeUXGpw5gPybPK-U6c6UkQLZ4P72DGFgSNuEw3bBd-DiDK14_WcGSOPmxRc59hlAkXtpfxJzC7nEO9tSC6YraVjY5ytCHRK6Lt4rVFkacrxhJj9IcT7gnDsZm03lXRysSuzBjXC7dQ9IA8yQUo3u4tu8JX8FKAykLQEKHMVvtUc15dcDO6MZYjqIujIUz-lqAEBDGBUEFpisdSn-QgOk2DtZLNbs2w"/>
++</div>
++<div>
++<h3 class="text-2xl font-bold mb-4">Analyse de Données en Temps Réel</h3>
++<p class="text-on-surface-variant">Suivez vos appels, vos demandes de devis et votre position sur la carte via un tableau de bord simplifié.</p>
++</div>
++</div>
++</div>
++</div>
++</section>
++<!-- Proof Section -->
++<section class="py-24 px-8 bg-surface-container-low">
++<div class="max-w-7xl mx-auto">
++<div class="flex justify-between items-end mb-16">
++<div>
++<h2 class="text-4xl font-bold mb-4">Ils dominent déjà le 28</h2>
++<p class="text-on-surface-variant">Témoignages de nos partenaires locaux.</p>
++</div>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
++<!-- Testimonial 1 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"Grâce à Expert-Local, nous sommes passés de 3 à 45 avis en 4 mois. Mon téléphone n'arrête pas de sonner pour des chantiers sur Chartres."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">JD</div>
++<div>
++<div class="font-bold">Jean D.</div>
++<div class="text-sm text-on-surface-variant">Menuisier, Chartres (28)</div>
++</div>
++</div>
++</div>
++<!-- Testimonial 2 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"La visibilité locale était un mystère pour moi. Ils ont tout pris en main et les résultats sont là : +30% de CA cette année."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">ML</div>
++<div>
++<div class="font-bold">Marc L.</div>
++<div class="text-sm text-on-surface-variant">Plombier-Chauffagiste, Dreux (28)</div>
++</div>
++</div>
++</div>
++<!-- Testimonial 3 -->
++<div class="glass-card p-8 rounded-2xl border-t-4 border-secondary">
++<div class="flex gap-1 text-primary mb-6">
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
++</div>
++<p class="text-lg italic mb-8 leading-relaxed text-on-surface">"Indispensable pour tout artisan qui veut durer. L'accompagnement est top et très concret."</p>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary">SF</div>
++<div>
++<div class="font-bold">Sophie F.</div>
++<div class="text-sm text-on-surface-variant">Paysagiste, Maintenon (28)</div>
++</div>
++</div>
++</div>
++</div>
++</div>
++</section>
++<!-- Offers Section -->
++<section class="py-32 px-8">
++<div class="max-w-7xl mx-auto">
++<div class="text-center mb-20">
++<h2 class="text-4xl lg:text-5xl font-bold mb-6">Prêt à prendre la première place ?</h2>
++<p class="text-on-surface-variant">Des solutions adaptées à chaque étape de votre croissance.</p>
++</div>
++<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
++<!-- Offer 1 -->
++<div class="bg-surface-container rounded-2xl p-10 flex flex-col hover:translate-y-[-8px] transition-transform duration-300">
++<h3 class="text-xl font-bold mb-2">Diagnostic</h3>
++<div class="text-4xl font-black mb-6">Gratuit</div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Audit de votre fiche Google
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Analyse de la concurrence
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                3 axes d'amélioration immédiats
++                            </li>
++</ul>
++<button class="w-full border border-outline-variant py-3 rounded-xl font-bold hover:bg-surface-container-high transition-colors">Commander</button>
++</div>
++<!-- Offer 2 - Featured -->
++<div class="bg-surface-container-high rounded-2xl p-10 flex flex-col relative scale-105 border-2 border-primary shadow-2xl shadow-primary/10">
++<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary-fixed px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Populaire</div>
++<h3 class="text-xl font-bold mb-2">Kit Express</h3>
++<div class="text-4xl font-black mb-6">299€ <span class="text-sm font-normal text-on-surface-variant">/ unique</span></div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Optimisation SEO Complète
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Setup système d'avis QR Code
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Shooting photo local (Option)
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Support dédié 30 jours
++                            </li>
++</ul>
++<button class="w-full ember-gradient text-on-primary-fixed py-4 rounded-xl font-bold shadow-lg shadow-primary/20">Démarrer maintenant</button>
++</div>
++<!-- Offer 3 -->
++<div class="bg-surface-container rounded-2xl p-10 flex flex-col hover:translate-y-[-8px] transition-transform duration-300">
++<h3 class="text-xl font-bold mb-2">Domination Locale</h3>
++<div class="text-4xl font-black mb-6">99€ <span class="text-sm font-normal text-on-surface-variant">/ mois</span></div>
++<ul class="space-y-4 mb-10 flex-grow">
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Gestion active des avis
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Posts Google bimensuels
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Rapport mensuel de performance
++                            </li>
++<li class="flex items-center gap-3 text-on-surface-variant">
++<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
++                                Veille concurrentielle 28
++                            </li>
++</ul>
++<button class="w-full border border-outline-variant py-3 rounded-xl font-bold hover:bg-surface-container-high transition-colors">Choisir l'autorité</button>
++</div>
++</div>
++</div>
++</section>
++<!-- Final CTA & Form -->
++<section class="py-32 px-8 bg-surface-container-lowest">
++<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
++<div>
++<h2 class="text-5xl font-extrabold mb-8">Ne laissez pas vos clients passer chez le voisin.</h2>
++<p class="text-xl text-on-surface-variant mb-12 leading-relaxed">Remplissez ce questionnaire de 2 minutes pour recevoir votre audit personnalisé directement dans votre boîte mail.</p>
++<div class="space-y-6">
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
++<span class="material-symbols-outlined">bolt</span>
++</div>
++<span class="font-medium">Réponse sous 24h ouvrées</span>
++</div>
++<div class="flex items-center gap-4">
++<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
++<span class="material-symbols-outlined">map</span>
++</div>
++<span class="font-medium">Expertise 100% locale (Eure-et-Loir)</span>
++</div>
++</div>
++</div>
++<div class="bg-surface-container p-10 rounded-3xl border border-outline-variant/10 shadow-2xl">
++<form class="space-y-6">
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Nom de votre entreprise</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="Ex: Menuiserie Dupont Chartres" type="text"/>
++</div>
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Votre Ville principale</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="Ex: Dreux, Maintenon..." type="text"/>
++</div>
++<div class="space-y-2">
++<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wider">Email professionnel</label>
++<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary transition-all text-on-surface" placeholder="votre@email.fr" type="email"/>
++</div>
++<button class="w-full ember-gradient text-on-primary-fixed py-5 rounded-xl font-bold text-lg shadow-xl shadow-primary/30 hover:scale-[1.02] transition-transform" type="submit">
++                            Recevoir mon Diagnostic Gratuit
++                        </button>
++<p class="text-center text-xs text-on-surface-variant">Confidentialité garantie. Aucun spam.</p>
++</form>
++</div>
++</div>
++</section>
++</main>
++<!-- Footer -->
++<footer class="bg-[#10131A] w-full py-12 border-t border-[#E0E2EC]/10">
++<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
++<div class="space-y-4">
++<div class="text-lg font-black text-[#E0E2EC]">Expert-Local.fr</div>
++<p class="text-[#E0E2EC]/50 text-sm max-w-xs">L'autorité digitale pour les artisans et commerçants d'Eure-et-Loir.</p>
++</div>
++<div class="flex flex-wrap justify-center gap-8">
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Mentions Légales</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Politique de Confidentialité</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Diagnostic SEO Chartres</a>
++<a class="text-[#E0E2EC]/50 hover:text-[#FF7F3F] transition-colors text-sm" href="#">Artisans 28</a>
++</div>
++<div class="text-[#E0E2EC]/50 text-sm">
++                 2024 Expert-Local.fr - L'Autorité Locale en Eure-et-Loir (28)
++            </div>
++</div>
++</footer>
++<!-- FAB for quick action -->
++<button class="fixed bottom-8 right-8 w-16 h-16 ember-gradient rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center text-on-primary-fixed z-50 hover:scale-110 transition-transform">
++<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_call</span>
++</button>
++</body></html>
+
+# 2026-04-06 04:09:07.834879
++a
+
+# 2026-04-06 11:25:55.577943
++Claude, nous allons créer 4 pages de capture locale pour dominer l'Eure-et-Loir. 
++Garde exactement le même design (Stitch Dark Ember), les mêmes composants <Image />, la même <video> et le même formulaire que sur index.astro.
++
++FICHIERS À CRÉER :
++1. src/pages/chartres.astro (Cible : Artisans et commerçants de Chartres)
++2. src/pages/dreux.astro (Cible : Artisans et commerçants de Dreux)
++3. src/pages/chateaudun.astro (Cible : Artisans et commerçants de Châteaudun)
++4. src/pages/nogent-le-roi.astro (Cible : Artisans et commerçants de Nogent-le-Roi)
++
++DIRECTIVES POUR CHAQUE PAGE :
++- SEO : Adapte les balises <title> et <meta description> avec le nom de la ville.
++- TEXTE : Remplace les occurrences générales "Eure-et-Loir" ou "28" par le nom de la ville spécifique dans les titres H1 et H2 pour créer une ultra-pertinence locale.
++- LOGIQUE : Utilise BaseLayout.astro pour toutes ces pages.
++
++Vérifie que les liens d'ancrage (#diagnostic) pointent bien vers le formulaire de la page correspondante.
+
+# 2026-04-06 11:25:58.841174
++a
+
+# 2026-04-06 11:39:26.302923
++y
+
+# 2026-04-06 11:44:48.007195
++Qwen, on passe à l'indexation massive. 
++
++1. FOOTER : Dans 'src/layouts/BaseLayout.astro', ajoute une ligne de liens discrets dans le footer nommée 'Zones d'intervention' avec des liens vers /chartres, /dreux, /chateaudun et /nogent-le-roi.
++
++2. SCHEMA.ORG : Dans chaque fichier (chartres.astro, dreux.astro, etc.), injecte un script JSON-LD 'LocalBusiness'. 
++   - Le nom doit être 'Expert-Local [Nom de la Ville]'.
++   - La 'areaServed' doit être le nom de la ville.
++   - Ajoute une section 'Review' factice (ou basée sur tes témoignages) pour que Google affiche des étoiles dans les résultats.
++
++3. SITEMAP : Crée le fichier 'public/sitemap.xml' avec les URLs de toutes nos pages (priorité 1.0 pour l'accueil, 0.8 pour les villes).
+
+# 2026-04-06 11:44:51.638098
++a
+
+# 2026-04-06 11:46:38.565997
++aider --architect --model openrouter/qwen/qwen3.6-plus:free
+
+# 2026-04-06 11:47:35.023347
++y
+
+# 2026-04-06 11:47:46.909859
++Qwen, mission : Scellage du Maillage Interne et Propulsion SEO.
++
++1. FOOTER (src/layouts/BaseLayout.astro) : 
++   - Ajoute une section "Expertise Locale 28" dans le footer.
++   - Insère les liens : /chartres, /dreux, /chateaudun, /nogent-le-roi.
++   - Style : Texte discret, hover avec la couleur primary (#ffb595).
++
++2. SITEMAP (public/sitemap.xml) :
++   - Génère le sitemap XML complet incluant la racine (index.astro) et les 4 pages de villes.
++   - Date de dernière modification : 2026-04-06.
++
++3. ROBOTS (public/robots.txt) :
++   - Crée le fichier pour autoriser l'indexation et pointer vers le sitemap.
++
++4. VÉRIFICATION CTA :
++   - Vérifie sur chaque page de ville que les boutons "Diagnostic" pointent bien vers l'ID #diagnostic de la page en cours pour éviter les erreurs de navigation.
++
++Agis par blocs SEARCH/REPLACE pour être précis.
+
+# 2026-04-06 11:48:14.973756
++aider --architect --model openrouter/deepseek/deepseek-chat
+
+# 2026-04-06 11:48:36.589564
++DeepSeek, mission : Finalisation du Maillage Interne et de l'Indexation.
++
++1. MAILLAGE FOOTER (src/layouts/BaseLayout.astro) :
++   - Ajoute une section "Zones d'intervention" dans le footer.
++   - Crée des liens propres vers : /chartres, /dreux, /chateaudun, /nogent-le-roi.
++   - Style : Utilise les classes Tailwind existantes pour rester en harmonie avec le thème Dark (texte gris, hover primary #ffb595).
++
++2. SITEMAP XML (public/sitemap.xml) :
++   - Génère un fichier sitemap.xml valide à la racine du dossier public.
++   - Liste l'URL racine (/) et les 4 pages de villes.
++   - Priorité : 1.0 pour l'accueil, 0.8 pour les villes.
++
++3. ROBOTS.TXT (public/robots.txt) :
++   - Crée un fichier robots.txt autorisant tous les agents et pointant vers le sitemap.
++
++4. CHECK TECHNIQUE :
++   - Assure-toi que les balises <a> vers les villes utilisent des chemins relatifs (ex: href="/chartres").
++   - Vérifie que l'ID #diagnostic est bien présent sur chaque page de ville pour que les CTA ne pointent pas vers le vide.
+
+# 2026-04-06 11:48:39.436567
++a
+
+# 2026-04-06 11:50:27.924752
++DeepSeek, mission : Suture finale du Footer et des Ancres.
++
++1. FOOTER (BaseLayout.astro) : 
++   - Utilise un bloc SEARCH/REPLACE pour modifier le composant existant.
++   - Ajoute une section 'Expertise Locale' avec les liens : /chartres, /dreux, /chateaudun, /nogent-le-roi.
++   - Style : Garde le design sombre (Dark Ember), texte gris clair, hover #ffb595.
++
++2. FIX ANCRES (chartres.astro) : 
++   - Vérifie que la section du formulaire possède bien l'attribut id="diagnostic".
++   - Assure-toi que TOUS les boutons 'Diagnostic Gratuit' de la page pointent vers href="#diagnostic".
++
++3. GÉNÉRALISATION : 
++   - Si la modification sur chartres.astro fonctionne, applique la même correction d'ID sur dreux.astro, chateaudun.astro et nogent-le-roi.astro.
+
+# 2026-04-06 11:50:31.189058
++a
+
+# 2026-04-06 11:51:56.276011
++y
+
+# 2026-04-06 11:54:15.164076
++tres bien commit tout !
+
+# 2026-04-06 11:55:35.155815
++y
+
+# 2026-04-06 11:57:07.419739
++/diff
+
+# 2026-04-06 11:57:29.642860
++DeepSeek, mission : Création de l'infrastructure Blog (Astro Content Collections).
++
++1. STRUCTURE :
++   - Crée un dossier 'src/content/blog/'.
++   - Crée un fichier 'src/content/config.ts' pour définir la collection 'blog' (schéma : titre, date, description, image, auteur).
++
++2. PAGES :
++   - Crée 'src/pages/blog/index.astro' : Ce sera la liste de tous les articles. Utilise le layout BaseLayout et le style 'magazine-grid' de Stitch.
++   - Crée 'src/pages/blog/[...slug].astro' : Ce sera le modèle de l'article seul. Assure-toi que le texte est ultra-lisible (prose dark mode) et que la <video> ou les images s'intègrent bien.
++
++3. ARTICLE DE TEST :
++   - Crée un premier fichier 'src/content/blog/premier-audit-chartres.md' avec un texte factice (Lorem Ipsum) pour vérifier que l'affichage fonctionne.
++
++4. DESIGN :
++   - Utilise les classes 'glass-card' pour les vignettes d'articles.
++   - Les titres doivent être en 'Plus Jakarta Sans' avec le dégradé 'ember-gradient'.
++
++Garde le copywriting de l'accueil intact, ne modifie que les nouveaux fichiers.
+
+# 2026-04-06 11:59:32.177875
++y
+
+# 2026-04-06 12:00:52.628070
++/diff
+
+# 2026-04-06 12:01:03.284041
++DeepSeek, prépare le déploiement final.
++1. Modifie 'astro.config.mjs' pour ajouter l'URL de mon site : site: 'https://expert-local.fr' (ou ton domaine réel).
++2. Vérifie que le sitemap est bien généré lors du build (import du package @astrojs/sitemap si besoin).
++3. Ajoute le lien 'Blog' dans le Header de 'BaseLayout.astro'.
+
+# 2026-04-06 12:01:06.986095
++a
+
+# 2026-04-06 12:01:09.658109
++y
+
+# 2026-04-06 12:06:36.682679
++DeepSeek, ma config Astro plante sur l'import du sitemap. 
++Vérifie 'astro.config.mjs' :
++1. Assure-toi que l'import est : import sitemap from '@astrojs/sitemap';
++2. Assure-toi que dans integrations: [], il y a bien sitemap() (avec les parenthèses).
++3. Si je n'ai pas encore installé le paquet, commente temporairement la ligne du sitemap pour que je puisse au moins lancer 'npm run dev'.
+
+# 2026-04-06 12:09:21.777945
++DeepSeek, le site redémarre, on finalise pour l'hébergement o2switch.
++
++1. HTACCESS (public/.htaccess) :
++   - Crée ce fichier pour activer la réécriture d'URL.
++   - Force le HTTPS.
++   - Fais en sorte que /chartres pointe vers /chartres.html (sans afficher l'extension).
++   - Gère les erreurs 404 vers /404.html.
++
++2. CONFIGURATION (astro.config.mjs) :
++   - Assure-toi que 'site' est bien 'https://expert-local.fr'.
++   - Vérifie que l'intégration sitemap() est bien active maintenant que le paquet est installé.
++
++3. HEADER (src/layouts/BaseLayout.astro) :
++   - Ajoute le lien 'Blog' dans la navigation si ce n'est pas déjà fait.
+
+# 2026-04-06 12:09:49.521184
++y
+
+# 2026-04-06 12:16:03.584498
++DeepSeek, j'ai une erreur 404 sur /blog. Vérifie ces 3 points :
++
++1. DOSSIER : Est-ce que mon fichier 'premier-audit-chartres.md' est BIEN dans 'src/content/blog/' (et pas juste dans 'src/content/') ?
++2. CONFIG : Vérifie que 'src/content/config.ts' contient bien 'export const collections = { blog };'.
++3. PAGES : Vérifie que le fichier 'src/pages/blog/index.astro' existe bien et qu'il utilise 'getCollection("blog")'.
+
+# 2026-04-06 12:17:28.119962
++y
+
+# 2026-04-06 18:31:34.715120
++DeepSeek, le build confirme que les routes du blog sont ABSENTES (11 pages seulement). Astro ignore le dossier content.
++
++1. VÉRIFIE 'src/content/config.ts' : 
++   - Assure-toi que l'import est 'from "astro:content"'.
++   - Vérifie que la constante 'blog' est bien définie et que 'export const collections = { blog };' est présent.
++
++2. VÉRIFIE LA STRUCTURE :
++   - Si 'src/pages/blog/index.astro' n'existe pas, CRÉE-LE.
++   - Si 'src/pages/blog/[...slug].astro' n'existe pas, CRÉE-LE.
++   - Assure-toi que l'article 'premier-audit-chartres.md' est BIEN dans 'src/content/blog/'.
++
++3. SYNC & RESTART :
++   - Une fois les corrections faites, demande-moi de lancer 'npx astro sync'.
+
+# 2026-04-06 18:34:19.482806
++y
+
+# 2026-04-06 18:36:22.314348
++J'ai toujours ce message en lancant la commande npx astro sync : 
++PS C:\Users\estar\Expert-Local\expert-local-v2> npx astro sync
++[LegacyContentConfigError] Found legacy content config file in "src\content\config.ts". Please move this file to "src/content.config.ts" and ensure each collection has a loader defined.
++  Hint:
++    See https://docs.astro.build/en/guides/upgrade-to/v6/#removed-legacy-content-collections for more information on updating collections.
++  Error reference:
++    https://docs.astro.build/en/reference/errors/legacy-content-config-error/
++  Stack trace:
++    at getContentPaths (file:///C:/Users/estar/Expert-Local/expert-local-v2/node_modules/astro/dist/content/utils.js:526:15)
++    at createSettings (file:///C:/Users/estar/Expert-Local/expert-local-v2/node_modules/astro/dist/core/config/settings.js:146:20)
++    at async sync (file:///C:/Users/estar/Expert-Local/expert-local-v2/node_modules/astro/dist/cli/sync/index.js:19:3)
++    at async cli (file:///C:/Users/estar/Expert-Local/expert-local-v2/node_modules/astro/dist/cli/index.js:234:5)
++Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
++PS C:\Users\estar\Expert-Local\expert-local-v2>
+
+# 2026-04-06 18:36:25.609580
++y
+
+# 2026-04-06 18:36:29.313971
++a
+
+# 2026-04-06 18:46:35.696545
++y
+
+# 2026-04-06 18:47:35.209115
++/clear
+
+# 2026-04-06 18:47:43.521361
++aider --architect --model openrouter/anthropic/claude-3.5-sonnet
+
+# 2026-04-06 18:49:04.759599
++n
+
+# 2026-04-06 18:49:10.559747
++Claude, oublie l'optimisation des villes pour 2 minutes. On a une URGENCE technique :
++
++1. J'ai renommé 'src/content/config.ts' en 'src/content.config.ts' pour Astro 6.
++2. Mes liens de blog affichent '404 undefined' car ils cherchent 'post.slug'.
++
++FAIS CES 2 MODIFS PRÉCISES :
++- Dans 'src/pages/blog/index.astro' : remplace href={`/blog/${post.slug}`} par href={`/blog/${post.id}`}.
++- Dans 'src/pages/blog/[...slug].astro' : dans getStaticPaths, remplace params: { slug: post.slug } par params: { slug: post.id }.
++
++Vérifie aussi que 'src/content.config.ts' utilise bien le 'loader: glob' pour Astro 6.
+
+# 2026-04-06 18:49:14.695341
++a
+
+# 2026-04-06 18:50:18.320022
++y
+
+# 2026-04-06 18:50:25.984755
++/diff
+
+# 2026-04-06 18:50:42.775416
++Claude, on finit la bascule Astro 6. 
++
++1. Dans 'src/content.config.ts' : 
++   - Ajoute l'import : import { glob } from 'astro/loaders';
++   - Dans 'defineCollection', ajoute : loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
++
++2. Dans 'src/pages/blog/index.astro' : 
++   - Applique le remplacement de 'post.slug' par 'post.id' dans le lien <a>.
++
++3. Dans 'src/pages/blog/[...slug].astro' : 
++   - Applique le remplacement de 'post.slug' par 'post.id' dans getStaticPaths.
++
++Une fois fait, je lancerai 'npx astro sync' et tout sera fonctionnel.
+
+# 2026-04-06 18:50:46.855082
++y
+
+# 2026-04-06 18:53:27.743992
++DeepSeek, mon fichier 'src/content.config.ts' est en double. 
++EFFACE tout le contenu du fichier et REMPLACE-LE par ce code unique et propre :
++
++import { defineCollection, z } from 'astro:content';
++import { glob } from 'astro/loaders';
++
++const blog = defineCollection({
++  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
++  schema: z.object({
++    title: z.string(),
++    date: z.date(),
++    description: z.string(),
++    image: z.string().optional(),
++    author: z.string().default('Antoine Estarellas'),
++  })
++});
++
++export const collections = { blog };
+
+# 2026-04-06 18:55:49.863124
++DeepSeek, on y est presque ! L'erreur vient du fait qu'en Astro 6, 'post.render()' n'existe plus. 
++
++Fais ces modifs dans 'src/pages/blog/[...slug].astro' :
++
++1. AJOUTE l'import en haut du fichier :
++   import { getCollection, render } from 'astro:content';
++
++2. REMPLACE la ligne 14 :
++   const { Content } = await post.render();
++   PAR :
++   const { Content } = await render(post);
+
+# 2026-04-06 19:00:41.821453
++DeepSeek, on a un problème : les pages villes plantent car 'src/components/VilleTemplate.astro' n'existe pas. 
++
++ANNULE l'utilisation du template pour l'instant. 
++REMETS le fichier 'src/pages/chartres.astro' (et les autres villes) dans leur état d'origine, c'est-à-dire :
++1. Supprime l'import de VilleTemplate.
++2. Assure-toi que tout le contenu HTML/Astro est directement dans le fichier, enveloppé par <BaseLayout>.
++3. Vérifie que l'import de BaseLayout est correct : import BaseLayout from '../layouts/BaseLayout.astro';
+
+# 2026-04-06 19:12:00.459221
++Aider, on peaufine le "Hard SEO" avant le build final. Applique ces 3 corrections sur TOUTES les pages villes (chartres, dreux, chateaudun, nogent-le-roi) :
++
++1. JSON-LD (Données Structurées) : 
++   - Ne remplace pas le bloc actuel, mais AJOUTE un second bloc de type 'ProfessionalService'.
++   - Inclus : name ("Expert Local " + nom de la ville), image (ton URL de logo ou profil), priceRange ("€€"), et areaServed (le nom de la ville).
++   - Ajoute une propriété 'aggregateRating' avec une valeur fixe de test (ex: ratingValue: 4.9, reviewCount: 15) pour activer les étoiles dans Google.
++
++2. ACCESSIBILITÉ & IMAGE :
++   - Cherche l'image '/photo-profil.jpg'.
++   - Ajoute un attribut alt explicite : alt="Antoine Estarellas - Expert en visibilité locale et avis Google"
++
++3. COHÉRENCE DES URLS (Trailing Slash) :
++   - Vérifie la balise <link rel="canonical">. 
++   - Assure-toi qu'elle se termine BIEN par un slash '/' (ex: https://expert-local.fr/chartres/) pour être raccord avec les liens du footer et éviter le contenu dupliqué.
++
++Vérifie aussi 'src/layouts/BaseLayout.astro' pour que ces changements soient bien répercutés partout.
+
+# 2026-04-06 19:12:29.587302
++y
+
+# 2026-04-06 19:17:25.906461
++Aider, on finit d'harmoniser le site avec la règle 'trailingSlash: always'. 
++
++1. PAGES VILLES : 
++   - Applique les modifications JSON-LD (ProfessionalService) et l'alt text de l'image de profil sur 'dreux.astro', 'chateaudun.astro' et 'nogent-le-roi.astro'. 
++   - Adapte 'name' (Expert Local Ville) et 'areaServed' (Ville) pour chaque fichier.
++
++2. NAVIGATION & FOOTER :
++   - Dans 'src/layouts/BaseLayout.astro' et 'src/components/Footer.astro' :
++   - Remplace TOUS les liens internes (href) pour qu'ils se terminent par un slash.
++   - Exemple : '/blog' devient '/blog/', '/' devient '/', '/chartres' devient '/chartres/', etc.
++
++3. BLOG :
++   - Dans 'src/pages/blog/index.astro', assure-toi que le lien vers l'article est bien : href={`/blog/${post.id}/`} (avec le slash à la fin).
+
+# 2026-04-06 19:18:45.890969
++y
+
+# 2026-04-06 19:43:40.333076
++/clear
+
+# 2026-04-06 19:55:08.532849
++n
+
+# 2026-04-06 19:55:11.251397
++/add src/pages/chartres.astro src/pages/blog/index.astro astro.config.mjs public/.htaccess
+
+# 2026-04-06 19:55:40.403388
++Claude, le site est en ligne sur o2switch mais les formulaires et paiements sont cassés.
++
++Le problème probable : On a forcé trailingSlash: always dans Astro, mais mes URLs de redirection (Merci, Webhooks) n'ont peut-être pas le slash final.
++
++Mission :
++
++Vérifie les URLs fetch() ou action des formulaires vers n8n/Brevo. Ajoute le slash final si nécessaire.
++
++Vérifie les redirections de paiement (Stripe/PayPal). Si elles pointent vers /merci-pro, change-les en /merci-pro/.
++
++Dis-moi si je dois configurer mes variables d'environnement n8n/Brevo en tant que PUBLIC_ dans Astro pour qu'elles soient visibles après le build sur o2switch.
+
+# 2026-04-06 20:01:35.162829
++n
+
+# 2026-04-06 20:03:06.194128
++/add src/pages/chartres.astro src/pages/dreux.astro src/pages/chateaudun.astro src/pages/nogent-le-roi.astro
++/add astro.config.mjs public/.htaccess src/layouts/BaseLayout.astro
++
++Qwen, le site est en ligne mais les formulaires de diagnostic et les boutons de paiement sont HS. 
++Cause probable : Le passage à 'trailingSlash: always' et l'absence de variables d'environnement au build.
++
++RÉPARE LES FLUX SUIVANTS :
++
++1. DIAGNOSTIC GRATUIT (Webhooks) :
++   - Dans les scripts de soumission (fetch), vérifie l'URL d'envoi vers n8n ou Brevo.
++   - Si l'URL utilise 'import.meta.env.VARIABLE', remplace-le par 'import.meta.env.PUBLIC_VARIABLE' pour qu'elle soit incluse dans le build statique.
++   - Assure-toi que l'URL du webhook ne subit pas de redirection 301 (le trailing slash ne doit PAS être ajouté aux requêtes vers des APIs externes).
++
++2. PAIEMENTS & REDIRECTIONS :
++   - Cherche tous les liens de redirection après succès (ex: /merci/, /confirmation/).
++   - Force l'ajout du slash final à la fin de ces URLs de destination pour être raccord avec la config Astro.
++   - Si les liens de paiement sont générés en JS, assure-toi que les URLs de retour (return_url) se terminent par un slash.
++
++3. SÉCURITÉ DES FORMULAIRES :
++   - Vérifie que la balise <form> ne pointe pas vers une URL relative qui pourrait être cassée par la structure des dossiers sur o2switch.
++
++Une fois terminé, liste-moi les variables que je dois renommer dans mon fichier .env avec le préfixe PUBLIC_.
+
+# 2026-04-06 20:03:40.425935
++n
+
+# 2026-04-06 20:03:55.482043
++/add src/pages/chartres.astro
++/add src/pages/dreux.astro
++/add src/pages/chateaudun.astro
++/add src/pages/nogent-le-roi.astro
++/add astro.config.mjs
++/add public/.htaccess
+
+# 2026-04-06 20:35:58.837593
++n
+
+# 2026-04-06 20:36:10.053369
++/add tests/expert-local.spec.ts src/pages/chartres.astro astro.config.mjs src/components/Footer.astro
++
++Qwen, crée un script de test Playwright robuste dans 'tests/expert-local.spec.ts' pour valider mon nouveau site.
++
++SCÉNARIO À TESTER :
++1. REDIRECTION SLASH : Va sur 'http://localhost:4321/chartres' (sans slash) et vérifie que Playwright finit sur 'http://localhost:4321/chartres/'.
++2. SEO JSON-LD : Vérifie qu'il existe une balise <script type="application/ld+json"> contenant "@type": "ProfessionalService" et "name": "Expert Local Chartres".
++3. FORMULAIRE DIAGNOSTIC : 
++   - Sur la page /chartres/, remplis les champs (Prénom, Nom, Email, Site web).
++   - Intercepte la requête POST vers l'URL n8n (mocker la réponse avec un statut 200).
++   - Clique sur le bouton de soumission.
++   - Vérifie que l'utilisateur est bien redirigé vers '/merci-diagnostic/'.
++4. NAVIGATION : Vérifie que le lien du Footer vers 'Dreux' pointe bien vers '/dreux/' (avec le slash).
++5. RESPONSIVE : Vérifie que le bouton CTA est visible sur un écran mobile (375x667).
++
++N'oublie pas d'utiliser 'import.meta.env.PUBLIC_N8N_URL' si nécessaire ou de lire l'URL directement dans le code pour le mock.
+
+# 2026-04-06 20:36:44.456555
++y
+
+# 2026-04-06 20:37:22.837071
++n
+
+# 2026-04-06 20:39:40.105840
++/add tests/expert-local.spec.ts src/pages/chartres.astro src/components/Footer.astro astro.config.mjs
+
+# 2026-04-06 20:39:53.867136
++Écris un script de test Playwright dans 'tests/expert-local.spec.ts'.
++
++VÉRIFICATIONS :
++
++Redirection : Aller sur 'http://localhost:4321/chartres' et vérifier qu'on finit sur '/chartres/'.
++
++SEO : Vérifier le JSON-LD 'ProfessionalService' avec 'Expert Local Chartres'.
++
++Form : Remplir id='diagnostic' et vérifier le POST vers l'URL n8n (mocker en 200).
++
++Navigation : Vérifier la redirection vers '/merci-diagnostic/' après succès.
++
++Footer : Vérifier que le lien Dreux a bien son slash final.
+
+# 2026-04-06 20:39:58.571036
++y
+
+# 2026-04-06 20:40:39.815634
++/model openrouter/qwen/qwen-2.5-72b-instruct:free
+
+# 2026-04-06 20:42:47.652048
++/add tests/expert-local.spec.ts src/pages/chartres.astro astro.config.mjs src/components/Footer.astro
++
++Qwen, génère un script de test Playwright robuste dans 'tests/expert-local.spec.ts' pour valider les points critiques du site :
++
++1. REDIRECTION SLASH : Naviguer vers '/chartres' (sans slash) et vérifier que l'URL finale est bien '/chartres/'.
++2. DONNÉES STRUCTUREÉES : Vérifier que le JSON-LD 'ProfessionalService' est présent avec le nom 'Expert Local Chartres' et les 4.9 étoiles.
++3. FORMULAIRE & WEBHOOK : 
++   - Sur la page /chartres/, remplir le formulaire id='diagnostic'.
++   - Intercepter l'appel POST vers l'URL n8n (mocker la réponse avec un statut 200).
++   - Cliquer sur envoyer et vérifier la redirection vers '/merci-diagnostic/'.
++4. NAVIGATION FOOTER : Vérifier que le lien vers 'Dreux' possède bien le trailing slash ('/dreux/').
++
++Utilise le port 4321 pour les tests (baseUrl: http://localhost:4321).
+
+# 2026-04-06 20:42:52.075514
++n
+
+# 2026-04-06 20:42:55.365465
++/add tests/expert-local.spec.ts src/pages/chartres.astro astro.config.mjs src/components/Footer.astro
++
++Qwen, génère un script de test Playwright robuste dans 'tests/expert-local.spec.ts' pour valider les points critiques du site :
++
++1. REDIRECTION SLASH : Naviguer vers '/chartres' (sans slash) et vérifier que l'URL finale est bien '/chartres/'.
++2. DONNÉES STRUCTUREÉES : Vérifier que le JSON-LD 'ProfessionalService' est présent avec le nom 'Expert Local Chartres' et les 4.9 étoiles.
++3. FORMULAIRE & WEBHOOK : 
++   - Sur la page /chartres/, remplir le formulaire id='diagnostic'.
++   - Intercepter l'appel POST vers l'URL n8n (mocker la réponse avec un statut 200).
++   - Cliquer sur envoyer et vérifier la redirection vers '/merci-diagnostic/'.
++4. NAVIGATION FOOTER : Vérifier que le lien vers 'Dreux' possède bien le trailing slash ('/dreux/').
++
++Utilise le port 4321 pour les tests (baseUrl: http://localhost:4321).
+
+# 2026-04-06 20:43:01.269369
++n
+
+# 2026-04-07 00:11:33.827189
++/add src/content/blog/
++
++Haiku, crée 3 fichiers Markdown (.md) dans 'src/content/blog/' pour asseoir mon autorité d'expert en visibilité locale dans le 28. 
++
++TON TON : Précis, technique, pragmatique. Pas de "Grand Frère", on parle de business et de conversion.
++
++SOURCES À INTÉGRER : 
++- Médiamétrie (déc. 2025) : 42,4 millions de visiteurs uniques sur Google Maps.
++- Étude Geolid 2026 : 69,21% des visites viennent du Search classique, 36,23% d'appels directs.
++- Étude conso 2026 : 67% des clients vérifient les avis avant un appel local.
++
++ARTICLES À RÉDIGER :
++
++1. 'urgence-plomberie-chartres.md' : Focus sur l'invisibilité fatale. Pourquoi la fiche Google est l'endroit n°1 de conversion pour un dépannage immédiat (fuite, panne).
++2. 'psychologie-avis-artisan-28.md' : L'artisan comme commerçant. Comment transformer un chantier fini en preuve numérique (5 étoiles). Le passage du bouche-à-oreille physique au digital.
++3. 'google-vs-pages-jaunes-2026.md' : Le choc des époques. Pourquoi déléguer sa visibilité à un annuaire est une erreur stratégique majeure en 2026. Focus sur le bouton "Appeler".
++
++CONSIGNES SEO :
++- Utilise des balises H1, H2, H3 claires.
++- Frontmatter Astro complet (title, pubDate, description, tags, image: {url: "/blog-default.jpg", alt: "..."}).
++- Texte riche, sans gras inutile, orienté "Révélation" pour l'artisan.

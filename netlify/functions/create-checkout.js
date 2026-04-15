@@ -48,7 +48,7 @@ export async function handler(event, context) {
         });
       }
 
-      sessionOptions.success_url = `${process.env.SITE_URL}/merci-kit?session_id={CHECKOUT_SESSION_ID}`;
+      sessionOptions.success_url = `${process.env.SITE_URL}/merci-kit/?session_id={CHECKOUT_SESSION_ID}`;
       sessionOptions.cancel_url = `${process.env.SITE_URL}/#offre`; 
       
       sessionOptions.metadata = {
@@ -69,7 +69,7 @@ export async function handler(event, context) {
         sessionOptions.discounts = [{ coupon: process.env.STRIPE_COUPON_FLASH30 }];
       }
 
-      sessionOptions.success_url = `${process.env.SITE_URL}/merci-pro?session_id={CHECKOUT_SESSION_ID}`;
+      sessionOptions.success_url = `${process.env.SITE_URL}/merci-pro/?session_id={CHECKOUT_SESSION_ID}`;
       sessionOptions.cancel_url = `${process.env.SITE_URL}/#offre`;
       
       sessionOptions.metadata = {

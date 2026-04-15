@@ -255,9 +255,48 @@ import { Image } from 'astro:assets';
   </section>
 
   <!-- ═══════════════════════════════════
+       DIAGNOSTIC GRATUIT
+  ═══════════════════════════════════ -->
+  <section class="section" id="diagnostic">
+    <div class="container container--narrow">
+      <div class="section-header">
+        <span class="section-label section-label--primary"><span class="material-symbols-outlined icon-sm">gps_fixed</span> Diagnostic gratuit</span>
+        <h2 class="section-title">Recevez votre diagnostic Google en 24h</h2>
+        <p class="section-subtitle">Score de risque, analyse concurrents et 3 actions prioritaires — gratuitement.</p>
+      </div>
+      <form id="diagnostic-form" class="diagnostic-form glass-card">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="diag-prenom">Prénom</label>
+            <input type="text" id="diag-prenom" name="prenom" required placeholder="Votre prénom">
+          </div>
+          <div class="form-group">
+            <label for="diag-email">Email</label>
+            <input type="email" id="diag-email" name="email" required placeholder="votre@email.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="diag-commerce">Nom du commerce</label>
+            <input type="text" id="diag-commerce" name="nom_commerce" required placeholder="Ex : Salon Marie">
+          </div>
+          <div class="form-group">
+            <label for="diag-ville">Ville</label>
+            <input type="text" id="diag-ville" name="ville" required placeholder="Ex : Châteaudun">
+          </div>
+        </div>
+        <button type="submit" class="btn btn--primary btn--large btn--full" id="diag-submit">
+          <span class="material-symbols-outlined icon-sm">send</span> Recevoir mon diagnostic gratuit
+        </button>
+        <p class="form-legal">Vos données sont traitées conformément à notre <a href="/confidentialite/">politique de confidentialité</a>.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
        OFFRE / PRICING
   ═══════════════════════════════════ -->
-  <section class="section section--dark" id="offre" id="diagnostic">
+  <section class="section section--dark" id="offre">
     <div class="container">
       <div class="section-header">
         <span class="section-label section-label--primary"><span class="material-symbols-outlined icon-sm">diamond</span> Les offres</span>
@@ -295,16 +334,7 @@ import { Image } from 'astro:assets';
             <li><span class="material-symbols-outlined icon-filled">check_circle</span> Masterclass vidéo</li>
             <li><span class="material-symbols-outlined icon-filled">check_circle</span> Plan d'action 10 jours</li>
           </ul>
-          <div class="order-bump">
-            <label>
-              <input type="checkbox" id="bump-kit" name="bump">
-              <span class="order-bump-text">
-                <strong>Kit Relance+ (19€)</strong><br>
-                <small>5 messages vocaux prêts à envoyer + 5 scripts SMS avancés</small>
-              </span>
-            </label>
-          </div>
-          <button class="btn btn--primary btn--full btn--large btn-checkout" data-plan="kit">Commencer maintenant</button>
+          <a href="https://buy.stripe.com/8x26oIccaeYdbHl36K5Rm01" class="btn btn--primary btn--full btn--large btn-checkout" data-plan="kit" rel="noopener">Commencer maintenant</a>
         </div>
 
         <div class="pricing-card">
@@ -319,7 +349,7 @@ import { Image } from 'astro:assets';
             <li><span class="material-symbols-outlined icon-filled">check_circle</span> Appel stratégique personnalisé 45 min</li>
             <li><span class="material-symbols-outlined icon-filled">check_circle</span> Suivi à J+10</li>
           </ul>
-          <button class="btn btn--secondary btn--full btn-checkout" data-plan="pro">Devenir PRO</button>
+          <a href="https://buy.stripe.com/9B614o1xw4jzfXB9v85Rm02" class="btn btn--secondary btn--full btn-checkout" data-plan="pro" rel="noopener">Devenir PRO</a>
         </div>
 
       </div>
@@ -440,4 +470,42 @@ import { Image } from 'astro:assets';
       document.getElementById('panel-after').style.display = tab === 'after' ? '' : 'none';
     });
   });
+
+  // Diagnostic form submission
+  const diagForm = document.getElementById('diagnostic-form');
+  if (diagForm) {
+    diagForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('diag-submit');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined icon-sm">hourglass_top</span> Envoi en cours…';
+
+      const payload = {
+        prenom: diagForm.querySelector('[name="prenom"]').value.trim(),
+        email: diagForm.querySelector('[name="email"]').value.trim(),
+        nom_commerce: diagForm.querySelector('[name="nom_commerce"]').value.trim(),
+        ville: diagForm.querySelector('[name="ville"]').value.trim(),
+        source: window.location.pathname,
+      };
+
+      try {
+        const webhookUrl = import.meta.env.PUBLIC_N8N_URL;
+        const res = await fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error(`Erreur ${res.status}`);
+        window.location.href = '/merci-diagnostic/';
+      } catch (err) {
+        console.error('Erreur diagnostic:', err);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        alert('Une erreur est survenue. Veuillez réessayer.');
+      }
+    });
+  }
 </script>

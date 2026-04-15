@@ -1,7 +1,6 @@
 ---
 /**
- * Header.astro — Navigation sticky glassmorphism
- * Réutilisable dans tous les layouts
+ * Header.astro — Navigation sticky glassmorphism M3
  */
 ---
 
@@ -25,28 +24,25 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(10, 15, 26, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-border-dark);
+    background: rgba(16, 19, 26, 0.80);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
   .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-3) 0;
+    padding: var(--space-4) 0;
   }
   .nav-logo {
     font-family: var(--font-heading);
     font-size: var(--text-xl);
     font-weight: var(--weight-bold);
-    color: var(--color-text-primary);
+    color: var(--color-on-surface);
     text-decoration: none;
+    letter-spacing: -0.5px;
   }
-  .nav-logo:hover { color: var(--color-text-primary); }
+  .nav-logo:hover { color: var(--color-on-surface); }
   .nav-logo-accent { color: var(--color-primary); }
-  .btn--header {
-    font-size: var(--text-sm);
-    padding: var(--space-2) var(--space-5);
-  }
 </style>
