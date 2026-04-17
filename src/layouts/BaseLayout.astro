@@ -42,17 +42,24 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet" />
 
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content="/images/og-image-2026.webp" />
-  <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Expert Local" />
-  <meta property="og:locale" content="fr_FR" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content="https://expert-local.fr/images/og-image-2026.webp" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="628" />
+<meta property="og:image:alt" content="Expert-Local.fr — Plus d'avis Google. Plus de clients." />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Expert Local" />
+<meta property="og:locale" content="fr_FR" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content="https://expert-local.fr/images/og-image-2026.webp" />
+<meta name="twitter:image:alt" content="Expert-Local.fr — Plus d'avis Google. Plus de clients." />
 
   <style is:global>
     @import '../styles/global.css';

@@ -2,33 +2,124 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
+const allPosts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
+
+const featured = allPosts[0];
+const rest = allPosts.slice(1);
 ---
 
 <BaseLayout title="Blog | Expert Local" description="Conseils pour améliorer votre visibilité locale et obtenir plus d'avis Google">
-  <div class="container py-12">
-    <h1 class="text-4xl font-bold mb-8 text-center ember-gradient">Blog Expert Local</h1>
-    
-    <div class="magazine-grid">
-      {posts.map(post => (
-        <a href={`/blog/${post.id}/`} class="glass-card hover:scale-[1.02] transition-transform">
-          <article>
-            {post.data.image && (
-              <img src={post.data.image} alt="" loading="lazy" class="w-full h-48 object-cover rounded-t-lg" />
-            )}
-            <div class="p-6">
-              <h2 class="text-xl font-bold mb-2">{post.data.title}</h2>
-              <p class="text-gray-400 mb-4">{post.data.description}</p>
-              <div class="flex justify-between items-center text-sm text-gray-500">
-                <span>{post.data.author}</span>
-                <span>{post.data.date.toLocaleDateString('fr-FR')}</span>
-              </div>
-            </div>
-          </article>
-        </a>
-      ))}
+<style>
+  :root {
+    --wa: #E67E22;
+    --wa-light: #F09040;
+    --wa-glow: rgba(230,126,34,0.10);
+    --cb: #0f0d0b;
+    --cb2: rgba(255,255,255,0.07);
+    --cb-h: rgba(230,126,34,0.30);
+    --tp: #f5f2ee;
+    --tm: rgba(245,242,238,0.62);
+    --tf: rgba(245,242,238,0.28);
+  }
+  .blog-hero { padding:4rem 0 2.5rem;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:3.5rem; }
+  .blog-label { font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--wa);margin-bottom:1.2rem;display:block; }
+  .blog-h1 { font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.2rem,4.5vw,3.4rem);font-weight:800;line-height:1.12;color:var(--tp);margin:0 0 1.2rem;max-width:600px;letter-spacing:-.02em; }
+  .blog-h1 span { color:var(--wa); }
+  .blog-sub { font-size:1rem;color:var(--tm);max-width:500px;line-height:1.75;letter-spacing:.01em; }
+
+  .featured { display:grid;grid-template-columns:55% 45%;background:var(--cb);border:1px solid var(--cb2);border-radius:20px;overflow:hidden;margin-bottom:4rem;text-decoration:none;transition:border-color .25s; }
+  .featured:hover { border-color:var(--cb-h); }
+  .feat-img { overflow:hidden;min-height:400px; }
+  .feat-img img { width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s; }
+  .featured:hover .feat-img img { transform:scale(1.03); }
+  .feat-img-ph { width:100%;min-height:400px;background:linear-gradient(160deg,#1c1510 0%,#2a1d10 100%); }
+  .feat-body { padding:2.8rem 2.8rem 2.8rem 2.4rem;display:flex;flex-direction:column;justify-content:space-between; }
+  .atag { display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--wa);border:1px solid rgba(230,126,34,.32);border-radius:4px;padding:3px 10px;margin-bottom:1.4rem;width:fit-content; }
+  .feat-title { font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.2rem,1.8vw,1.6rem);font-weight:800;line-height:1.28;color:var(--tp);margin:0 0 1.1rem;letter-spacing:-.015em; }
+  .feat-excerpt { font-size:.9rem;color:var(--tm);line-height:1.8;letter-spacing:.012em;flex:1; }
+  .cmeta { display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--tf);margin-top:2rem; }
+  .rlink { display:inline-flex;align-items:center;gap:6px;font-size:.83rem;font-weight:700;color:var(--wa);margin-top:1.4rem;letter-spacing:.01em; }
+  .rlink::after { content:' →'; }
+
+  .ssep { display:flex;align-items:center;gap:1rem;margin-bottom:2rem;font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tf); }
+  .ssep::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.07); }
+
+  .agrid { display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-bottom:5rem; }
+  .acard { background:var(--cb);border:1px solid var(--cb2);border-radius:16px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:border-color .25s,transform .25s; }
+  .acard:hover { border-color:var(--cb-h);transform:translateY(-4px); }
+  .acard-img { overflow:hidden;height:220px; }
+  .acard-img img { width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s; }
+  .acard:hover .acard-img img { transform:scale(1.04); }
+  .acard-img-ph { width:100%;height:220px;background:linear-gradient(160deg,#161210 0%,#201810 100%); }
+  .acard-body { padding:1.6rem 1.6rem 1.4rem;flex:1;display:flex;flex-direction:column; }
+  .acard-title { font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;line-height:1.35;color:var(--tp);margin:0 0 .8rem;flex:1;letter-spacing:-.01em; }
+  .acard-excerpt { font-size:.84rem;color:rgba(245,242,238,0.68);line-height:1.72;margin-bottom:1.2rem;letter-spacing:.018em; }
+  .acard-foot { display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--tf);border-top:1px solid rgba(255,255,255,.05);padding-top:1rem;margin-top:auto;letter-spacing:.01em; }
+  .bnew { display:inline-block;font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--wa-glow);color:var(--wa);border:1px solid rgba(230,126,34,.25);border-radius:4px;padding:2px 9px;margin-bottom:.8rem; }
+  .acard.is-new { border-color:rgba(230,126,34,.15); }
+
+  @media(max-width:900px){ .featured{grid-template-columns:1fr;} .feat-img{min-height:220px;} .agrid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .agrid{grid-template-columns:1fr;} }
+</style>
+
+  <div class="container">
+
+    <div class="blog-hero">
+      <span class="blog-label">Le blog Expert Local</span>
+      <h1 class="blog-h1">Visibilité locale,<br><span>sans jargon.</span></h1>
+      <p class="blog-sub">Des articles concrets pour les artisans et commerçants d'Eure-et-Loir qui veulent exister sur Google — et obtenir plus d'avis clients.</p>
     </div>
+
+    {featured && (
+      <a href={`/blog/${featured.id}/`} class="featured">
+        {featured.data.image
+          ? <div class="feat-img"><img src={featured.data.image} alt={featured.data.title} loading="lazy" /></div>
+          : <div class="feat-img feat-img-ph"></div>
+        }
+        <div class="feat-body">
+          <div>
+            <span class="atag">À la une</span>
+            <h2 class="feat-title">{featured.data.title}</h2>
+            <p class="feat-excerpt">{featured.data.description}</p>
+          </div>
+          <div>
+            <div class="cmeta">
+              <span>{featured.data.author}</span>
+              <span>·</span>
+              <span>{featured.data.date.toLocaleDateString('fr-FR')}</span>
+            </div>
+            <span class="rlink">Lire l'article</span>
+          </div>
+        </div>
+      </a>
+    )}
+
+    {rest.length > 0 && (
+      <>
+        <div class="ssep">Tous les articles</div>
+        <div class="agrid">
+          {rest.map((post, i) => (
+            <a href={`/blog/${post.id}/`} class={`acard${i === 0 ? ' is-new' : ''}`}>
+              {post.data.image
+                ? <div class="acard-img"><img src={post.data.image} alt={post.data.title} loading="lazy" /></div>
+                : <div class="acard-img acard-img-ph"></div>
+              }
+              <div class="acard-body">
+                {i === 0 && <span class="bnew">Nouveau</span>}
+                <h2 class="acard-title">{post.data.title}</h2>
+                <p class="acard-excerpt">{post.data.description}</p>
+                <div class="acard-foot">
+                  <span>{post.data.author}</span>
+                  <span>{post.data.date.toLocaleDateString('fr-FR')}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+
   </div>
 </BaseLayout>

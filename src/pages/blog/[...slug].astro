@@ -15,20 +15,145 @@ const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="container max-w-3xl py-12 prose dark:prose-invert prose-lg mx-auto">
-    <header class="mb-12">
-      <h1 class="text-4xl font-bold mb-4 ember-gradient">{post.data.title}</h1>
-      <div class="flex items-center gap-4 text-gray-400">
+<style>
+  :root {
+    --wa: #E67E22;
+    --tp: #f5f2ee;
+    --tm: rgba(245,242,238,0.62);
+    --tf: rgba(245,242,238,0.28);
+  }
+
+  /* ── EN-TÊTE ARTICLE ── */
+  .article-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--wa);
+    border: 1px solid rgba(230,126,34,.32);
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-bottom: 1.4rem;
+  }
+  .article-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.18;
+    color: var(--tp);
+    letter-spacing: -.02em;
+    margin: 0 0 1.4rem;
+    /* supprime ember-gradient : pas de fond orange sur le titre */
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: .82rem;
+    color: var(--tf);
+    letter-spacing: .01em;
+  }
+  .article-meta-sep { opacity: .4; }
+
+  /* ── CORPS DE L'ARTICLE ── */
+  .article-body {
+    font-size: 1.02rem;
+    line-height: 1.82;
+    color: rgba(245,242,238,0.78);
+    letter-spacing: .012em;
+  }
+  .article-body h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--tp);
+    letter-spacing: -.015em;
+    margin: 2.8rem 0 1rem;
+  }
+  .article-body h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--tp);
+    letter-spacing: -.01em;
+    margin: 2rem 0 .75rem;
+  }
+  .article-body strong { color: var(--tp); font-weight: 700; }
+  .article-body a { color: var(--wa); text-decoration: underline; text-underline-offset: 3px; }
+  .article-body a:hover { color: #F09040; }
+  .article-body ol, .article-body ul { padding-left: 1.4rem; margin: 1.2rem 0; }
+  .article-body li { margin-bottom: .5rem; }
+  .article-body img {
+    width: 100%;
+    border-radius: 12px;
+    margin: 2rem 0;
+    display: block;
+  }
+  .article-body figure { margin: 2rem 0; }
+  .article-body p { margin-bottom: 1.2rem; }
+
+  /* ── CTA FINAL ── */
+  .article-cta-block {
+    margin: 2.5rem 0;
+  }
+  .article-cta-block a {
+    display: inline-block;
+    background: var(--wa);
+    color: #fff !important;
+    padding: 13px 26px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: .9rem;
+    text-decoration: none !important;
+    letter-spacing: .01em;
+    transition: background .2s;
+  }
+  .article-cta-block a:hover { background: #F09040; }
+
+  /* ── FOOTER ARTICLE ── */
+  .article-footer {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .article-footer a {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--wa);
+    text-decoration: none;
+    letter-spacing: .01em;
+  }
+  .article-footer a:hover { color: #F09040; }
+</style>
+
+  <article class="container max-w-3xl py-12 mx-auto">
+
+    <header class="article-header">
+      <span class="article-tag">Article</span>
+      <h1 class="article-title">{post.data.title}</h1>
+      <div class="article-meta">
         <span>{post.data.author}</span>
-        <span>•</span>
-        <span>{post.data.date.toLocaleDateString('fr-FR')}</span>
+        <span class="article-meta-sep">•</span>
+        <span>{post.data.date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
       </div>
     </header>
 
-    <Content />
+    <div class="article-body">
+      <Content />
+    </div>
 
-    <footer class="mt-12 pt-6 border-t border-gray-800">
-      <a href="/blog/" class="text-primary hover:underline">← Retour au blog</a>
+    <footer class="article-footer">
+      <a href="/blog/">← Retour au blog</a>
     </footer>
+
   </article>
 </BaseLayout>

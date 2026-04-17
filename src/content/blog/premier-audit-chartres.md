@@ -1,24 +1,43 @@
 ---
-title: "Premier audit à Chartres : les résultats"
-date: 2023-10-15
-description: "Découvrez comment nous avons aidé un salon de coiffure à Chartres à améliorer sa visibilité en 10 jours"
-image: "/images/blog/chartres-coiffure.webp"
+title: "J'ai lancé Expert Local — pour que les artisans du 28 arrêtent d'être invisibles sur Google"
+description: "Conseiller Numérique en Eure-et-Loir, j'ai lancé Expert Local : un accompagnement simple pour aider les artisans et commerçants à obtenir des avis Google et gagner en visibilité locale."
+date: 2026-04-17
+author: "Antoine Estarellas"
+image: "/images/lancement-linkedin.jpg"
 ---
 
-## Le défi initial
+![Lancement Expert Local sur LinkedIn](/images/lancement-linkedin.jpg)
 
-Le salon "Boucles & Ciseaux" à Chartres avait une fiche Google avec seulement 12 avis et une note de 3.4. Malgré une clientèle satisfaite, très peu de clients laissaient des avis.
+Dans mon quotidien de Conseiller Numérique en Eure-et-Loir, je croise chaque semaine des artisans et commerçants qui font un travail remarquable. Plombiers, boulangers, électriciens, fleuristes — des gens sérieux, compétents, recommandés par le bouche-à-oreille.
 
-## Notre approche
+**Mais invisibles sur Google.**
 
-En appliquant notre méthode en 3 étapes :
+Pas de fiche à jour, pas d'avis, un site vieillissant ou inexistant. Résultat : le client qui cherche "plombier Chartres" ne les trouve pas. Il part ailleurs.
 
-1. **Le bon moment** : Demander l'avis au moment où la cliente admire sa nouvelle coupe
-2. **Les bons mots** : Utiliser des scripts psychologiques spécifiques
-3. **Le bon système** : Automatisation des relances par SMS
+C'est un problème que je sais résoudre. Alors j'ai lancé **Expert Local**.
 
-## Résultats après 10 jours
+## Ce que j'ai construit
 
-- 32 nouveaux avis (dont 28 cinq étoiles)
-- Note passée de 3.4 à 4.8
-- Position 1 sur "coiffeur chartres" en 3 semaines
+Expert Local, c'est un accompagnement simple et humain pour aider les TPE, artisans et commerçants du 28 à exister en ligne — sans jargon, sans abonnement piège, sans agence hors de prix.
+
+Le service repose sur une méthode en 3 étapes :
+
+1. **Le bon moment** — demander un avis au moment où le client est le plus satisfait
+2. **Les bons mots** — des scripts psychologiques adaptés à chaque métier
+3. **Le bon système** — QR codes, relances SMS, automatisation discrète
+
+Le tout accessible dès **49€**, avec un diagnostic gratuit pour commencer.
+
+## Pourquoi maintenant
+
+J'ai passé plusieurs mois à structurer l'offre, tester les outils, construire le funnel de A à Z. Le système est en place. Il est temps de le confronter au terrain.
+
+Je cherche mes **premiers testeurs en Eure-et-Loir** — commerçants ou artisans prêts à tester le diagnostic gratuit et me donner leurs retours francs. Pas un discours de vente. Un vrai test terrain.
+
+## Pour les artisans et commerçants du 28
+
+Si vous avez une fiche Google peu fournie, peu d'avis, ou une note qui ne reflète pas la qualité de votre travail — le diagnostic gratuit est fait pour vous.
+
+Il analyse votre fiche en quelques minutes et vous donne un plan d'action concret.
+
+**→ [Demandez votre diagnostic gratuit sur expert-local.fr](https://expert-local.fr)**

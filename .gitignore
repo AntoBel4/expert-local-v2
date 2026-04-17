@@ -36,3 +36,5 @@ logs/
 # IDE
 .vscode/
 .idea/
+
+n8n/

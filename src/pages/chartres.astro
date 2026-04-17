@@ -347,6 +347,16 @@ import { Image } from 'astro:assets';
             <li><span class="material-symbols-outlined icon-filled">check_circle</span> Masterclass vidéo</li>
             <li><span class="material-symbols-outlined icon-filled">check_circle</span> Plan d'action 10 jours</li>
           </ul>
+          <div class="order-bump">
+            <label class="order-bump__label">
+              <input type="checkbox" id="bump-relance" class="order-bump__checkbox">
+              <span class="order-bump__content">
+                <span class="order-bump__badge">OFFRE EXCLUSIVE</span>
+                <span class="order-bump__title">Ajouter le Kit Relance+ — <strong>+19€</strong></span>
+                <span class="order-bump__desc">5 messages vocaux de relance + 5 scripts SMS avancés pour doubler votre taux de réponse.</span>
+              </span>
+            </label>
+          </div>
           <a href="https://buy.stripe.com/8x26oIccaeYdbHl36K5Rm01" class="btn btn--primary btn--full btn--large btn-checkout" data-plan="kit" rel="noopener">Commencer maintenant</a>
         </div>
 
@@ -521,4 +531,27 @@ import { Image } from 'astro:assets';
       }
     });
   }
+
+  // ── ORDER BUMP ──
+  const bumpCheckbox = document.getElementById('bump-relance');
+  const kitBtn = document.querySelector('.btn-checkout[data-plan="kit"]');
+  const kitPriceEl = document.querySelector('.pricing-card--featured .pricing-price');
+
+  const URL_KIT   = 'https://buy.stripe.com/8x26oIccaeYdbHl36K5Rm01';
+  const URL_BUMP  = 'https://buy.stripe.com/00w9AUcca5nD6n1bDg5Rm04';
+
+  if (bumpCheckbox && kitBtn) {
+    bumpCheckbox.addEventListener('change', () => {
+      if (bumpCheckbox.checked) {
+        kitBtn.href = URL_BUMP;
+        if (kitPriceEl) kitPriceEl.innerHTML = '68€ <span class="pricing-ttc">*</span>';
+        kitBtn.textContent = 'Commencer maintenant (Kit + Relance+)';
+      } else {
+        kitBtn.href = URL_KIT;
+        if (kitPriceEl) kitPriceEl.innerHTML = '49€ <span class="pricing-ttc">*</span>';
+        kitBtn.textContent = 'Commencer maintenant';
+      }
+    });
+  }
+
 </script>
